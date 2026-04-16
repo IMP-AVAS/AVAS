@@ -1,0 +1,75 @@
+2026-04-03 09:06:11 | INFO |  plotphase2.py:312  | hello world
+2026-04-03 09:06:11 | INFO |  plotphase2.py:76  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-03 09:10:02 | INFO |  plotphase2.py:312  | hello world
+2026-04-03 09:10:02 | INFO |  plotphase2.py:76  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-03 09:11:56 | INFO |  plotphase2.py:312  | hello world
+2026-04-03 09:11:56 | INFO |  plotphase2.py:76  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-03 09:11:56 | INFO |  plotphase2.py:86  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]
+2026-04-03 09:12:21 | INFO |  plotphase2.py:311  | hello world
+2026-04-03 09:12:21 | INFO |  plotphase2.py:76  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-03 09:12:21 | INFO |  plotphase2.py:86  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]
+2026-04-03 09:12:33 | INFO |  plotphase2.py:311  | hello world
+2026-04-03 09:12:33 | INFO |  plotphase2.py:76  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-03 09:12:33 | INFO |  plotphase2.py:86  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p']]
+2026-04-03 09:13:18 | INFO |  plotphase2.py:311  | hello world
+2026-04-03 09:13:18 | INFO |  plotphase2.py:76  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p_100']]
+2026-04-03 09:13:18 | INFO |  plotphase2.py:86  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]
+2026-04-03 09:13:27 | INFO |  plotphase2.py:311  | hello world
+2026-04-03 09:13:27 | INFO |  plotphase2.py:76  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p_100']]
+2026-04-03 09:13:27 | INFO |  plotphase2.py:86  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]
+2026-04-03 09:13:40 | INFO |  plotphase2.py:311  | hello world
+2026-04-03 09:13:40 | INFO |  plotphase2.py:76  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-03 09:13:40 | INFO |  plotphase2.py:86  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p']]
+2026-04-03 09:14:49 | INFO |  plotphase2.py:311  | hello world
+2026-04-03 09:14:50 | INFO |  plotphase2.py:76  | picture_type: [['z', 'dp_p']]
+2026-04-03 09:14:50 | INFO |  plotphase2.py:86  | picture_title: [['Z(mmm)', 'dp/p']]
+2026-04-03 09:21:56 | INFO |  plotphase2.py:311  | hello world
+2026-04-03 09:21:56 | INFO |  plotphase2.py:76  | picture_type: [['z', 'dp_p']]
+2026-04-03 09:21:56 | INFO |  plotphase2.py:86  | picture_title: [['Z(mm)', 'dp/p']]
+2026-04-03 09:22:26 | INFO |  plotphase2.py:311  | hello world
+2026-04-03 09:22:26 | INFO |  plotphase2.py:76  | picture_type: [['z', 'dp_p_100']]
+2026-04-03 09:22:26 | INFO |  plotphase2.py:86  | picture_title: [['Z(mm)', 'dp/p(%)']]
+2026-04-03 09:24:33 | INFO |  plotphase2.py:312  | hello world
+2026-04-03 09:24:34 | INFO |  plotphase2.py:76  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:24:34 | INFO |  plotphase2.py:86  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:25:36 | INFO |  plotphase2.py:314  | hello world
+2026-04-03 09:25:36 | INFO |  plotphase2.py:76  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:25:36 | INFO |  plotphase2.py:86  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:26:08 | INFO |  plotphase2.py:317  | hello world
+2026-04-03 09:26:08 | INFO |  plotphase2.py:76  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:26:08 | INFO |  plotphase2.py:86  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:27:26 | INFO |  plotphase2.py:319  | hello world
+2026-04-03 09:27:26 | INFO |  plotphase2.py:76  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:27:26 | INFO |  plotphase2.py:86  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:28:36 | INFO |  plotphase2.py:317  | hello world
+2026-04-03 09:28:36 | INFO |  plotphase2.py:76  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:28:36 | INFO |  plotphase2.py:86  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:29:36 | INFO |  plotphase2.py:317  | hello world
+2026-04-03 09:29:36 | INFO |  plotphase2.py:76  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:29:36 | INFO |  plotphase2.py:86  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:30:11 | INFO |  plotphase2.py:317  | hello world
+2026-04-03 09:31:38 | INFO |  plotphase2.py:320  | hello world
+2026-04-03 09:31:53 | INFO |  plotphase2.py:320  | hello world
+2026-04-03 09:31:53 | INFO |  plotphase2.py:79  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:31:53 | INFO |  plotphase2.py:89  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:32:21 | INFO |  plotphase2.py:316  | hello world
+2026-04-03 09:32:21 | INFO |  plotphase2.py:79  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:32:21 | INFO |  plotphase2.py:89  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:33:02 | INFO |  plotphase2.py:317  | hello world
+2026-04-03 09:33:03 | INFO |  plotphase2.py:79  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:33:03 | INFO |  plotphase2.py:89  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:34:40 | INFO |  plotphase2.py:309  | hello world
+2026-04-03 09:34:40 | INFO |  plotphase2.py:72  | picture_type: [['dp_p', 'dp_p_100']]
+2026-04-03 09:34:40 | INFO |  plotphase2.py:82  | picture_title: [['dp/p', 'dp/p(%)']]
+2026-04-03 09:35:10 | INFO |  plotphase2.py:307  | hello world
+2026-04-03 09:35:10 | INFO |  plotphase2.py:72  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-03 09:35:10 | INFO |  plotphase2.py:82  | picture_title: [['X(mm)', "X'(mrad)"], ['Y(mm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mm)', 'dp/p']]
+2026-04-03 09:50:59 | INFO |  plotphase2.py:72  | picture_type: [['z', 'dp_p']]
+2026-04-03 09:50:59 | INFO |  plotphase2.py:82  | picture_title: [['Z(mm)', 'dp/p']]
+2026-04-03 09:51:47 | INFO |  plotphase2.py:307  | hello world
+2026-04-03 11:26:35 | INFO |  plotphase2.py:307  | hello world
+2026-04-03 11:26:44 | INFO |  plotphase2.py:307  | hello world
+2026-04-03 15:02:40 | INFO |  plotphase2.py:307  | hello world
+2026-04-03 15:35:41 | INFO |  plotphase2.py:302  | hello world
+2026-04-03 15:36:02 | INFO |  plotphase2.py:302  | hello world
+2026-04-03 15:36:23 | INFO |  plotphase2.py:302  | hello world

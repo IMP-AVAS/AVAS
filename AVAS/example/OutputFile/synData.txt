@@ -1,0 +1,2 @@
+0 field 0.21 0 0 0.0570756 invalid invalid
+0 exitPlane 0.21 0.21 1.19527e-08 0.0631081 invalid invalid

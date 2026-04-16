@@ -1,0 +1,11 @@
+.idea
+.__pycache__
+*.pyc
+venv
+build/
+dist/
+test_yaxin512
+test1
+test2
+otherdemand/test_wending.py
+.vs

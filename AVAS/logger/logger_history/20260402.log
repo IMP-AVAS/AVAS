@@ -1,0 +1,20 @@
+2026-04-02 17:37:07 | INFO |  plotphase2.py:96  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]
+2026-04-02 17:38:12 | INFO |  plotphase2.py:86  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-02 17:38:12 | INFO |  plotphase2.py:96  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]
+2026-04-02 17:54:39 | INFO |  plotphase2.py:86  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-02 17:54:39 | INFO |  plotphase2.py:96  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]
+2026-04-02 18:04:16 | INFO |  plotphase2.py:86  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-02 18:04:16 | INFO |  plotphase2.py:96  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]
+2026-04-02 18:05:40 | INFO |  plotphase2.py:86  | picture_type: [['z', 'dp_p']]
+2026-04-02 18:05:40 | INFO |  plotphase2.py:96  | picture_title: [['Z(mmm)', 'dp/p(%)']]
+2026-04-02 18:06:41 | INFO |  plotphase2.py:86  | picture_type: [['z', 'dp_p']]
+2026-04-02 18:06:41 | INFO |  plotphase2.py:96  | picture_title: [['Z(mmm)', 'dp/p(%)']]
+2026-04-02 18:13:34 | INFO |  plotphase2.py:322  | hello world
+2026-04-02 18:13:34 | INFO |  plotphase2.py:86  | picture_type: [['x', 'x1'], ['y', 'y1'], ['z', 'z1'], ['z', 'dp_p']]
+2026-04-02 18:13:34 | INFO |  plotphase2.py:96  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Z(mmm)', "Z'(mrad)"], ['Z(mmm)', 'dp/p(%)']]
+2026-04-02 18:15:56 | INFO |  plotphase2.py:322  | hello world
+2026-04-02 18:15:56 | INFO |  plotphase2.py:86  | picture_type: [['x', 'x1'], ['y', 'y1'], ['z', 'z1'], ['z', 'dp_p']]
+2026-04-02 18:15:56 | INFO |  plotphase2.py:96  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Z(mmm)', "Z'(mrad)"], ['Z(mmm)', 'dp/p(%)']]
+2026-04-02 18:16:33 | INFO |  plotphase2.py:322  | hello world
+2026-04-02 18:16:33 | INFO |  plotphase2.py:86  | picture_type: [['x', 'x1'], ['y', 'y1'], ['phi', 'w_minus_mean'], ['z', 'dp_p']]
+2026-04-02 18:16:33 | INFO |  plotphase2.py:96  | picture_title: [['X(mmm)', "X'(mrad)"], ['Y(mmm)', "Y'(mrad)"], ['Φ(deg)', 'W(MeV)'], ['Z(mmm)', 'dp/p(%)']]

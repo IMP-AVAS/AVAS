@@ -1,0 +1,12 @@
+readparticledistribution unknown
+numofcharge 1
+particlerestmass 938.272088159928
+current 0.18409999999999999
+particlenumber 5260
+frequency 162500000.0
+kneticenergy 1.5270289036445652
+use_dst 0
+twissx -0.65785 0.37743 0.13768
+twissy -0.6341 0.37292 0.14059
+twissz 0.04275 0.37292 0.26506
+distribution GS GS

@@ -1,0 +1,43 @@
+科研用途软件许可证
+
+版权所有 (c) [2024] [中国科学院近代物理所]
+
+特此授权，凡下载、安装或使用本软件及相关文档文件（“软件”）的个人或组织，仅限于科研目的，可以无限制地使用软件
+，包括但不限于使用、复制、修改、合并、发布、分发、再许可软件副本，前提是遵守以下条件：
+
+1. 上述版权声明和本许可声明应包含在软件的所有副本或重要部分中。
+
+2. 本软件不得用于商业目的，仅限于科研、教学和学术交流。
+
+3. 在任何使用软件或基于软件开发的作品中，必须明确注明原软件作者或组织的贡献。
+
+4. 本软件可能依赖于部分未开源的第三方动态链接库或组件。这些组件的版权和使用权归其各自版权所有者所有，
+**不在本许可范围之内**。用户在使用本软件时应自行确保遵守这些组件的原始许可条款。
+
+免责声明：本软件按“原样”提供，不作任何明示或暗示的保证，包括但不限于对适销性、特定用途适用性和非
+侵权性的保证。在任何情况下，软件作者或版权持有人均不对任何由使用本软件引起或与之相关的直接或间接损害负责，
+包括但不限于利润损失、数据丢失或业务中断等。
+
+Research-Only Software License
+
+Copyright (c) [2024] [Institute of Modern Physics, Chinese Academy of Sciences]
+
+Permission is hereby granted, free of charge, to any individual or organization obtaining a copy of this software and 
+associated documentation files (the "Software"), to use the Software solely for research purposes, including but not 
+limited to using, copying, modifying, merging, publishing, distributing, and sublicensing copies of the Software, subject 
+to the following conditions:
+
+1. The above copyright notice and this license statement shall be included in all copies or substantial portions of the Software.
+
+2. The Software shall not be used for commercial purposes. It is intended solely for research, teaching, and academic communication.
+
+3. Any use of the Software or derivative works must properly acknowledge the contribution of the original authors or organization.
+
+4. This Software may depend on third-party dynamic link libraries or components that are **not open source**. These components are 
+the property of their respective copyright holders and are **not covered by this license**. Users must ensure compliance with their original 
+license terms when using such components.
+
+Disclaimer: The Software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties 
+of merchantability, fitness for a particular purpose and noninfringement. In no event shall the authors or copyright holders be liable for 
+any claim, damages, or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the 
+Software or the use or other dealings in the Software.

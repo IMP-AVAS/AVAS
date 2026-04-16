@@ -1,0 +1,29 @@
+Entrance phase -180.0000000000 Synchronous phase77.3695475935  Energy of entry1.5270289036  Export energy1.6331096091
+Entrance phase -162.0000000000 Synchronous phase-83.2496942007  Energy of entry1.5270289036  Export energy1.4730432169
+Entrance phase -144.0000000000 Synchronous phase-63.0393111533  Energy of entry1.5270289036  Export energy1.3352499956
+Entrance phase -126.0000000000 Synchronous phase-42.2487049267  Energy of entry1.5270289036  Export energy1.2455327578
+Entrance phase -108.0000000000 Synchronous phase-21.0581150067  Energy of entry1.5270289036  Export energy1.2133049968
+Entrance phase -90.0000000000 Synchronous phase0.5209043558  Energy of entry1.5270289036  Export energy1.2301114955
+Entrance phase -72.0000000000 Synchronous phase22.5197767458  Energy of entry1.5270289036  Export energy1.2792585541
+Entrance phase -54.0000000000 Synchronous phase44.6497768578  Energy of entry1.5270289036  Export energy1.3463672934
+Entrance phase -36.0000000000 Synchronous phase66.0871501249  Energy of entry1.5270289036  Export energy1.4234418902
+Entrance phase -18.0000000000 Synchronous phase85.8888789375  Energy of entry1.5270289036  Export energy1.5075144344
+Entrance phase 0.0000000000 Synchronous phase-76.3705742086  Energy of entry1.5270289036  Export energy1.5974455512
+Entrance phase 18.0000000000 Synchronous phase-60.4783934475  Energy of entry1.5270289036  Export energy1.6913163623
+Entrance phase 36.0000000000 Synchronous phase-45.8809991606  Energy of entry1.5270289036  Export energy1.7851573471
+Entrance phase 54.0000000000 Synchronous phase-31.9782077398  Energy of entry1.5270289036  Export energy1.8726567679
+Entrance phase 72.0000000000 Synchronous phase-18.2507848261  Energy of entry1.5270289036  Export energy1.9454986662
+Entrance phase 90.0000000000 Synchronous phase-4.2917082632  Energy of entry1.5270289036  Export energy1.9940366082
+Entrance phase 108.0000000000 Synchronous phase10.2118932817  Energy of entry1.5270289036  Export energy2.0084171156
+Entrance phase 126.0000000000 Synchronous phase25.4937753336  Energy of entry1.5270289036  Export energy1.9802187258
+Entrance phase 144.0000000000 Synchronous phase41.7215814311  Energy of entry1.5270289036  Export energy1.9049124113
+Entrance phase 162.0000000000 Synchronous phase59.0032677907  Energy of entry1.5270289036  Export energy1.7849922059
+Entrance phase 180.0000000000 Synchronous phase77.3691015908  Energy of entry1.5270289036  Export energy1.6331096091
+Entrance phase 52.6770814489 Synchronous phase-32.9880110144 Energy of entry 1.5270289036 Export energy 1.8666133019
+Entrance phase 52.6615736948 Synchronous phase-32.9998848073 Energy of entry 1.5270289036 Export energy 1.8665421471
+Entrance phase 52.6614246944 Synchronous phase-32.9999995260 Energy of entry 1.5270289036 Export energy 1.8665414631
+Entrance phase 52.6614240812 Synchronous phase-33.0000000015 Energy of entry 1.5270289036 Export energy 1.8665414603
+Entrance phase 52.6614240832 Synchronous phase-33.0000000000 Energy of entry 1.5270289036 Export energy 1.8665414603
+Entrance phase 52.6614240833 Synchronous phase-33.0000000000 Energy of entry 1.5270289036 Export energy 1.8665414603
+***************************************************************************************************
+************************************************end******************************************************

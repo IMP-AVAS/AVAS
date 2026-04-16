@@ -1,0 +1,12 @@
+.idea/
+__pycache__/
+*.pyc
+AVAS/venv/
+AVAS/build/
+AVAS/dist/
+AVAS/test_yaxin512/
+AVAS/test1/
+AVAS/test2/
+AVAS/test2026/
+AVAS/otherdemand/test_wending.py
+.vs/
