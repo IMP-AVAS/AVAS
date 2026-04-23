@@ -1,6 +1,5 @@
 import sys
 
-from IPython.lib.guisupport import start_event_loop_qt4
 from PyQt5.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QGroupBox, QPushButton, QLineEdit,
     QLabel, QFileDialog, QGridLayout, QSizePolicy

@@ -1,14 +1,6 @@
 
 import os
 import ctypes
-# 确保 DLL 路径优先
-# dll_dir = r"C:\Users\shliu\Desktop\AVAS\AVAS\dllfile"
-# ctypes.LoadLibrary(os.path.join(dll_dir, "MSVCP140.dll"))
-import os
-
-from ctypes import *
-
-
 
 # script_directory = os.path.dirname(os.path.abspath(__file__))  # 获取当前脚本所在文件夹的绝对路径
 # parent_directory = os.path.dirname(script_directory)  # 获取上级目录的路径
@@ -153,8 +145,8 @@ class MultiParticleEngine():
         script_directory = os.path.dirname(os.path.abspath(__file__))  # 获取当前脚本所在文件夹的绝对路径
         parent_directory = os.path.dirname(script_directory)  # 获取上级目录的路径
 
-        self.dll_dir = os.path.join(parent_directory, "dllfile")
-        self.dll_path = os.path.join(parent_directory, 'dllfile', 'AVAS.dll')  # 使用绝对路径连接得到完整的路径
+        self.dll_dir = os.path.join(parent_directory, "dllfile2")
+        self.dll_path = os.path.join(parent_directory, 'dllfile2', 'p3.dll')  # 使用绝对路径连接得到完整的路径
         self.so_path = os.path.join(parent_directory, 'dllfile', 'libAVAS.so')  # 使用绝对路径连接得到完整的路径
         # 必须保存 add_dll_directory 的句柄，否则会失效
         self._dll_dir_handles = []
@@ -178,30 +170,18 @@ class MultiParticleEngine():
             elif platform.system() == "Linux":
                 raise ValueError(f"Failed to load so '{self.so_path}'. Reason: {e}")
 
-    def get_path(self, inputfilepath, outputfilePath, fieldfilePath):
-        if platform.system() == 'Windows':
-            inputfilepath = ctypes.c_wchar_p(inputfilepath)
-            outputfilePath = ctypes.c_wchar_p(outputfilePath)
-            fieldfilePath = ctypes.c_wchar_p(fieldfilePath)
-            res = self.library.path(inputfilepath, outputfilePath, fieldfilePath)
 
-        elif platform.system() == "Linux":
-            inputfilepath = ctypes.c_char_p(inputfilepath.encode('utf-8'))  # 转为字节并包装为 c_char_p
-            outputfilePath = ctypes.c_char_p(outputfilePath.encode('utf-8'))
-            fieldfilePath = ctypes.c_char_p(fieldfilePath.encode('utf-8'))
-            res = self.AVAS_cdll.path(inputfilepath, outputfilePath, fieldfilePath)
-
-        return res
 
     # input, beam, lattice都应该为自定义的结构体
     def main_agent(self, value):
 
-        value = ctypes.c_int(value)
-        value = ctypes.pointer(value)
-        if platform.system() == 'Windows':
-            res = self.library.main_agent(value)
-        elif platform.system() == "Linux":
-            res = self.AVAS_cdll.main_agent(value)
+        input_path = r"C:\Users\shliu\Desktop\cafe_AVAS2\InputFile"
+        output_path = r"C:\Users\shliu\Desktop\cafe_AVAS2\OutputFile"
+
+        self.library.set_path(input_path.encode('utf-8'),
+                          output_path.encode('utf-8'))
+
+        res =self.library.run()
 
         return res
 
@@ -209,7 +189,6 @@ class MultiParticleEngine():
 
 def run_agent(inputfile, outputfile, fieldfile):
     obj = MultiParticleEngine()
-    obj.get_path(inputfile, outputfile, fieldfile)
     obj.main_agent(1)
 
 if __name__ == '__main__':

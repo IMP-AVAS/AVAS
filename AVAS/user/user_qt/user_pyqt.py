@@ -1,7 +1,6 @@
 ﻿
 import sys
-avas_control = r"F:\AVAS_CONTROL\AVAS_control"
-sys.path.append(avas_control)
+
 import sys
 import time
 
@@ -127,6 +126,7 @@ class SimThread(QObject):
 
     def start(self):
         self.queue = Queue()
+
         self.process = Process(target=basic_run, args=(self.project_path, self.queue))
         self.process.start()
         self.check_timer.start(1000)  # 更快响应 UI

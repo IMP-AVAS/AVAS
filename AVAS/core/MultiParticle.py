@@ -1,5 +1,6 @@
 
 
+
 from core.MultiParticleEngine import MultiParticleEngine
 
 import platform
@@ -175,9 +176,9 @@ def basic_mulp(project_path):
 if __name__ == "__main__":
     import sys, os
 
-
-
-    item = {'project_path': r"C:\Users\shliu\Desktop\yanshou\error_b",
+    path = r"C:\Users\shliu\Desktop\cafe_AVAS"
+    path1 = r"C:\Users\shliu\Desktop\v1"
+    item = {'project_path': r"C:\Users\shliu\Desktop\cafe_AVAS",
             "device":"cpu"
             }
 

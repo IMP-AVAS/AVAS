@@ -54,9 +54,16 @@ class MultiParticleEngine():
 
         return res
 
+
+def run_agent(inputfile, outputfile, fieldfile):
+    obj = MultiParticleEngine()
+    obj.get_path(inputfile, outputfile, fieldfile)
+    obj.main_agent(1)
 if __name__ == '__main__':
     import threading
     import time
+    import os
+    from multiprocessing import Process
 
     project_path = r"C:\Users\shliu\Desktop\HEBT\hebt_avas"
     inputfile = os.path.join(project_path, "InputFile")
@@ -66,17 +73,9 @@ if __name__ == '__main__':
     # 创建一个停止标志，用于停止执行
     obj = MultiParticleEngine()
     obj.get_path(inputfile, outputfile, fieldfile)
-
-    agent_thread = threading.Thread(target=obj.main_agent, args=(1,))
-    agent_thread.start()
-
-    # 主线程等待 3 秒
-    # time.sleep(3)
     #
-    # print("3秒后发送停止信号 main_agent(0)")
     # obj.main_agent(0)
-    #
-    # # 可选：等子线程结束
-    # agent_thread.join()
-    # print("线程已结束")
 
+    process = Process(target=run_agent, args=(inputfile, outputfile, fieldfile))
+    process.start()
+    process.join()
