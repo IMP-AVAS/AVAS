@@ -138,19 +138,17 @@ def txt_to_field_bin(txtfile, binfile):
     print("txt 转二进制完成：", binfile)
 
 if __name__ == "__main__":
-    # eader, data = read_field_1d(r"C:\Users\shliu\Desktop\yanshou\error_b\InputFile\multipole4_5_3Db.bsx")
-    # print(eader, data)
-    for i in range(1, 7):
-        path1 = fr"C:\Users\shliu\Desktop\yanshou\error_b\InputFile\multipole4_{i}_3D.bsz"
-        path2 = fr"C:\Users\shliu\Desktop\yanshou\error_b\InputFile\multipole4_{i}_3Db.bsz"
-        txt_to_field_bin(path1, path2)
+    eader, data = read_field_from_txt(r"C:\Users\wangh\Desktop\test_2b\multipole4_1_3D.bsx")
+    print(eader, data)
+    # for i in range(1, 7):
+    #     path1 = fr"C:\Users\shliu\Desktop\yanshou\error_b\InputFile\multipole4_{i}_3D.bsz"
+    #     path2 = fr"C:\Users\shliu\Desktop\yanshou\error_b\InputFile\multipole4_{i}_3Db.bsz"
+    #     txt_to_field_bin(path1, path2)
+    #
+    #     header, data = read_field_1d(path2)
+    #     np.set_printoptions(threshold=np.inf)
+    #
+    #     # print(150, header )
+    #     # print(151, data[:10] )
 
-        header, data = read_field_1d(path2)
-        np.set_printoptions(threshold=np.inf)
 
-        # print(150, header )
-        # print(151, data[:10] )
-
-
-# 使用
-# add_one_to_field("field.bin", "field_plus1.bin")

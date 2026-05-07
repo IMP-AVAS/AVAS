@@ -28,12 +28,6 @@ class InputConfig():
         self.mulp_keys = ["sim_type", "scmethod", "spacecharge", "steppercycle", "dumpperiodicity", ]
         self.env_keys = ["spacechargelong", "spacechargetype"]
 
-    # def initialize_input(self):
-    #     self.input_parameter = {'scmethod': None, "scanphase": None, 'spacecharge': None, 'steppercycle': None, 'dumpperiodicity':None,
-    #                             "maxthreads": None}
-
-
-
 
     def read_input_txt(self, path):
         #读取beam文件
@@ -60,7 +54,7 @@ class InputConfig():
 
         original_dict = self.read_input_txt(path)
         if "pchistogram" in original_dict.keys():
-            print(67)
+
             original_dict["pchistogram_start"] = original_dict["pchistogram"][0]
             original_dict["pchistogram_grid"] = original_dict["pchistogram"][1]
         if "longlimits" in original_dict.keys():

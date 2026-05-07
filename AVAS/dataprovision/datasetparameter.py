@@ -46,6 +46,10 @@ class DatasetParameter():
         #     dataset_info = dataset_info[: index]
         # else:
         #     pass
+        self.syn_x = [i[29] for i in dataset_info]
+        self.syn_y = [i[31] for i in dataset_info]
+        print(51, self.syn_x)
+        print(52, self.syn_y)
 
         self.num_of_particle = float(dataset_info[0][28])
 
@@ -221,12 +225,13 @@ if __name__ == "__main__":
     # obj.get_parameter()
     # print(obj.z)
     #
-    path1 = r"C:\Users\wangh\Desktop\test_maxin\proton\OutputFile\DataSet.txt"
+    path1 = r"C:\Users\wangh\Desktop\test_energy\danengsan_p10_2\avas_p10_sol\OutputFile\DataSet.txt"
     project_path =None
     obj = DatasetParameter(path1, project_path)
     v = obj.get_parameter()
     # print(len(obj.z)
-    print(len(obj.rms_y))
+    print(obj.syn_x)
+    print(obj.syn_y)
 
 
 

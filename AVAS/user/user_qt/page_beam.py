@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QVBoxL
 import os
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import QStandardPaths
+
 from user.user_qt.user_defined import MyQLineEdit
 
 from PyQt5.QtCore import Qt
@@ -35,6 +36,7 @@ class PageBeam(QWidget):
         self.obj_plt_ellipse = None
         self.cb_use_dst_num = 0
         self.cb_beam_type = "notdc"
+        self.if_2b = None
         self.initUI()
 
     def initUI(self):
@@ -82,10 +84,6 @@ class PageBeam(QWidget):
         # particle_input_file_layout = QVBoxLayout()
         # particle_input_file_layout.addLayout(vbox_particle_input_file)
         particle_input_file_group_box.setLayout(vbox_particle_input_file)
-
-
-
-        
 
 ###############################################
         hbox_charge = QHBoxLayout()
@@ -609,10 +607,12 @@ class PageBeam(QWidget):
         # self.label_result.setText(f"Selected Option: {selected_option}")
 
 
-    def fill_parameter(self):
+    def fill_parameter(self, file_path=None):
         beam_path = os.path.join(self.project_path, "InputFile", "beam.txt")
 
-        item = {"projectPath": self.project_path, }
+        item = {"projectPath": self.project_path,
+                "otherPath": file_path
+                }
 
         beam_obj = BeamConfig()
         beam_res = beam_obj.create_from_file(item)
@@ -724,14 +724,15 @@ class PageBeam(QWidget):
         res["beamtype"] = self.cb_beam_type
         return res
 
-    def import_beam_parameter(self):
+    def import_beam_parameter(self, ):
         if not self.text_particle_input_file.text():
             QMessageBox.warning(None, 'Error', f'No dst file')
             return False
 
-
-        dst_path = os.path.join(self.project_path, "InputFile", self.text_particle_input_file.text())
-
+        if self.if_2b is None:
+            dst_path = os.path.join(self.project_path, "InputFile", self.text_particle_input_file.text())
+        else:
+            dst_path = os.path.join(self.project_path, "OutputFile", "generate_2beam", self.text_particle_input_file.text())
 
         item = {"dstPath": dst_path}
         dst_res = cal_beam_parameter(item)
@@ -766,7 +767,7 @@ class PageBeam(QWidget):
         self.distribution_combo_trans.setCurrentText(dst_res["distribution_x"])
         self.distribution_combo_longi.setCurrentText(dst_res["distribution_y"])
 
-    def save_beam(self):
+    def save_beam(self, save_path = None):
         beam_dict = self.generate_beam_list()
         for k, v in beam_dict.items():
             if v == '':
@@ -775,6 +776,7 @@ class PageBeam(QWidget):
 
 
         item = {"projectPath": self.project_path,
+                "otherPath": save_path
                 }
         beam_obj = BeamConfig()
 

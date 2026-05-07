@@ -33,6 +33,6 @@ class GenDst():
 
 if __name__ == '__main__':
     obj = GenDst()
-    input = r"C:\Users\shliu\Desktop\cafe_AVAS\beam.txt"
-    output = r"C:\Users\shliu\Desktop\cafe_AVAS\beam.dst"
+    input = r"C:\Users\wangh\Desktop\test_page_2b\Outputfile\generate_2beam\beam1.txt"
+    output = r"C:\Users\wangh\Desktop\test_page_2b\Outputfile\generate_2beam\beam1.dst"
     obj.generate_dst(input, output)

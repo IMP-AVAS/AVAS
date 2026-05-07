@@ -178,7 +178,7 @@ if __name__ == "__main__":
 
     path = r"C:\Users\shliu\Desktop\cafe_AVAS"
     path1 = r"C:\Users\shliu\Desktop\v1"
-    item = {'project_path': r"C:\Users\shliu\Desktop\cafe_AVAS",
+    item = {'project_path': r"C:\Users\wangh\Desktop\test_energy\danengsan_p10_3\project_quad",
             "device":"cpu"
             }
 
