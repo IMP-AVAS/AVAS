@@ -31,6 +31,7 @@ from aftertreat.dataanalysis.extodensity import ExtoDensity
 from utils.inputconfig import InputConfig
 from utils.change_win_to_linux import change_end_crlf
 from aftertreat.picture.plotplt import PlotPlt
+from aftertreat.picture.plot_edst import Plotedst
 #下列为功能函数
 #基础运行
 
@@ -56,23 +57,20 @@ def basic_mulp(**item):
     write_mulp_to_lattice_only_sim2(lattice_mulp_path, lattice_path)
 
     res = multiparticle_obj.run()
-
     # 生成束诊文件
-    diag_item = {
-        "project_path": project_path,
-        "input_file": os.path.join(project_path, 'InputFile'),
-        "output_file": os.path.join(project_path, 'OutputFile'),
-        "diag_file_path": os.path.join(project_path, 'OutputFile', 'par_diag1.txt'),
-    }
-    obj = DiagInfo(diag_item)
-    obj.write_diag_info_to_file()
-
+    # diag_item = {
+    #     "project_path": project_path,
+    #     "input_file": os.path.join(project_path, 'InputFile'),
+    #     "output_file": os.path.join(project_path, 'OutputFile'),
+    #     "diag_file_path": os.path.join(project_path, 'OutputFile', 'par_diag1.txt'),
+    # }
+    # obj = DiagInfo(diag_item)
+    # obj.write_diag_info_to_file()
     #
     item = {"projectPath": project_path, }
     input_info = InputConfig()
     input_info = input_info.create_from_file(item)
     input_info = input_info["data"]["inputParams"]
-
     if input_info.get("pchistogram_start") == 1 and input_info.get("pchistogram_grid") > 0:
         # 生成密度文件
         exdata_path = os.path.join(project_path, "OutputFile", "PCHistogram.dat")
@@ -418,6 +416,63 @@ def plot_dst(item):
             picture_param = {"picturePath": ""}
             output = format_output(code, msg=msg, **picture_param)
     return output
+
+def plot_edst(item):
+    default_item = {"edst_path": None, "picture_type": [["x", "x1"]], "show_": 0, "fig": None, "platform": "qt",
+                    "sampleInterval": 1, "needData": False, "projectPath": None, "location": "out",
+                    "dst_dict": None, "twiss_dict": None,
+    }
+
+    default_item.update(item)
+
+    platform = default_item.get("platform")
+    project_path = default_item.get("projectPath")
+    fig = default_item.get("fig")
+    sample_interval = default_item.get("sampleInterval")
+    location = default_item.get("location")
+    show_ = default_item.get("show_")
+    edst_dict = default_item.get("edst_dict")
+    twiss_dict = default_item.get("twiss_dict")
+    picture_type = default_item.get("picture_type")
+
+
+    if platform == "qt":
+        edst_path = default_item.get("edst_path")
+    elif platform == "web":
+        if location == "out":
+            edst_path = os.path.join(project_path, "OutputFile", default_item.get("edst_path"))
+        elif location == "in":
+            edst_path = os.path.join(project_path, "InputFile", default_item.get("edst_path"))
+
+    v = Plotedst()
+
+    item = {
+        "show_": show_,
+        "fig": fig,
+        "save_path": None,
+        "picture_type":picture_type,
+        "edst_path": edst_path,
+        "edst_dict": edst_dict,
+    }
+
+
+    if platform == "qt":
+        output = v.run(item)
+    elif platform == "web":
+        try:
+            save_path = generate_web_picture_path(project_path)
+            item["save_path"] = save_path
+            v.run(item)
+
+            picture_param = {"picturePath": save_path}
+            output = format_output(**picture_param)
+        except Exception as e:
+            code = -1
+            msg = str(e)
+            picture_param = {"picturePath": ""}
+            output = format_output(code, msg=msg, **picture_param)
+    return output
+
 
 def plot_plt(item):
     default_item = {"plt_path": None, "picture_type": [["x", "x1"]], "show_": 0, "fig": None, "platform": "qt",
@@ -942,20 +997,33 @@ def plot_dst4qt(item):
     return 1
 
 if __name__ == '__main__':
+    edst_path = r"C:\Users\wangh\Desktop\qx\2beam\OutputFile\outData_6.992532.edst"
+
+
     item = {
         "show_": 1,
         "fig": None,
         "save_path": None,
-        "picture_type":  [["x", "x1"], ["y", "y1"], ["z", "z1"], ["phi", "w"]],
-        "project_path": r"C:\Users\wangh\Desktop\324\v1",
-        "plt_path": r"C:\Users\wangh\Desktop\324\v1\OutputFile\BeamSet.plt",
-        "num": 0,
-        "part_arr": None,
-        "exist_particle": None,
-        "dst_dict": None,
+        "picture_type":  [["x", "x1"], ["y", "y1"], ["phi", "w"], ["phi", "y"]],
+        "edst_path": edst_path,
+        "edst_dict": None,
         }
+    plot_edst(item)
 
-    plot_plt(item)
+    # item = {
+    #     "show_": 1,
+    #     "fig": None,
+    #     "save_path": None,
+    #     "picture_type":  [["x", "x1"], ["y", "y1"], ["z", "z1"], ["phi", "w"]],
+    #     "project_path": r"C:\Users\wangh\Desktop\324\v1",
+    #     "plt_path": r"C:\Users\wangh\Desktop\324\v1\OutputFile\BeamSet.plt",
+    #     "num": 0,
+    #     "part_arr": None,
+    #     "exist_particle": None,
+    #     "dst_dict": None,
+    #     }
+    #
+    # plot_plt(item)
 
     # dst_path = r"C:\Users\wangh\Desktop\phase_plot\outData_198.295500.dst"
     #

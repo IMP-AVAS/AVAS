@@ -11,6 +11,19 @@ from pathlib import Path
 def copy_file(source_file, target_folder):
     shutil.copy(source_file, target_folder)
 
+
+def copy_file_rename(source_file, target_folder, new_name):
+    # 确保目标文件夹存在
+    os.makedirs(target_folder, exist_ok=True)
+
+    # 拼接目标文件完整路径
+    target_file = os.path.join(target_folder, new_name)
+
+    # 复制并重命名
+    shutil.copy(source_file, target_file)
+
+    return target_file
+
 #将文件切割成一个个列表（/ \）
 def split_file(file_path):
     # 将文件路径使用"/"进行分割

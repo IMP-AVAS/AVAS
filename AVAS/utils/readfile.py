@@ -167,6 +167,7 @@ def read_dst(input):
 
     f.close()
     return res
+
 def read_dst_fast(input):
     t0 = time.time()
     with open(input, 'rb') as f:
@@ -188,8 +189,8 @@ def read_dst_fast(input):
 
     res= {}
     res['number'] = number
-    res['ib'] = Ib
-    res['freq'] = freq*10**6
+    res['ib'] = Ib                         #mA
+    res['freq'] = freq*10**6               #hz
     res['partran_dist'] = partran_dist
     res['basemassinmev'] = BaseMassInMeV
     t1 = time.time()
@@ -198,6 +199,38 @@ def read_dst_fast(input):
     t2 = time.time()
 
     # print("计算能量时间", t2 - t1)
+
+    return res
+def read_edst(edst_path):
+    f = open(edst_path, 'rb')
+    f.read(2)
+
+    data = struct.unpack("<i", f.read(4))
+    number = int(data[0])
+
+    data = struct.unpack("<d", f.read(8))
+    ib = float(data[0])
+
+    data = struct.unpack("<d", f.read(8))
+    freq = float(data[0]) #MHZ
+    f.read(1)
+
+    partran_dist = np.fromfile(
+        f,
+        dtype='<f8',
+        count=9 * (number + 1)
+    ).reshape(number + 1, 9)
+
+
+    data = struct.unpack("<d", f.read(8))
+    BaseMassInMeV = float(data[0])
+
+    res = {}
+    res["number"] = number
+    res["freq"] = freq*10**6
+    res['partran_dist'] = partran_dist
+    res['basemassinmev'] = BaseMassInMeV
+    f.close()
 
     return res
 

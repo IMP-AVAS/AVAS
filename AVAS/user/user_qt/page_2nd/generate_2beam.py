@@ -11,7 +11,7 @@ from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import QStandardPaths
 from user.user_qt.user_defined import MyQLineEdit
 
-from utils.treatfile import copy_file
+from utils.treatfile import copy_file, copy_file_rename
 from utils.treatfile import split_file, file_in_directory
 
 
@@ -27,6 +27,8 @@ import os
 from user.user_qt.page_utils.parametergridwidget import ParameterGridWidget
 from utils.tool import safe_float, safe_int
 from core.gendst import GenDst
+from utils.twobeamsetconfig import Beam2Config
+from apps.dst2edst import Dst2edst
 
 class PageBeamFor2Beam(PageBeam):
     def __init__(self, project_path, beam_id=1):
@@ -81,7 +83,7 @@ class PageBeamFor2Beam(PageBeam):
                     self.text_particle_input_file.setText(relative_dst_file_path)
 
 
-class generate2beam(QWidget):
+class Pagegenerate2beam(QWidget):
     def __init__(self, project_path):
         super().__init__()
         self.project_path = project_path
@@ -99,8 +101,15 @@ class generate2beam(QWidget):
 
         self.beam1_path = os.path.join(self.dir_generate_2b, "beam1.txt")
         self.beam2_path = os.path.join(self.dir_generate_2b, "beam2.txt")
+        self.twobeam_set_path = os.path.join(self.project_path, "OutputFile", "generate_2beam", "2beam_set.txt")
 
         self.g2b_setting = {}
+
+
+        self.b1_dst_path =  os.path.join(self.project_path, "OutputFile", "generate_2beam", "2beam_first.dst")
+        self.b2_dst_path = os.path.join(self.project_path, "OutputFile", "generate_2beam", "2beam_second.dst")
+
+
 
         self.initUI()
 
@@ -112,8 +121,19 @@ class generate2beam(QWidget):
 
         title = QLabel("Two-beam generation")
         main_layout.addWidget(title)
+#################################################################
+        top_button_layout = QHBoxLayout()
 
+        self.btn_save = QPushButton("Save")
+        top_button_layout.addWidget(self.btn_save)
 
+        # 让 Save 按钮靠左，右边留空
+        top_button_layout.addStretch()
+
+        main_layout.addLayout(top_button_layout)
+
+        # 连接保存函数
+        self.btn_save.clicked.connect(self.save_2beam_set)
         ##############################################
 
         self.beam1_window = PageBeamFor2Beam(self.project_path)
@@ -173,7 +193,6 @@ class generate2beam(QWidget):
 
         main_layout.addWidget(mode_group)
 
-
         ##########################################################################################
          #beam1和beam2的相位范围
         phase_group = QGroupBox("Phase range")
@@ -220,14 +239,16 @@ class generate2beam(QWidget):
         phase_layout.addLayout(beam2_phase_layout)
         main_layout.addWidget(phase_group)
 
-###################################################################################
+
+        ########################################################################
+
+        ###################################################################################
         # 束流1的中心位置
         phase_center_group = QGroupBox("Phase center")
         phase_center_layout = QVBoxLayout(phase_center_group)
 
         beam1_center_layout = QHBoxLayout()
-        beam1_center_layout.addWidget(QLabel("Beam 1 phase range:"))
-
+        beam1_center_layout.addWidget(QLabel("Beam 1 phase center deviation:"))
 
         self.le_beam1_center = QLineEdit()
         beam1_center_layout.addWidget(self.le_beam1_center)
@@ -236,8 +257,7 @@ class generate2beam(QWidget):
 
         # 束流2的中心位置
         beam2_center_layout = QHBoxLayout()
-        beam2_center_layout.addWidget(QLabel("Beam 2 phase range:"))
-
+        beam2_center_layout.addWidget(QLabel("Beam 2 phase center deviation:"))
 
         self.le_beam2_center = QLineEdit()
         beam2_center_layout.addWidget(self.le_beam2_center)
@@ -248,10 +268,6 @@ class generate2beam(QWidget):
         phase_center_layout.addLayout(beam2_center_layout)
         main_layout.addWidget(phase_center_group)
 
-
-
-
-        ########################################################################
         #同步粒子的信息
 
         self.beam_param_widget = ParameterGridWidget()
@@ -275,6 +291,39 @@ class generate2beam(QWidget):
         generate_edst_button.clicked.connect(self.generate_2beam)
         main_layout.addWidget(generate_edst_button)
         #####################################################################
+        self.key_line_map = {
+        "b1_phase_min": self.le_beam1_phase_min,
+        "b1_phase_max": self.le_beam1_phase_max,
+
+        "b2_phase_min": self.le_beam2_phase_min,
+        "b2_phase_max": self.le_beam2_phase_max,
+
+        "b1_phase_center": self.le_beam1_center,
+        "b2_phase_center": self.le_beam2_center,
+
+        "syn_p_charge": self.text_charge,
+        "syn_p_mass": self.text_mass,
+        "syn_p_phi": self.text_phi,
+        "syn_p_energy": self.text_energy,
+        }
+
+        self.fill_parameter()
+
+    def fill_parameter(self):
+        if os.path.exists(self.beam1_path):
+            self.beam1_window.fill_parameter(self.beam1_path)
+
+        if os.path.exists(self.beam2_path):
+            self.beam2_window.fill_parameter(self.beam2_path)
+
+        if os.path.exists(self.twobeam_set_path):
+            obj = Beam2Config()
+            item = {"projectPath": self.project_path}
+            g2bset_params = obj.create_from_file(item)["data"]["g2bset_params"]
+
+            for key, line in self.key_line_map.items():
+                line.setText(str(g2bset_params.get(key)))
+
 
 
     def open_beam1_page(self):
@@ -284,44 +333,105 @@ class generate2beam(QWidget):
         self.beam2_window.show()
 
     def generate_2beam(self):
-        self.g2b_setting = {
-        "b1_phase_min": safe_float(self.le_beam1_phase_min.text()),
-        "b1_phase_max": safe_float(self.le_beam1_phase_max.text()),
+        self.save_2beam_set()
+        set_dict = {}
+        for  key, line in self.key_line_map.items():
+            set_dict[key] = safe_float(line.text())
 
-        "b2_phase_min": safe_float(self.le_beam2_phase_min.text()),
-        "b2_phase_max": safe_float(self.le_beam2_phase_max.text()),
+        set_dict["syn_p_charge"] = safe_int( self.text_charge.text())
+        set_dict["b1_charge"] = safe_int(self.beam1_window.text_charge.text())
+        set_dict["b2_charge"] = safe_int(self.beam2_window.text_charge.text())
 
-        "b1_phase_center": safe_float(self.le_beam1_center.text()),
-        "b2_phase_center": safe_float(self.le_beam2_center.text()),
+        set_dict["b1_path"] = self.b1_dst_path
+        set_dict["b2_path"] = self.b2_dst_path
 
-        "syn_p_charge": safe_int(self.text_charge.text()),
-        "syn_p_maxx": safe_float(self.text_mass.text()),
-        "syn_p_phi": safe_float(self.text_phi.text()),
-        "syn_p_energy": safe_float(self.text_energy.text()),
-        }
+        set_dict["2beam_mode"] = self.get_two_beam_mode()
+        set_dict["edst_path"] = os.path.join(self.dir_generate_2b, "2beam.edst")
 
-        print(self.g2b_setting)
+        obj = Dst2edst(set_dict)
+        obj.run()
+
+        print(set_dict)
+
+        #复制文件到Inputfile
+        source_file1 = self.b1_dst_path
+        source_file2 = self.b2_dst_path
+        source_file3 = os.path.join(self.dir_generate_2b, "2beam.edst")
+
+        target_folder =  os.path.join(self.project_path, "InputFile")
+        copy_file(source_file1, target_folder)
+        copy_file(source_file2, target_folder)
+        copy_file(source_file3, target_folder)
         pass
 
     def generate_beam1(self):
-        save_path = os.path.join(self.project_path, "OutputFile", "generate_2beam", "beam1.txt")
+        save_path = self.beam1_path
         self.beam1_window.save_beam(save_path)
+        use_dst = self.beam1_window.cb_use_dst_num
+        #如果不使用分布，那么就生成新的
+        print(use_dst)
+        if use_dst == 0:
+            obj = GenDst()
+            input = save_path
+            out_put = self.b1_dst_path
+            obj.generate_dst(input, out_put)
 
-        obj = GenDst()
+        #如果使用，那么就复制后重命名
+        else:
+            source_file = os.path.join(self.dir_generate_2b, self.beam1_window.text_particle_input_file.text())
+            target_folder = self.dir_generate_2b
+            new_name = "2beam_first.dst"
+            new_file_path = os.path.join(target_folder, new_name)
 
-        input = save_path
-        out_put = os.path.join(self.project_path, "OutputFile", "generate_2beam", "2beam_first.dst")
-        obj.generate_dst(input, out_put)
+            #如果源文件不叫2beam_first.dst
+            if self.beam1_window.text_particle_input_file.text() != "2beam_first.dst":
+                copy_file_rename(source_file, target_folder, new_name)
+            elif self.beam1_window.text_particle_input_file.text() == "2beam_first.dst":
+                pass
+
+
+            #无论是否存在，都把文件重新复制，如果不存在就是复制后重命名，如果存在，那就重新复制一次
+            # copy_file_rename(source_file, target_folder, new_name)
+            # #判断是否存在我们要复制的文件，如果已经存在，那么直接跳过
+            # if os.path.exists(new_file_path):
+            #     pass
+            # #如果不存在，那么就复制
+            # else:
+            #     copy_file_rename(source_file, target_folder, new_name)
+
 
     def generate_beam2(self):
-        save_path = os.path.join(self.project_path, "OutputFile", "generate_2beam", "beam2.txt")
+        save_path = self.beam2_path
         self.beam2_window.save_beam(save_path)
 
+        use_dst = self.beam2_window.cb_use_dst_num
         obj = GenDst()
+        # 如果不使用分布，那么就生成新的
+        if use_dst == 0:
+            input = save_path
+            out_put = self.b2_dst_path
+            obj.generate_dst(input, out_put)
+        else:
+            source_file = os.path.join(self.dir_generate_2b, self.beam1_window.text_particle_input_file.text())
+            target_folder = self.dir_generate_2b
+            new_name = "2beam_second.dst"
+            new_file_path = os.path.join(target_folder, new_name)
 
-        input = save_path
-        out_put = os.path.join(self.project_path, "OutputFile", "generate_2beam", "2beam_second.dst")
-        obj.generate_dst(input, out_put)
+            # 如果源文件不叫2beam_first.dst
+            if self.beam1_window.text_particle_input_file.text() != "2beam_second.dst":
+                copy_file_rename(source_file, target_folder, new_name)
+            elif self.beam1_window.text_particle_input_file.text() == "2beam_second.dst":
+                pass
+
+
+            #判断是否存在我们要复制的文件，如果已经存在，那么直接跳过
+
+            # if os.path.exists(new_file_path):
+            #     pass
+            # #如果不存在，那么就复制
+            # else:
+            #     copy_file_rename(source_file, target_folder, new_name)
+
 
     def get_two_beam_mode(self):
         #将dc定义为1，puslse定义为0
@@ -337,6 +447,21 @@ class generate2beam(QWidget):
         elif self.rb_beam1_pulse_beam2_dc.isChecked():
             return (0, 1)
 
+    def save_2beam_set(self):
+        self.beam1_window.save_beam(self.beam1_path)
+        self.beam2_window.save_beam(self.beam2_path)
+
+        set_dict = {}
+        for  key, line in self.key_line_map.items():
+            set_dict[key] = safe_float(line.text())
+
+        set_dict["syn_p_charge"] = safe_int( self.text_charge.text())
+
+        obj = Beam2Config()
+        obj.set_param(**set_dict)
+        item = {"projectPath": self.project_path}
+        obj.write_to_file(item)
+
 if __name__ == "__main__":
     import sys
     from PyQt5.QtWidgets import QApplication
@@ -345,7 +470,7 @@ if __name__ == "__main__":
 
     project_path = r"C:\Users\wangh\Desktop\test_page_2b"
 
-    window = generate2beam(project_path)
+    window = Pagegenerate2beam(project_path)
     window.show()
 
     sys.exit(app.exec_())

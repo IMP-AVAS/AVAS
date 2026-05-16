@@ -1,6 +1,6 @@
 ﻿import sys
 import time
-
+from pathlib import Path
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QVBoxLayout, QWidget, QPushButton, \
     QStackedWidget,QMenu, QLabel, QLineEdit, QTextEdit,  QGridLayout, QHBoxLayout,  QFrame, QFileDialog, QGroupBox,\
     QComboBox, QSizePolicy, QMessageBox,QPushButton, QCheckBox
@@ -8,6 +8,7 @@ import os
 from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtCore import QStandardPaths
 
+from conf.contants import edst_picture_title_dict
 from user.user_qt.user_defined import MyQLineEdit
 
 from PyQt5.QtCore import Qt
@@ -22,12 +23,15 @@ from utils.beamconfig import BeamConfig
 from PyQt5.QtGui import QIntValidator, QDoubleValidator
 from user.user_qt.page_utils.phaseellipse_dialog import PhaseEllipseWidget
 
-
+from PyQt5.QtWidgets import (
+    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QGroupBox, QPushButton, QLineEdit,
+    QLabel, QFileDialog, QGridLayout, QSizePolicy, QRadioButton, QButtonGroup
+)
 gray240 = "rgb(240, 240, 240)"
 from apis.qt_api.api import cal_beam_parameter
 from apis.basic_api.api import plot_dataset
 from utils.tool import safe_float, safe_int, safe_str
-
+from utils.readfile import read_txt, read_edst
 class PageBeam(QWidget):
     def __init__(self, project_path):
         super().__init__()
@@ -455,12 +459,34 @@ class PageBeam(QWidget):
 
         # vertical_layout2.addLayout(hbox_displacePos)
         # vertical_layout2.addLayout(hbox_displaceDpos)
+
+
+        ##############################
+        group_box_beam_mode = QGroupBox("Beam Mode")
+        beam_mode_layout = QHBoxLayout(group_box_beam_mode)
+
+        self.rb_single_beam = QRadioButton("Single beam")
+        self.rb_double_beam = QRadioButton("Double beam")
+
+        # 默认选择单束
+        self.rb_single_beam.setChecked(True)
+
+        # 按钮组：保证两个选项互斥
+        self.beam_mode_group = QButtonGroup(self)
+        self.beam_mode_group.addButton(self.rb_single_beam, 1)
+        self.beam_mode_group.addButton(self.rb_double_beam, 2)
+
+        beam_mode_layout.addWidget(self.rb_single_beam)
+        beam_mode_layout.addWidget(self.rb_double_beam)
+
+        vertical_layout2.addWidget(group_box_beam_mode)
         vertical_layout2.addStretch(1)
 
 
-
-
         vertical_group_box2.setLayout(vertical_layout2)
+
+        # =========================
+
 
 
 #######################################################
@@ -724,48 +750,95 @@ class PageBeam(QWidget):
         res["beamtype"] = self.cb_beam_type
         return res
 
+    def clear_beam_parameter_ui(self):
+        self.text_mass.clear()
+        self.text_current.clear()
+        self.text_particel_number.clear()
+        self.text_frequency.clear()
+        self.text_energy.clear()
+
+        self.alpha_xx_text.clear()
+        self.beta_xx_text.clear()
+        self.alpha_yy_text.clear()
+        self.beta_yy_text.clear()
+        self.alpha_zz_text.clear()
+        self.beta_zz_text.clear()
+
+        self.varepsilon_xx_text.clear()
+        self.varepsilon_yy_text.clear()
+
+        self.distribution_combo_trans.setCurrentIndex(0)
+        self.distribution_combo_longi.setCurrentIndex(0)
+
     def import_beam_parameter(self, ):
         if not self.text_particle_input_file.text():
             QMessageBox.warning(None, 'Error', f'No dst file')
             return False
 
-        if self.if_2b is None:
+        doublebeam_mode = 0
+        if Path(self.text_particle_input_file.text()).suffix.lower() == ".edst":
+            doublebeam_mode = 1
+
+
+        # if self.if_2b is None:
+        #     dst_path = os.path.join(self.project_path, "InputFile", self.text_particle_input_file.text())
+        # else:
+        #     dst_path = os.path.join(self.project_path, "OutputFile", "generate_2beam", self.text_particle_input_file.text())
+
+
+        if doublebeam_mode == 1:
+            self.clear_beam_parameter_ui()
+            edst_path = os.path.join(self.project_path, "InputFile", self.text_particle_input_file.text())
+            edst_param = read_edst(edst_path)
+            syn_p = edst_param["partran_dist"][-1]
+            energy = syn_p[5]
+            charge = syn_p[6]
+            mass = syn_p[7]
+            freq = edst_param["freq"]
+
+            self.text_mass.setText(str(mass))
+            self.text_frequency.setText(str(freq))
+            self.text_energy.setText(str(energy))
+            self.text_charge.setText(str(int(charge)))
+
+
+
+
+
+        elif doublebeam_mode == 0:
             dst_path = os.path.join(self.project_path, "InputFile", self.text_particle_input_file.text())
-        else:
-            dst_path = os.path.join(self.project_path, "OutputFile", "generate_2beam", self.text_particle_input_file.text())
+            item = {"dstPath": dst_path}
+            dst_res = cal_beam_parameter(item)
+            if dst_res["code"] == -1:
+                raise Exception(dst_res["data"]["msg"])
 
-        item = {"dstPath": dst_path}
-        dst_res = cal_beam_parameter(item)
-        if dst_res["code"] == -1:
-            raise Exception(dst_res["data"]["msg"])
+            dst_res = dst_res['data']['beamParams']
 
-        dst_res = dst_res['data']['beamParams']
-
-        # print(dst_res)
-        self.text_mass.setText(str(dst_res.get('particlerestmass')))
-        self.text_current.setText(str(dst_res.get('current')))
-        self.text_particel_number.setText(str(dst_res.get('particlenumber')))
-        self.text_frequency.setText(str(dst_res.get('frequency')))
+            # print(dst_res)
+            self.text_mass.setText(str(dst_res.get('particlerestmass')))
+            self.text_current.setText(str(dst_res.get('current')))
+            self.text_particel_number.setText(str(dst_res.get('particlenumber')))
+            self.text_frequency.setText(str(dst_res.get('frequency')))
 
 
-        self.text_energy.setText(str(dst_res.get("kneticenergy")))
+            self.text_energy.setText(str(dst_res.get("kneticenergy")))
 
 
-        self.alpha_xx_text.setText(str(round(dst_res.get("alpha_x"), self.decimals)))
-        self.beta_xx_text.setText(str(round(dst_res.get("beta_x"), self.decimals)))
+            self.alpha_xx_text.setText(str(round(dst_res.get("alpha_x"), self.decimals)))
+            self.beta_xx_text.setText(str(round(dst_res.get("beta_x"), self.decimals)))
 
-        self.alpha_yy_text.setText(str(round(dst_res.get("alpha_y"), self.decimals)))
-        self.beta_yy_text.setText(str(round(dst_res.get("beta_y"), self.decimals)))
+            self.alpha_yy_text.setText(str(round(dst_res.get("alpha_y"), self.decimals)))
+            self.beta_yy_text.setText(str(round(dst_res.get("beta_y"), self.decimals)))
 
-        self.alpha_zz_text.setText(str(round(dst_res.get("alpha_z"), self.decimals)))
-        self.beta_zz_text.setText(str(round(dst_res.get("beta_z"), self.decimals)))
+            self.alpha_zz_text.setText(str(round(dst_res.get("alpha_z"), self.decimals)))
+            self.beta_zz_text.setText(str(round(dst_res.get("beta_z"), self.decimals)))
 
-        self.varepsilon_xx_text.setText(str(round(dst_res.get("emit_x"), self.decimals)))
-        self.varepsilon_yy_text.setText(str(round(dst_res.get("emit_y"), self.decimals)))
-        self.varepsilon_zz_text.setText(str(round(dst_res.get("emit_z"), self.decimals)))
+            self.varepsilon_xx_text.setText(str(round(dst_res.get("emit_x"), self.decimals)))
+            self.varepsilon_yy_text.setText(str(round(dst_res.get("emit_y"), self.decimals)))
+            self.varepsilon_zz_text.setText(str(round(dst_res.get("emit_z"), self.decimals)))
 
-        self.distribution_combo_trans.setCurrentText(dst_res["distribution_x"])
-        self.distribution_combo_longi.setCurrentText(dst_res["distribution_y"])
+            self.distribution_combo_trans.setCurrentText(dst_res["distribution_x"])
+            self.distribution_combo_longi.setCurrentText(dst_res["distribution_y"])
 
     def save_beam(self, save_path = None):
         beam_dict = self.generate_beam_list()
@@ -900,7 +973,11 @@ class PageBeam(QWidget):
                     copy_file(source_file, target_folder)
                     self.text_particle_input_file.setText(relative_dst_file_path)
 
-
+    def get_beam_mode(self):
+        if self.rb_single_beam.isChecked():
+            return "single"
+        elif self.rb_double_beam.isChecked():
+            return "double"
 
         # particle_input_text = self.text_particle_input_file.text()
         # if particle_input_text:
@@ -909,7 +986,7 @@ class PageBeam(QWidget):
         #         line_edit.setStyleSheet("background-color: rgb(240, 240, 240);")
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    main_window = PageBeam(r'F:\using\test_avas_qt\cafe_avas')
+    main_window = PageBeam(r'C:\Users\wangh\Desktop\qx2')
     main_window.fill_parameter()
     main_window.setGeometry(800, 500, 600, 650)
     main_window.setStyleSheet("background-color: rgb(253, 253, 253);")

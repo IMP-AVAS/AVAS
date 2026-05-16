@@ -48,8 +48,7 @@ class DatasetParameter():
         #     pass
         self.syn_x = [i[29] for i in dataset_info]
         self.syn_y = [i[31] for i in dataset_info]
-        print(51, self.syn_x)
-        print(52, self.syn_y)
+
 
         self.num_of_particle = float(dataset_info[0][28])
 

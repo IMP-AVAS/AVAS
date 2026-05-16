@@ -1,7 +1,9 @@
 sim_type mulp
-scanphase 1
 spacecharge 1
 steppercycle 50
 dumpperiodicity 0
+boundary 0
+randomseed 0
 scmethod FFT
 pchistogram 0 300
+longlimits 0 0.0 0.0

@@ -1,6 +1,8 @@
 import numpy as np
 import struct
 import os
+
+#双束文件的的beamset
 # 二进制文件，数据格式
 # Char + Char + dumpPeriodicity(int) + Np(int) + Ib[mA](double) + freq[MHz](double) + mc2[MeV](double)
 # + Nx * [Char + tpye(int) + Index(int) + time[s](double) + location[m](double) +

@@ -8,6 +8,8 @@ from scipy.ndimage import gaussian_filter
 
 
 from aftertreat.picture.plotphase2 import plot_dst_density
+
+
 class PlotPlt():
     def __init__(self):
         self.fig_size = (12.8 *2 /3, 9.2*2 /3)

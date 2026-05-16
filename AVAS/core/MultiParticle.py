@@ -176,12 +176,10 @@ def basic_mulp(project_path):
 if __name__ == "__main__":
     import sys, os
 
-    path = r"C:\Users\shliu\Desktop\cafe_AVAS"
-    path1 = r"C:\Users\shliu\Desktop\v1"
-    item = {'project_path': r"C:\Users\wangh\Desktop\test_energy\danengsan_p10_3\project_quad",
+    path = r"C:\Users\wangh\Desktop\test_sun0514"
+    item = {'project_path': path,
             "device":"cpu"
             }
-
     obj = MultiParticle(item)
     # print(">" * 30)
     # print("exe =", sys.executable)

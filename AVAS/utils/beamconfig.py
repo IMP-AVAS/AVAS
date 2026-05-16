@@ -248,7 +248,7 @@ class BeamConfig():
 
 if __name__ == "__main__":
     item = {
-        "projectPath": r"D:\using\test_avas_qt\test_beam"
+        "projectPath": r"C:\Users\wangh\Desktop\test_page_2b"
     }
 
     obj = BeamConfig()

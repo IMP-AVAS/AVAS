@@ -516,9 +516,9 @@ def get_all_files_in_project(item):
     return output
 
 if __name__ == '__main__':
-    # item = {"dstPath": r"C:\Users\anxin\Desktop\test_schedule\cafe_avas\InputFile\part_rfq.dst"}
-    # res = cal_beam_parameter(item)
-    # print(res)
+    item = {"dstPath": r"C:\Users\wangh\Desktop\qx2\InputFile\part_rfq.dst"}
+    res = cal_beam_parameter(item)
+    print(res)
     #
     # item = {"projectPath": r"D:\using\test_avas_qt\cafe_avas"}
     # res = get_all_files_in_project(item)

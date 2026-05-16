@@ -49,7 +49,6 @@ if __name__ == '__main__':
                     alpha=0.6
                 )
                 index = int(re.search(r'\d+', name).group())
-                print(51, index)
                 if index <=6:
                     if i % 5 == 0:  # 每隔一个 BPM 标一次
                         ax.text(
@@ -107,7 +106,6 @@ if __name__ == '__main__':
                     alpha=0.6
                 )
                 index = int(re.search(r'\d+', name).group())
-                print(51, index)
                 if index <= 6:
                     if i % 5 == 0:  # 每隔一个 BPM 标一次
                         ax.text(

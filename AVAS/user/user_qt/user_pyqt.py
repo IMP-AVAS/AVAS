@@ -129,6 +129,7 @@ class SimThread(QObject):
 
         self.process = Process(target=basic_run, args=(self.project_path, self.queue))
         self.process.start()
+
         self.check_timer.start(1000)  # 更快响应 UI
 
     def check_process(self):
@@ -160,6 +161,17 @@ class SimThread(QObject):
         if self.queue:
             self.queue.close()
             self.queue = None
+
+class SimThread2(QObject):
+
+    def __init__(self, project_path):
+        super().__init__()
+        self.project_path = project_path
+
+
+    def start(self):
+        self.queue = Queue()
+        basic_run(self.project_path, self.queue)
 
 
 class MainWindow(QMainWindow):
@@ -551,14 +563,22 @@ class MainWindow(QMainWindow):
         item ={"projectPath": self.project_path}
 
         project_check(item)
+        ##################
         self.sim_thread = SimThread(self.project_path)
         #完成
-        self.sim_thread.finished.connect(self.on_task_finished)
+        self.sim_thread.finished.connect(self.on_task_finished)   #设置按钮的状态
         #模拟出错
         self.sim_thread.sim_error_signal.connect(self.handle_error)
 
         self.sim_thread.start()
-        self.timer1.start(2000)
+##################################
+        # self.sim_thread = SimThread2(self.project_path)
+        # self.sim_thread.start()
+######################################
+
+
+        if self.page_beam.get_beam_mode() == "single":
+            self.timer1.start(2000)
 
 
     def handle_error(self, error_message):

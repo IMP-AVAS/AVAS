@@ -1,8 +1,8 @@
 import sys
 
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QGroupBox, QPushButton, QLineEdit,
-    QLabel, QFileDialog, QGridLayout, QSizePolicy
+    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QGroupBox, QPushButton, QLineEdit,
+    QLabel, QFileDialog, QGridLayout, QSizePolicy, QRadioButton, QButtonGroup
 )
 from PyQt5.QtCore import Qt
 
@@ -14,6 +14,8 @@ import logging
 from logger.logger_config import setup_logger
 logger = logging.getLogger(__name__)
 from aftertreat.dataanalysis.treatplt import TreatPlt
+from user.user_qt.page_utils.pltdialog import PltPlotDialog
+from user.user_qt.page_2nd.edstdialog import EdstPlotDialog
 
 class PagePlotphase(QWidget):
     def __init__(self, project_path):
@@ -27,11 +29,34 @@ class PagePlotphase(QWidget):
     def initUI(self):
         main_layout = QVBoxLayout(self)
 
+        ##############################
+        group_box_beam_mode = QGroupBox("Beam Mode")
+        beam_mode_layout = QHBoxLayout(group_box_beam_mode)
+
+        self.rb_single_beam = QRadioButton("Single beam")
+        self.rb_double_beam = QRadioButton("Double beam")
+
+        # 默认选择单束
+        self.rb_single_beam.setChecked(True)
+
+        # 按钮组：保证两个选项互斥
+        self.beam_mode_group = QButtonGroup(self)
+        self.beam_mode_group.addButton(self.rb_single_beam, 1)
+        self.beam_mode_group.addButton(self.rb_double_beam, 2)
+
+        beam_mode_layout.addWidget(self.rb_single_beam)
+        beam_mode_layout.addWidget(self.rb_double_beam)
+
+        self.rb_single_beam.toggled.connect(self.update_beam_mode_ui)
+        self.rb_double_beam.toggled.connect(self.update_beam_mode_ui)
+
+        main_layout.addWidget(group_box_beam_mode)
+
         # =========================
         # DST Import / Plot
         # =========================
-        group_box_dst = QGroupBox("DST Import / Plot")
-        dst_layout = QVBoxLayout(group_box_dst)
+        self.group_box_dst = QGroupBox("DST Import / Plot")
+        dst_layout = QVBoxLayout(self.group_box_dst)
 
         self.button_import_dst_file = QPushButton("Import dst File")
         self.button_import_dst_file.clicked.connect(self.select_dst_file)
@@ -119,21 +144,32 @@ class PagePlotphase(QWidget):
         # =========================
         # Add to main layout
         # =========================
-        main_layout.addWidget(group_box_dst)
+        main_layout.addWidget(self.group_box_dst)
         main_layout.addWidget(group_box_plt)
 
     def plot_dst(self):
-        self.cavity_voltage_dialog = DstPlotDialog(self.dst_path)
-        self.cavity_voltage_dialog.plot_image()
-        self.cavity_voltage_dialog.show()
 
+        #单束模式画dst文件
+        if self.get_beam_mode() == "single":
+            self.dst_dialog = DstPlotDialog(self.dst_path)
+            self.dst_dialog.plot_image()
+            self.dst_dialog.show()
+
+        #双束流模式
+        if self.get_beam_mode() == "double":
+            self.edst_dialog = EdstPlotDialog(self.dst_path)
+            self.edst_dialog.plot_image()
+            self.edst_dialog.show()
+
+        #双束模式画edst文件
     def select_dst_file(self):
         dst_file_path, _ = QFileDialog.getOpenFileName(
             self,
-            "Select dst File",
+            "Select dst/edst File",
             self.project_path,
-            "DST Files (*.dst);;All Files (*)"
+            "DST Files (*.dst *.edst);;All Files (*)"
         )
+
         if dst_file_path:
             self.text_dst_path.setText(dst_file_path)
             self.dst_path = dst_file_path
@@ -183,7 +219,19 @@ class PagePlotphase(QWidget):
         w = PltPlotDialog(item)
         w.plot_image()
         w.show()
+    def get_beam_mode(self):
+        if self.rb_single_beam.isChecked():
+            return "single"
+        elif self.rb_double_beam.isChecked():
+            return "double"
 
+    def update_beam_mode_ui(self):
+        if self.rb_double_beam.isChecked():
+            self.group_box_dst.setTitle("EDST Import / Plot")
+            self.button_import_dst_file.setText("Import edst File")
+        else:
+            self.group_box_dst.setTitle("DST Import / Plot")
+            self.button_import_dst_file.setText("Import dst File")
 
 if __name__ == '__main__':
     setup_logger(
@@ -191,7 +239,7 @@ if __name__ == '__main__':
     )
 
     app = QApplication(sys.argv)
-    w = PagePlotphase(r'C:\Users\wangh\Desktop\324\v3')
+    w = PagePlotphase(r'C:\Users\wangh\Desktop\test_page_2b')
     w.setGeometry(800, 500, 360, 320)
     w.setStyleSheet("background-color: rgb(253, 253, 253);")
     w.show()

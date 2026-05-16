@@ -9,6 +9,9 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QVBoxL
     QStackedWidget, QMenu, QLabel, QLineEdit, QTextEdit, QGridLayout, QHBoxLayout, QFrame, QFileDialog, QGroupBox, \
     QComboBox, QSizePolicy, QCheckBox, QMessageBox
 from user.user_qt.page_plophase import PagePlotphase
+from user.user_qt.page_2nd.generate_2beam import Pagegenerate2beam
+
+
 class PageTool(QWidget):
     def __init__(self, project_path):
         super().__init__()
@@ -28,7 +31,11 @@ class PageTool(QWidget):
         btn_avasplot = QPushButton("AVASPlot")
         btn_avasplot.clicked.connect(self.btn_avasplot_start)
 
+        btn_2bgenerate = QPushButton("Double bunch generate ")
+        btn_2bgenerate.clicked.connect(self.btn_2bgenerate)
+
         layout_box1.addWidget(btn_avasplot)
+        layout_box1.addWidget(btn_2bgenerate)
         layout_box1.addStretch(1)
 
         group_box1.setLayout(layout_box1)
@@ -47,12 +54,16 @@ class PageTool(QWidget):
         self.avasplot_window = PagePlotphase(self.project_path)
         self.avasplot_window.show()
 
+    def btn_2bgenerate(self):
+        self.b2b_generate = Pagegenerate2beam(self.project_path)
+        self.b2b_generate.show()
+
 import sys
 from PyQt5.QtWidgets import QApplication
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     project_path = None
-    win = ToolPage(project_path)
+    win = PageTool(project_path)
 
     win.resize(700, 500)
     win.show()

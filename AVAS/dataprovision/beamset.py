@@ -1,3 +1,4 @@
+#单束文件的beamset
 import numpy as np
 import struct
 import os

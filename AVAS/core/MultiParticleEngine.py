@@ -60,22 +60,28 @@ def run_agent(inputfile, outputfile, fieldfile):
     obj.get_path(inputfile, outputfile, fieldfile)
     obj.main_agent(1)
 if __name__ == '__main__':
-    import threading
-    import time
-    import os
-    from multiprocessing import Process
-
     project_path = r"C:\Users\shliu\Desktop\HEBT\hebt_avas"
     inputfile = os.path.join(project_path, "InputFile")
     outputfile = os.path.join(project_path, "OutputFile")
     fieldfile = os.path.join(project_path, "InputFile")
 
-    # 创建一个停止标志，用于停止执行
+
     obj = MultiParticleEngine()
     obj.get_path(inputfile, outputfile, fieldfile)
-    #
-    # obj.main_agent(0)
+    obj.main_agent(1)
 
-    process = Process(target=run_agent, args=(inputfile, outputfile, fieldfile))
-    process.start()
+    # import threading
+    # import time
+    # import os
+    # from multiprocessing import Process
+    #
+    #
+    # # 创建一个停止标志，用于停止执行
+    # obj = MultiParticleEngine()
+    # obj.get_path(inputfile, outputfile, fieldfile)
+    # #
+    # # obj.main_agent(0)
+    #
+    # process = Process(target=run_agent, args=(inputfile, outputfile, fieldfile))
+    # process.start()
     process.join()
