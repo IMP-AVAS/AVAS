@@ -1047,28 +1047,45 @@ class ErrorDyn(Error):
         for i in range(1, self.all_group + 1):
             for j in range(1, self.all_time + 1):
                 print(i, j)
+                lattice_mulp_list = self.generate_lattice_mulp_list(i)
+                self.run_one_time(i, j, lattice_mulp_list)
+                self.write_err_datas(i, j)  # 误差数据
+                self.write_err_par_every_time(i, j)  # par_tot
 
-                try:
-                    lattice_mulp_list = self.generate_lattice_mulp_list(i)
-                    self.run_one_time(i, j, lattice_mulp_list)
-                    self.write_err_datas(i, j)  #误差数据
-                    self.write_err_par_every_time(i, j)  #par_tot
+                # 将束诊参数写入到文件
+                group = i
+                time = j
+                item = {
+                    "project_path": self.project_path,
+                    "input_file": self.input_path,
+                    "output_file": os.path.join(self.output_path, "error_output", f"output_{group}_{time}"),
+                    "diag_file_path": os.path.join(self.output_path, f"par_diag_datas_{group}_{time}.txt"),
+                }
+                obj = DiagInfo(item)
+                obj.write_diag_info_to_file()
 
-
-                    # 将束诊参数写入到文件
-                    group = i
-                    time = j
-                    item = {
-                        "project_path": self.project_path,
-                        "input_file": self.input_path,
-                        "output_file": os.path.join(self.output_path, "error_output", f"output_{group}_{time}"),
-                        "diag_file_path": os.path.join(self.output_path, f"par_diag_datas_{group}_{time}.txt"),
-                    }
-                    obj = DiagInfo(item)
-                    obj.write_diag_info_to_file()
-                except Exception as e:
-                    print(i, j, "该次模拟错误")
-                    pass
+                # try:
+                #     lattice_mulp_list = self.generate_lattice_mulp_list(i)
+                #     self.run_one_time(i, j, lattice_mulp_list)
+                #     self.write_err_datas(i, j)  #误差数据
+                #     self.write_err_par_every_time(i, j)  #par_tot
+                #
+                #
+                #     # 将束诊参数写入到文件
+                #     group = i
+                #     time = j
+                #     item = {
+                #         "project_path": self.project_path,
+                #         "input_file": self.input_path,
+                #         "output_file": os.path.join(self.output_path, "error_output", f"output_{group}_{time}"),
+                #         "diag_file_path": os.path.join(self.output_path, f"par_diag_datas_{group}_{time}.txt"),
+                #     }
+                #     obj = DiagInfo(item)
+                #     obj.write_diag_info_to_file()
+                #
+                # except Exception as e:
+                #     print(i, j, "该次模拟错误")
+                #     pass
 
 class Errorstat(Error):
     def __init__(self, item):

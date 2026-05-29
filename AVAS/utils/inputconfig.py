@@ -10,19 +10,25 @@ class InputConfig():
     def __init__(self):
         self.input_parameter_keys = ["sim_type", "scmethod", "spacecharge", "steppercycle", "dumpperiodicity",
                                      "spacechargelong", "spacechargetype", "fieldSource", "device", "pchistogram_start", "pchistogram_grid",
-                                     "longlimits_start", "longlimits_phase", "longlimits_energy", "boundary", "randomseed"
+                                     "longlimits_start", "longlimits_phase", "longlimits_energy", "boundary", "randomseed",
+                                     "numofgrid_x", "numofgrid_y", "numofgrid_z", "meshrms_x", "meshrms_y", "meshrms_z",
+                                     "adaptive_grid"
                                      ]
 
 
         self.input_parameter = {"sim_type": None, 'spacecharge': None, 'steppercycle': None, 'dumpperiodicity':None,
                                 "spacechargelong": None, "spacechargetype": None, "pchistogram_start":None, "pchistogram_grid":None,
                                 "longlimits_start": None, "longlimits_phase": None, "longlimits_energy": None,
-                                "boundary": None, "randomseed": None
+                                "boundary": None, "randomseed": None,
+                                "numofgrid_x": None, "numofgrid_y": None, "numofgrid_z": None, "meshrms_x": None, "meshrms_y": None, "meshrms_z": None,
+                                "adaptive_grid":None
                                 }
 
         self.int_keys = ["spacecharge", "steppercycle", "dumpperiodicity",
-                         "spacechargelong", "spacechargetype", "pchistogram_start", "pchistogram_grid", "longlimits_start", "boundary", "randomseed"]
-        self.float_keys = ["longlimits_phase", "longlimits_energy"]
+                         "spacechargelong", "spacechargetype", "pchistogram_start", "pchistogram_grid", "longlimits_start", "boundary", "randomseed",
+                         "numofgrid_x", "numofgrid_y", "numofgrid_z",
+                         ]
+        self.float_keys = ["longlimits_phase", "longlimits_energy", "meshrms_x", "meshrms_y", "meshrms_z"]
 
 
         self.mulp_keys = ["sim_type", "scmethod", "spacecharge", "steppercycle", "dumpperiodicity", ]
@@ -62,6 +68,15 @@ class InputConfig():
             original_dict["longlimits_phase"] = original_dict["longlimits"][1]
             original_dict["longlimits_energy"] = original_dict["longlimits"][2]
 
+        if "numofgrid" in original_dict.keys():
+            original_dict["numofgrid_x"] = original_dict["numofgrid"][0]
+            original_dict["numofgrid_y"] = original_dict["numofgrid"][1]
+            original_dict["numofgrid_z"] = original_dict["numofgrid"][2]
+
+        if "meshrms" in original_dict.keys():
+            original_dict["meshrms_x"] = original_dict["meshrms"][0]
+            original_dict["meshrms_y"] = original_dict["meshrms"][1]
+            original_dict["meshrms_z"] = original_dict["meshrms"][2]
 
         # 验证是否存在未知元素
         # for k, v in original_dict.items():
@@ -108,15 +123,23 @@ class InputConfig():
         kwargs = {}
 
         v_dic = {}
+        print(126, self.input_parameter)
         if self.input_parameter["sim_type"] == 'mulp':
             v_dic = copy.deepcopy(self.input_parameter)
             v_dic["pchistogram"] = [v_dic["pchistogram_start"], v_dic["pchistogram_grid"]]
             v_dic["longlimits"] = [v_dic["longlimits_start"], v_dic["longlimits_phase"], v_dic["longlimits_energy"]]
 
+            #如果使用自适应性网格，就删除所有
+            if v_dic["adaptive_grid"] == 1:
+                v_dic["numofgrid"] = [v_dic["numofgrid_x"], v_dic["numofgrid_y"], v_dic["numofgrid_z"]]
+                v_dic["meshrms"] = [v_dic["meshrms_x"], v_dic["meshrms_y"], v_dic["meshrms_z"]]
 
             need_delete = ["spacechargelong", "spacechargetype",
                            "pchistogram_start", "pchistogram_grid",
-                           "longlimits_start", "longlimits_phase", "longlimits_energy"]
+                           "longlimits_start", "longlimits_phase", "longlimits_energy",
+                           "numofgrid_x", "numofgrid_y", "numofgrid_z",
+                           "meshrms_x", "meshrms_y", "meshrms_z"
+                           ]
 
             for i in need_delete:
                 del v_dic[i]

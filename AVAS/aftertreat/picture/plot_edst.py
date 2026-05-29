@@ -157,7 +157,7 @@ if __name__ == "__main__":
 
 
     obj = Plotedst()
-    edst_path = r"C:\Users\wangh\Desktop\qx\2beam\OutputFile\outData_6.992532.edst"
+    edst_path = r"C:\Users\wangh\Desktop\test_xiao\OutputFile\outData_2.022640.edst"
 
 
     item = {

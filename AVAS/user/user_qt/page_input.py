@@ -1,7 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QToolBar, QVBoxLayout, QWidget, QPushButton, \
     QStackedWidget, QMenu, QLabel, QLineEdit, QTextEdit, QGridLayout, QHBoxLayout, QFrame, QFileDialog, QGroupBox, \
-    QComboBox, QSizePolicy, QCheckBox, QMessageBox
+    QComboBox, QSizePolicy, QCheckBox, QMessageBox, QButtonGroup
 
 import os
 from user.user_qt.user_defined import MyQLineEdit
@@ -12,6 +12,8 @@ from user.user_qt.user_defined import treat_err, treat_err2, gray240
 from utils.inputconfig import InputConfig
 from apis.qt_api.api import create_from_file_input_ini, write_to_file_input_ini
 from utils.tool import safe_float, safe_int, safe_str
+from utils.tool import safe_str
+
 class PageInput(QWidget):
     input_signal = pyqtSignal(dict)
 
@@ -21,6 +23,19 @@ class PageInput(QWidget):
         # self.multithreading_num = -1
         self.field_source_path = None
         self.longlimits_start_num = 0
+
+        self.default_grid_param = {
+            "FFT" :
+                {
+                    "grid_numofgrid": [64,64,64],
+                    "grid_meshrms": [6.5,6.5,6.5]
+                },
+            "SPICNIC":
+                {
+                    "grid_numofgrid": [18, 18, 18],
+                    "grid_meshrms": [3.5, 3.5, 3.5]
+                }
+        }
 
         self.initUI()
 
@@ -73,8 +88,95 @@ class PageInput(QWidget):
         sc_method_layout.addStretch(1)
         group_box_sc_method.setLayout(sc_method_layout)
 
+#############################################
 
 
+        sc_grid_group_box = QGroupBox()
+
+        sc_grid_layout = QVBoxLayout()
+
+        # -----------------------------
+        # 网格数模式选择：自适应 / 手动
+        # -----------------------------
+        sc_grid_mode_layout = QHBoxLayout()
+
+        self.cb_adaptive_grid = QCheckBox("Adaptive grid", self)
+        self.cb_manual_grid = QCheckBox("Manual grid", self)
+
+        # 创建按钮组
+        self.grid_mode_group = QButtonGroup(self)
+
+        # 设置互斥
+        self.grid_mode_group.setExclusive(True)
+
+        # 加入两个 checkbox
+        self.grid_mode_group.addButton(self.cb_adaptive_grid)
+        self.grid_mode_group.addButton(self.cb_manual_grid)
+
+        # 设置默认选中
+        self.cb_adaptive_grid.setChecked(True)
+        self.cb_adaptive_grid.setFixedWidth(120)
+        self.cb_manual_grid.setFixedWidth(120)
+
+
+
+        self.cb_adaptive_grid.stateChanged.connect(self.cb_grid_mode_change)
+        self.cb_manual_grid.stateChanged.connect(self.cb_grid_mode_change)
+
+        sc_grid_mode_layout.addWidget(self.cb_adaptive_grid)
+        sc_grid_mode_layout.addStretch(1)
+        sc_grid_mode_layout.addWidget(self.cb_manual_grid)
+        sc_grid_mode_layout.addStretch(1)
+
+
+
+        # -----------------------------
+        # Numofgrid
+        # -----------------------------
+
+        sc_grid_numofgrid_layout = QHBoxLayout()
+        sc_grid_numofgrid_label = QLabel("Numofgrid")
+        sc_grid_numofgrid_label.setMinimumWidth(84)
+        self.sc_grid_numofgrid_x_text = QLineEdit()
+        self.sc_grid_numofgrid_y_text = QLineEdit()
+        self.sc_grid_numofgrid_z_text = QLineEdit()
+
+        sc_grid_numofgrid_layout.addWidget(sc_grid_numofgrid_label)
+        sc_grid_numofgrid_layout.addWidget(self.sc_grid_numofgrid_x_text)
+        sc_grid_numofgrid_layout.addWidget(self.sc_grid_numofgrid_y_text)
+        sc_grid_numofgrid_layout.addWidget(self.sc_grid_numofgrid_z_text)
+
+
+        #############
+        sc_grid_meshrms_layout = QHBoxLayout()
+        sc_grid_meshrms_label = QLabel("MeshRms")
+        sc_grid_meshrms_label.setMinimumWidth(84)
+        self.sc_grid_meshrms_x_text = QLineEdit()
+        self.sc_grid_meshrms_y_text = QLineEdit()
+        self.sc_grid_meshrms_z_text = QLineEdit()
+
+        sc_grid_meshrms_layout.addWidget(sc_grid_meshrms_label)
+        sc_grid_meshrms_layout.addWidget(self.sc_grid_meshrms_x_text)
+        sc_grid_meshrms_layout.addWidget(self.sc_grid_meshrms_y_text)
+        sc_grid_meshrms_layout.addWidget(self.sc_grid_meshrms_z_text)
+
+        grid_param_edits = [
+            self.sc_grid_numofgrid_x_text,
+            self.sc_grid_numofgrid_y_text,
+            self.sc_grid_numofgrid_z_text,
+            self.sc_grid_meshrms_x_text,
+            self.sc_grid_meshrms_y_text,
+            self.sc_grid_meshrms_z_text,
+        ]
+
+        for edit in grid_param_edits:
+            edit.editingFinished.connect(self.update_default_grid_param_from_ui)
+
+        sc_grid_layout.addLayout(sc_grid_mode_layout)
+        sc_grid_layout.addLayout(sc_grid_numofgrid_layout)
+        sc_grid_layout.addLayout(sc_grid_meshrms_layout)
+
+        sc_grid_group_box.setLayout(sc_grid_layout)
 ###############fft
         # fft_layout = QHBoxLayout()
         #
@@ -389,7 +491,7 @@ class PageInput(QWidget):
 
         vertical_layout_main.addWidget(group_box_mulp_env)
         vertical_layout_main.addWidget(group_box_sc_method)
-
+        vertical_layout_main.addWidget(sc_grid_group_box)
         # vertical_layout_main.addWidget(group_box_multithreading)
         # vertical_layout_main.addWidget(group_box_scan_phase)
         vertical_layout_main.addWidget(group_box_step_per_period)
@@ -457,6 +559,8 @@ class PageInput(QWidget):
         elif sender_checkbox == self.cb_picnic:
             self.cb_fft.setChecked(not sender_checkbox.isChecked())
 
+        self.cb_grid_mode_change()
+
 
 
     def updatePath(self, new_path):
@@ -482,6 +586,20 @@ class PageInput(QWidget):
             self.cb_fft.setChecked(True)
         elif input_ini_res.get('scmethod') == "SPICNIC":
             self.cb_picnic.setChecked(True)
+        ##############################
+        sc_method_v1 = input_ini_res.get('scmethod')
+        if input_ini_res.get("adaptive_grid") == 0:
+            self.default_grid_param[sc_method_v1]["grid_numofgrid"] = [input_ini_res.get("numofgrid_x"),
+                                                                       input_ini_res.get("numofgrid_y"), input_ini_res.get("numofgrid_z")]
+            self.default_grid_param[sc_method_v1]["grid_meshrms"] = [input_ini_res.get("meshrms_x"),
+                                                                       input_ini_res.get("meshrms_y"), input_ini_res.get("meshrms_z")]
+
+
+        if input_ini_res.get("adaptive_grid") == 1:
+            self.sc_adaptive_grid_checkbox.setChecked(True)
+        elif input_ini_res.get("adaptive_grid") == 0:
+            self.sc_adaptive_grid_checkbox.setChecked(False)
+    #####################################
 
 
         # self.scan_phase_num = safe_int(input_ini_res.get('scanphase'), 1)
@@ -541,6 +659,9 @@ class PageInput(QWidget):
                 self.sc_step_meter_checkbox.setChecked(True)
             elif int(sc_step_type) == 1:
                 self.sc_step_beta_checkbox.setChecked(True)
+
+
+
 
 
 # if input_ini_res.get('scmethod') == "FFT":
@@ -638,7 +759,21 @@ class PageInput(QWidget):
         elif self.sc_step_beta_checkbox.isChecked():
             res['spacechargetype'] == 1
 
+        ###########################
+        if  self.cb_adaptive_grid.isChecked():
+            adaptive_grid = 1
+        else:
+            adaptive_grid = 0
+        res["adaptive_grid"] = adaptive_grid
+        res['numofgrid'] = [
+                    safe_int(self.sc_grid_numofgrid_x_text.text()), safe_int(self.sc_grid_numofgrid_y_text.text()),
+                    safe_int(self.sc_grid_numofgrid_z_text.text())]
+
+        res['meshrms'] = [safe_float(self.sc_grid_meshrms_x_text.text()), safe_float(self.sc_grid_meshrms_y_text.text()),
+                    safe_float(self.sc_grid_meshrms_z_text.text())]
+        print(res)
         return res
+
 
     #     # res.append(['SCMethod', "FFT"])
     #     res["scmethod"] = "FFT"
@@ -764,8 +899,69 @@ class PageInput(QWidget):
 
             self.scan_phase_combo.setEnabled(False)
             self.scan_phase_combo.setStyleSheet(f"QComboBox {{ background-color:  {gray240} }}")
+    def cb_grid_mode_change(self):
+        sender = self.sender()
+
+        numofgrid_element = [self.sc_grid_numofgrid_x_text, self.sc_grid_numofgrid_y_text,
+                             self.sc_grid_numofgrid_z_text]
+
+        meshrms_element= [self.sc_grid_meshrms_x_text, self.sc_grid_meshrms_y_text,
+                          self.sc_grid_meshrms_z_text
+        ]
 
 
+        sc_method = None
+        if self.cb_fft.isChecked():
+            sc_method = 'FFT'
+        elif self.cb_picnic.isChecked():
+            sc_method = 'SPICNIC'
+
+        if self.cb_adaptive_grid.isChecked():
+            print("选择 Adaptive grid")
+            # Numofgrid 自适应时不允许手动输入
+            for i in range(3):
+                numofgrid_element[i].setEnabled(False)
+                meshrms_element[i].setEnabled(False)
+
+        elif self.cb_manual_grid.isChecked():
+            print("选择 Manual grid")
+            for i in range(3):
+                numofgrid_element[i].setEnabled(True)
+                meshrms_element[i].setEnabled(True)
+                numofgrid_element[i].setText(safe_str(self.default_grid_param[sc_method]["grid_numofgrid"][i]))
+                meshrms_element[i].setText(safe_str(self.default_grid_param[sc_method]["grid_meshrms"][i]))
+
+    def update_default_grid_param_from_ui(self):
+        if getattr(self, "_updating_grid_ui", False):
+            return
+
+        sc_method = None
+        if self.cb_fft.isChecked():
+            sc_method = 'FFT'
+        elif self.cb_picnic.isChecked():
+            sc_method = 'SPICNIC'
+
+        try:
+            numofgrid = [
+                safe_int(self.sc_grid_numofgrid_x_text.text()),
+                safe_int(self.sc_grid_numofgrid_y_text.text()),
+                safe_int(self.sc_grid_numofgrid_z_text.text()),
+            ]
+
+            meshrms = [
+                safe_float(self.sc_grid_meshrms_x_text.text()),
+                safe_float(self.sc_grid_meshrms_y_text.text()),
+                safe_float(self.sc_grid_meshrms_z_text.text()),
+            ]
+
+        except ValueError:
+            print("网格参数输入格式错误")
+            return
+
+        self.default_grid_param[sc_method]["grid_numofgrid"] = numofgrid
+        self.default_grid_param[sc_method]["grid_meshrms"] = meshrms
+
+        print("已同步修改：", sc_method, self.default_grid_param[sc_method])
 # sec_sc = CollapsibleSection("空间电荷")
 # chk_sc = QtWidgets.QCheckBox("启用空间电荷计算")
 # sec_sc.form.addRow(chk_sc)

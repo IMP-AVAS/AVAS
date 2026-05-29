@@ -149,8 +149,8 @@ def write_to_tracewin_lattice(new_trlattice, avas_lattice_path):
 if __name__ == '__main__':
     # fiels = [ "5.74228", "0.0055", "1", "1", "750e6", "180, "1.4", "1.4", "hwr"  ]
 
-    avas_path = r"C:\Users\wangh\Desktop\proton_fix\lattice.txt"
-    tracewin_lattice_path = r"C:\Users\wangh\Desktop\proton_fix\lattice_mulp.dat"
+    avas_path = r"C:\Users\wangh\Desktop\test_mu\avas_p10_sol\InputFile\lattice_mulp.txt"
+    tracewin_lattice_path = r"C:\Users\wangh\Desktop\test_mu\avas_p10_sol\InputFile\tr_lattice.dat"
 
     avas_lattice = read_avas(avas_path)
 

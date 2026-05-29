@@ -124,9 +124,11 @@ class BeamsetParameter2b():
             syn_x = data_array[-1][0]
             syn_y = data_array[-1][2]
 
-            data_array[:-1, 0] = data_array[:-1, 0] + syn_x
-            data_array[:-1, 2] = data_array[:-1, 2] + syn_y
+            syn_z = location
 
+            data_array[:, 0] = data_array[:, 0] + syn_x
+            data_array[:, 2] = data_array[:, 2] + syn_y
+            data_array[:, 4] = data_array[:, 4] + syn_z
 
             self.one_step_list = data_array
 
@@ -202,24 +204,33 @@ class BeamsetParameter2b():
 
 if __name__ == "__main__":
 
-    beamset_pasth = r"C:\Users\wangh\Desktop\qx\2beam\OutputFile\BeamSet.plt"
+    beamset_pasth = r"C:\Users\wangh\Desktop\test_xiao\OutputFile\BeamSet.plt"
     obj = BeamsetParameter2b(beamset_pasth)
 
     step = obj.get_step()
     print(step)
-    dic ,lis = obj.get_one_parameter(0)
+    # for i in range(390):
+    #     dic ,lis = obj.get_one_parameter(i)
+    #     print(dic["location"])
 
-    np.set_printoptions(threshold=np.inf, linewidth=3)
-    print(dic, lis[0])
 
+    dic ,lis = obj.get_one_parameter(265)
+    print(dic["location"])
 
-    # d1, v2 = obj.get_one_parameter(0)
+    print(lis[-1])
+    import matplotlib.pyplot as plt
+
+    z_p = [i[4] for i in lis if int(i[8]) == 1 and int(i[6])==1]
+    y_p = [i[2] for i in lis if int(i[8]) == 1 and int(i[6])==1]
+    z_ap = [i[4] for i in lis if int(i[8]) == -1 and int(i[6])==1]
+    y_ap = [i[2] for i in lis if int(i[8]) == -1 and int(i[6])==1]
     # # print(d1, l1[0])
     #
     # res =obj.get_all_dict()
     #
-
-
+    plt.scatter(z_p, y_p,s=4.0)
+    plt.scatter(z_ap, y_ap,s=4.0)
+    plt.show()
 
 
     # # print(res)

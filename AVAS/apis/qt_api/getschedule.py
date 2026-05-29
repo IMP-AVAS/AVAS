@@ -8,6 +8,7 @@ from utils.iniconfig import IniConfig
 from utils.tool import format_output
 from utils.readfile import read_txt
 from utils.treat_directory import list_files_in_directory
+from dataprovision.par_out_ana import  ana_syn_particle
 class GetSchedule():
     def __init__(self, item):
         self.project_path = item["projectPath"]
@@ -56,18 +57,22 @@ class GetSchedule():
         self.total_length = total_length
 
         dataset_path = os.path.join(self.project_path, 'OutputFile', 'DataSet.txt')
+        syn_par_path = os.path.join(self.project_path, 'OutputFile', 'synParticle.txt')
 
         if not os.path.exists(dataset_path):
             dic["currentLength"] = 0
             return dic
         else:
-            dataset_obj = DatasetParameter(dataset_path)
-            res = dataset_obj.get_parameter()
-            if res is False:
+            # dataset_obj = DatasetParameter(dataset_path)
+            # res = dataset_obj.get_parameter()
+            syn_info = ana_syn_particle(syn_par_path)
+
+            if syn_info is False:
                 z = 0
             else:
-                z = dataset_obj.z[-1]
-                z = round(z, 6)
+                # z = dataset_obj.z[-1]
+                # z = round(z, 6)
+                z = round(syn_info[0], 6)
                 if z > total_length:
                     z = total_length
                     dic["currentLength"] = total_length
@@ -131,18 +136,22 @@ class GetSchedule():
 
 
         dataset_path = os.path.join(error_middle_output0_path, 'DataSet.txt')
+        syn_par_path = os.path.join(error_middle_output0_path, 'synParticle.txt')
 
         if not os.path.exists(dataset_path):
             dic["currentLength"] = 0
             return dic
         else:
-            dataset_obj = DatasetParameter(dataset_path)
-            res = dataset_obj.get_parameter()
-            if res is False:
+            # dataset_obj = DatasetParameter(dataset_path)
+            # res = dataset_obj.get_parameter()
+            syn_info = ana_syn_particle(syn_par_path)
+
+            if syn_info is False:
                 z = 0
             else:
-                z = dataset_obj.z[-1]
-                z = round(z, 6)
+                # z = dataset_obj.z[-1]
+                # z = round(z, 6)
+                z = round(syn_info[0], 6)
                 if z > total_length:
                     z = total_length
 

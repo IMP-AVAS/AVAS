@@ -999,6 +999,9 @@ def plot_dst4qt(item):
 if __name__ == '__main__':
     edst_path = r"C:\Users\wangh\Desktop\qx\2beam\OutputFile\outData_6.992532.edst"
 
+    item = {
+        ""
+    }
 
     item = {
         "show_": 1,

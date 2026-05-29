@@ -34,7 +34,7 @@ class MultiParticle():
         self.multiparticle_engine = item.get("mulp_engine")
         self.device = item.get("device")
         self.if_error = item.get("if_error", 0)
-
+        self.env_par_mode = item.get("env_par_mode", "par")
         if self.device in [None, ""]:
             self.device = "cpu"
 
@@ -49,9 +49,12 @@ class MultiParticle():
         # if self.errorlog_path is None:
         #     self.errorlog_path = os.path.join(self.output_file, "ErrorLog.txt")
 
+        item = {
+            "env_par_mode": self.env_par_mode
+        }
         if self.device  == "cpu":
             if self.multiparticle_engine is None:
-                self.multiparticle_engine = MultiParticleEngine()
+                self.multiparticle_engine = MultiParticleEngine(item)
                 # self.multiparticle_engine = engine
 
         if self.if_error == 0:
@@ -176,7 +179,7 @@ def basic_mulp(project_path):
 if __name__ == "__main__":
     import sys, os
 
-    path = r"C:\Users\wangh\Desktop\test_sun0514"
+    path = r"C:\Users\wangh\Desktop\test_shaopenghui"
     item = {'project_path': path,
             "device":"cpu"
             }

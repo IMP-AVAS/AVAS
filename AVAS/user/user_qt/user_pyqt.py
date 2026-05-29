@@ -44,58 +44,7 @@ from utils.exception import BaseError
 from concurrent.futures import ProcessPoolExecutor
 from apis.qt_api.api import project_check
 
-# def basic_run(project_path, queue):
-#     try:
-#         item = {"projectPath": project_path}
-#         obj = SimMode(item)
-#         obj.run()
-#     except Exception as e:
-#         queue.put(str(e))
-#     finally:
-#         queue.close()
 
-
-# class SimThread(QThread):
-#     finished = pyqtSignal()  # 任务完成信号
-#     sim_error_signal = pyqtSignal(str)
-#
-#     def __init__(self, project_path):
-#         super().__init__()
-#         self.project_path = project_path
-#         self.process = None
-#
-#     def run(self):
-#         try:
-#             print("Thread started")
-#             item = {"projectPath": self.project_path}
-#
-#             queue = Queue()  # 创建队列用于传递异常信息
-#
-#             # 创建进程并传递队列
-#             self.process = Process(target=basic_run, args=(self.project_path, queue,))
-#             self.process.start()
-#             self.process.join()
-#
-#             # 检查子进程是否有异常
-#             if not queue.empty():
-#                 error_message = queue.get()
-#                 raise Exception(f"Subprocess Error: {error_message}")
-#
-#             self.finished.emit()
-#             print("Thread finished")
-#
-#         except Exception as e:
-#             self.sim_error_signal.emit(str(e))
-#
-#     def stop(self):
-#         if self.process and self.process.is_alive():
-#             print("Stopping process...")
-#             self.process.terminate()  # 强制终止子进程
-#             self.process.join()       # 等待子进程结束
-#             print("Process stopped")
-#
-#         self.quit()  # 让 QThread 退出
-#         self.wait()  # 确保线程彻底结束
 
 
 
@@ -564,6 +513,7 @@ class MainWindow(QMainWindow):
 
         project_check(item)
         ##################
+        # self.sim_thread = SimThread(self.project_path)
         self.sim_thread = SimThread(self.project_path)
         #完成
         self.sim_thread.finished.connect(self.on_task_finished)   #设置按钮的状态

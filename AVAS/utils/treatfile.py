@@ -33,16 +33,27 @@ def split_file(file_path):
     return parts
 
 # 判断哪一个文件是否在文件夹中():
-def file_in_directory(file, directory):
-    file_list = os.path.normpath(file)
-    directory_list = [os.path.normpath(i) for i in list_files_in_directory(directory)]
-    # print(file)
-    # print(directory_list)
-    if file_list in directory_list:
-        return True
-    else:
-        return False
+# def file_in_directory(file, directory):
+#     file_list = os.path.normpath(file)
+#     directory_list = [os.path.normpath(i) for i in list_files_in_directory(directory)]
+#     # print(file)
+#     # print(directory_list)
+#     if file_list in directory_list:
+#         return True
+#     else:
+#         return False
+def normalize_path(path):
+    return os.path.normpath(path).lower()
 
+def file_in_directory(file, directory):
+    file_norm = normalize_path(file)
+
+    directory_set = {
+        normalize_path(i)
+        for i in list_files_in_directory(directory)
+    }
+
+    return file_norm in directory_set
 
 def check_file_update(file_path):
     """

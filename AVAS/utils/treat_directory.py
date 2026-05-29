@@ -67,6 +67,7 @@ def copy_directory(source_folder, destination_folder, new_name=None):
 
     shutil.copytree(source_folder, destination_folder)
 
+
 def delete_directory(path):
     """
     删除一个文件夹

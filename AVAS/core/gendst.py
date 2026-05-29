@@ -27,12 +27,24 @@ class GenDst():
             elif platform.system() == "Linux":
                 raise ValueError(f"Failed to load so '{self.so_path}'. Reason: {e}")
     def generate_dst(self, input, output):
-        self.library.GenBunch(ctypes.c_wchar_p(input),
-              ctypes.c_wchar_p(output))
+        if platform.system() == "Windows":
+            self.library.GenBunch(ctypes.c_wchar_p(input),
+                ctypes.c_wchar_p(output))
+        elif platform.system() == "Linux":
+            print(input, output)
+            input =  ctypes.c_char_p(input.encode('utf-8'))
+            output = ctypes.c_char_p(output.encode('utf-8'))
+
+            # input =  ctypes.c_char_p(input),
+            # output = ctypes.c_char_p(output)
+
+            self.AVAS_cdll.GenBunch(input,
+                output)
+
 
 
 if __name__ == '__main__':
     obj = GenDst()
-    input = r"C:\Users\wangh\Desktop\test_page_2b\Outputfile\generate_2beam\beam1.txt"
-    output = r"C:\Users\wangh\Desktop\test_page_2b\Outputfile\generate_2beam\beam1.dst"
+    input = r"C:\Users\wangh\Desktop\test_gdst\beam.txt"
+    output = r"C:\Users\wangh\Desktop\test_gdst\beam.dst"
     obj.generate_dst(input, output)

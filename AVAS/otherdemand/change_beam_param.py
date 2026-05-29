@@ -85,19 +85,22 @@ def write_to_dst(path, particle_info):
 if __name__ == "__main__":
     #读取原来的分布
     import copy
-    ori_dst = r"C:\Users\wangh\Desktop\test_quad\p10_2.dst"
+    ori_dst = r"C:\Users\wangh\Desktop\test_mu\test_ez_e\quad_input.dst"
     ori_fenbu = read_dst_fast(ori_dst)
     print(ori_fenbu)
 
     new_fenbu = copy.copy(ori_fenbu)
-
+    new_fenbu["basemassinmev"] = 938.27208816
     pdst = new_fenbu["partran_dist"]
 
     for i in pdst:
-        i[0] = np.random.uniform(-5, 5)/10
-        i[1] = np.random.uniform(-5, 5)/1000
-        i[2] = np.random.uniform(-5, 5)/10
-        i[3] = np.random.uniform(-5, 5)/1000
+        i[0] = np.random.uniform(-0.01, 0.01)
+        i[1] = np.random.uniform(1.0, 1.01)
+        i[2] = np.random.uniform(-0.01, 0.01)
+        i[3] = np.random.uniform(0, 0.00001)
+        i[4] = np.random.uniform(-0.01, 0.01)
+        i[5] = np.random.uniform(1.0, 1.01)
+
 
 
 ######################
@@ -105,5 +108,5 @@ if __name__ == "__main__":
 
 
     #生成新的分布
-    new_dst = r"C:\Users\wangh\Desktop\test_quad\quad_input.dst"
+    new_dst = r"C:\Users\wangh\Desktop\test_mu\test_ez_e\quad_input2.dst"
     write_to_dst(new_dst, new_fenbu)

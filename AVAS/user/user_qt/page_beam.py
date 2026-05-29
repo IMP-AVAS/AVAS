@@ -951,22 +951,26 @@ class PageBeam(QWidget):
 
             # print(file_in_directory(source_file, target_folder))
 
+            print(source_file, target_folder)
             #如果文件已经文件夹中
             if file_in_directory(source_file, target_folder):
+                print("beam", 1)
                 self.text_particle_input_file.setText(relative_dst_file_path)
 
             #如果文件不在文件夹中并且没有重名
             elif not file_in_directory(source_file, target_folder) and \
                 not file_in_directory(target_dst_file, target_folder):
+                print("beam",2)
                 copy_file(source_file, target_folder)
                 self.text_particle_input_file.setText(relative_dst_file_path)
 
             # 如果文件不在文件夹中并且重名了
+
             elif not file_in_directory(source_file, target_folder) and \
                 file_in_directory(target_dst_file, target_folder):
                 msg = QMessageBox.question(self, '文件已存在', '文件已存在，是否要覆盖？',
                                            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-
+                print("beam", 3)
                 if msg == QMessageBox.No:
                     return 0
                 elif msg == QMessageBox.Yes:
