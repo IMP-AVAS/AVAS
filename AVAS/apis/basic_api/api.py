@@ -997,21 +997,28 @@ def plot_dst4qt(item):
     return 1
 
 if __name__ == '__main__':
-    edst_path = r"C:\Users\wangh\Desktop\qx\2beam\OutputFile\outData_6.992532.edst"
-
     item = {
-        ""
+        "project_path": r"C:\Users\shliu\Desktop\ip_safe_lebt",
+        "device": "cpu",
     }
 
-    item = {
-        "show_": 1,
-        "fig": None,
-        "save_path": None,
-        "picture_type":  [["x", "x1"], ["y", "y1"], ["phi", "w"], ["phi", "y"]],
-        "edst_path": edst_path,
-        "edst_dict": None,
-        }
-    plot_edst(item)
+    basic_mulp(**item)
+
+    # edst_path = r"C:\Users\wangh\Desktop\qx\2beam\OutputFile\outData_6.992532.edst"
+    #
+    # item = {
+    #     ""
+    # }
+    #
+    # item = {
+    #     "show_": 1,
+    #     "fig": None,
+    #     "save_path": None,
+    #     "picture_type":  [["x", "x1"], ["y", "y1"], ["phi", "w"], ["phi", "y"]],
+    #     "edst_path": edst_path,
+    #     "edst_dict": None,
+    #     }
+    # plot_edst(item)
 
     # item = {
     #     "show_": 1,

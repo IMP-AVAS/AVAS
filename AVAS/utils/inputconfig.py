@@ -123,7 +123,7 @@ class InputConfig():
         kwargs = {}
 
         v_dic = {}
-        print(126, self.input_parameter)
+
         if self.input_parameter["sim_type"] == 'mulp':
             v_dic = copy.deepcopy(self.input_parameter)
             v_dic["pchistogram"] = [v_dic["pchistogram_start"], v_dic["pchistogram_grid"]]

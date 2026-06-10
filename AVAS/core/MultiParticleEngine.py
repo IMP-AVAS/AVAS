@@ -44,6 +44,7 @@ class MultiParticleEngine():
 
     def get_path(self, inputfilepath, outputfilePath, fieldfilePath):
         if platform.system() == 'Windows':
+            print(47, inputfilepath, outputfilePath, fieldfilePath)
             inputfilepath = ctypes.c_wchar_p(inputfilepath)
             outputfilePath = ctypes.c_wchar_p(outputfilePath)
             fieldfilePath = ctypes.c_wchar_p(fieldfilePath)

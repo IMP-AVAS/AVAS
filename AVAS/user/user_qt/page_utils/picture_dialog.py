@@ -253,6 +253,7 @@ class MulpEnvelopeDialog(OnePicyureRightkeys):
             "beta_y": cmenu.addAction("beta_y"),
             "beta_z": cmenu.addAction("beta_z"),
             "beta_xyz": cmenu.addAction("beta_xyz"),
+            "c_xy": cmenu.addAction("c_xy"),
         }
 
         action = cmenu.exec_(self.mapToGlobal(event.pos()))

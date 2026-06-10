@@ -22,14 +22,20 @@ DEFAULT_ANALYSIS_SETTINGS = {
     'parameter_number': 8 * 6,
     "elements_quantity": [2, 6], # Example: [2 elements type 1, 6 elements type 3]
     "elements_type": [1, 3],     # Corresponding element types above
-    "bounds":
-        [[0.5, 0.5, 2 * MRAD_TO_DEGREE, 2 * MRAD_TO_DEGREE, 0.5, 0.1], # 6 parameter bounds for element type 1
-         [0.5, 0.5, 2 * MRAD_TO_DEGREE, 2 * MRAD_TO_DEGREE, 2 * MRAD_TO_DEGREE, 0.5]], # 6 parameter bounds for element type 3
     'block_size': 6, # Only used when mode='block'
     'error_commands': [ # Error command templates corresponding to elements_type
         ['err_cav_ncpl_dyn', '1', '0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0'],
         ['err_quad_ncpl_dyn', '1', '0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0', '0.0']
-    ]
+    ],
+
+    "bounds_lower":
+        [[-0.5, -0.5, -2 * MRAD_TO_DEGREE, -2 * MRAD_TO_DEGREE, -0.5, -0.1],  # 6 parameter bounds for element type 1
+         [-0.5, -0.5, -2 * MRAD_TO_DEGREE, -2 * MRAD_TO_DEGREE, -2 * MRAD_TO_DEGREE, -0.5]],
+
+    "bounds_upper":
+        [[0.5, 0.5, 2 * MRAD_TO_DEGREE, 2 * MRAD_TO_DEGREE, 0.5, 0.1],  # 6 parameter bounds for element type 1
+         [0.5, 0.5, 2 * MRAD_TO_DEGREE, 2 * MRAD_TO_DEGREE, 2 * MRAD_TO_DEGREE, 0.5]],
+
 }
 
 # Simulation result parsing configuration

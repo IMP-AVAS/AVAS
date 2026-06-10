@@ -770,8 +770,6 @@ class PageInput(QWidget):
                     safe_int(self.sc_grid_numofgrid_z_text.text())]
 
         res['meshrms'] = [safe_float(self.sc_grid_meshrms_x_text.text()), safe_float(self.sc_grid_meshrms_y_text.text()),
-                    safe_float(self.sc_grid_meshrms_z_text.text())]
-        print(res)
         return res
 
 

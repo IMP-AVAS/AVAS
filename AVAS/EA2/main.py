@@ -35,6 +35,7 @@ if __name__ == "__main__":
 
     test_root_path = Path(r'C:\Users\wangh\Desktop\ea_test\AVAS\EA_CAFe_MEBT2')
 
+
     # --- Phase 1: Project initialization or loading ---
     try:
         # Create a new project

@@ -14,8 +14,8 @@ from utils_ea import logger, get_input, create_or_load_json_config, save_json_co
 from config import DEFAULT_ANALYSIS_SETTINGS, MRAD_TO_DEGREE
 from paths import AnalysisPaths, ProjectPaths
 from simulator import AvasSimulator
-
-
+import os
+import sys
 # =========================================================================
 # Module-level functions: For single simulation tasks in multiprocessing
 # =========================================================================
@@ -26,19 +26,31 @@ def run_single_simulation_task(
         group_id: int,
         base_simulation_path: Path,
         analysis_setting_for_task: Dict,
-        simulator_instance: AvasSimulator
+        simulator_instance: AvasSimulator,
+        field_path: Path,
+        gpu_id: int,
+        platform,
 ) -> List[str]:
     """
     An independent function to execute a single simulation task in a multiprocessing pool.
     It receives all necessary parameters instead of relying on a class instance (which is not serializable).
     """
+    if platform == "gpu":
+        os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
+
+
     task_paths = AnalysisPaths(project_root_dir, group_id)
 
-    clone_path = task_paths.get_clone_path(clone_id)
-    result_file = task_paths.get_clone_output_file_path(clone_id)
+
+    analysis_dir_name = task_paths.analysis_dir  #OO1ANALYSIS
+    clones_dir = task_paths.clones_dir  #OO1ANALYSIS/clones
+
+    clone_path = task_paths.get_clone_path(clone_id)  #/clones/base_0
+    result_file = task_paths.get_clone_output_file_path(clone_id)  #/clones/base_0/outputfile
+
 
     # 1. Copy base files
-    copy_directory(base_simulation_path, clone_path)
+    copy_directory(base_simulation_path, clones_dir, new_name=f"base_{clone_id}")
 
     # 2. Modify input file
     lattice_path = task_paths.get_clone_input_file_path(clone_id)
@@ -109,7 +121,7 @@ def run_single_simulation_task(
     logger.debug(f"Subprocess {os.getpid()} modified file: {lattice_path}")
 
     # 3. Run simulation and get results
-    results = simulator_instance.run_and_get_result(clone_path, result_file)
+    results = simulator_instance.run_and_get_result(clone_path, result_file, field_path, platform)
     logger.debug(f"Subprocess {os.getpid()} completed simulation: clone_id={clone_id}")
 
     # 4. Clean up clone directory
@@ -133,11 +145,13 @@ class AnalysisManager:
         self.paths = None
         self.config: dict = {}
         self._base_simulation_path = project_root_dir / 'base_dir'
+        self.field_path = os.path.join(project_root_dir, 'field_dir')
+
         self.simulator = AvasSimulator()  # AvasSimulator instance
         self.mode = mode
         self.group_id = group_id
 
-        self._resolve_group_id(group_id, mode)  #产生group_id, 001analysis
+        # self._resolve_group_id(group_id, mode)  #产生group_id, 001analysis
 
         self.paths = AnalysisPaths(self._project_root_dir, self.group_id)
 
@@ -181,17 +195,19 @@ class AnalysisManager:
 
     def _setup_new_analysis(self, analysis_config: Dict, simple_size: int, random_seed: int, round_id: int):
         self.paths.create_analysis_dirs()  #创建analysis
+
         logger.info(f"Created analysis directory: {self.paths.analysis_dir}")
 
         effective_analysis_config = DEFAULT_ANALYSIS_SETTINGS.copy()
         #更新用户设置的analysis中的内容
         effective_analysis_config.update(analysis_config)
 
+        #如果是第一次模拟，随机数和round都设为0
         self.config = {
             'setting': effective_analysis_config,
             'simple_size': [simple_size if simple_size is not None else 10],
-            'random': [random_seed if random_seed is not None else 0],
-            'round_id': [round_id if round_id is not None else 0]
+            'random': [0],
+            'round_id': [0]
         }
 
         save_json_config(self.paths.analysis_settings_file, self.config)
@@ -217,9 +233,10 @@ class AnalysisManager:
                 logger.error(error_msg)
                 raise ValueError(error_msg)
 
+        #如果是重新模拟，那么随机数和round_id +1
         self.config['simple_size'].append(simple_size if simple_size is not None else self.config['simple_size'][-1])
-        self.config['random'].append(random_seed if random_seed is not None else self.config['random'][-1] + 1)
-        self.config['round_id'].append(round_id if round_id is not None else self.config['round_id'][-1] + 1)
+        self.config['random'].append(self.config['random'][-1] + 1)
+        self.config['round_id'].append(self.config['round_id'][-1] + 1)
 
         save_json_config(self.paths.analysis_settings_file, self.config)
 
@@ -237,23 +254,24 @@ class AnalysisManager:
         #
         np.random.seed(self._current_random_seed)
         simple_size = self._current_simple_size
-        bounds_per_element_type = self.config['setting']['bounds']
         elements_quantity = self.config['setting']['elements_quantity']  #2, 6
 
-        input_A = np.random.uniform(-1, 1, size=(simple_size, param_number))
-        input_B = np.random.uniform(-1, 1, size=(simple_size, param_number))
+        # input_A = np.random.uniform(-1, 1, size=(simple_size, param_number))
+        # input_B = np.random.uniform(-1, 1, size=(simple_size, param_number))
+
+        bounds_lower = self.config['setting']['bounds_lower']
+        bounds_upper = self.config['setting']['bounds_upper']
+
+        input_A = np.random.uniform(bounds_lower, bounds_upper)
+        input_B = np.random.uniform(bounds_lower, bounds_upper)
 
         scale_factors = []
-        for bounds, quantity in zip(bounds_per_element_type, elements_quantity):
-            scale_factors.extend(bounds * quantity)
+
 
         #取得参数的上界和下界
         # sample = np.random.uniform(low=lower, high=upper)
 
-        if len(scale_factors) != param_number:
-            raise ValueError(
-                f"Number of scale factors ({len(scale_factors)}) does not match total parameters ({param_number}). Please check elements_quantity and bounds configuration.")
-        scale_factors = np.array(scale_factors)
+
 
         input_Au_list = []
         input_Bu_list = []
@@ -304,16 +322,16 @@ class AnalysisManager:
             # └── input_Bu_0
 
             grp = inputdata_file.create_group(round_name)
-            grp.create_dataset('input_A', data=input_A * scale_factors)
-            grp.create_dataset('input_B', data=input_B * scale_factors)
+            grp.create_dataset('input_A', data=input_A )
+            grp.create_dataset('input_B', data=input_B )
 
             for i, (A_mod, B_mod) in enumerate(zip(input_Au_list, input_Bu_list)):
-                grp.create_dataset(f'input_Au_{i}', data=A_mod * scale_factors)
-                grp.create_dataset(f'input_Bu_{i}', data=B_mod * scale_factors)
+                grp.create_dataset(f'input_Au_{i}', data=A_mod)
+                grp.create_dataset(f'input_Bu_{i}', data=B_mod)
 
         logger.info(f"Generated and saved input data for round {self._current_round_id} to {self.paths.input_data_file}.")
 
-    def run_simulations_for_round(self, cpu_number: int = None, overwrite_output: str = 'n'):
+    def run_simulations_for_round(self, platform = None, cpu_num = None, gpu_num = None):
         """
         Execute all simulations for current round using parallel computing.
 
@@ -321,8 +339,8 @@ class AnalysisManager:
             cpu_number (int, optional): Number of CPUs for parallel processing. Defaults to system CPU count minus one.
             overwrite_output (str): 'y' force overwrite existing results, 'n' skip existing keys.
         """
-        if cpu_number is None:
-            cpu_number = max(1, cpu_count() - 1)
+        if cpu_num is None:
+            cpu_num = max(1, cpu_count() - 1)
 
         round_name = f'round_{self._current_round_id}'
 
@@ -347,15 +365,17 @@ class AnalysisManager:
                     else:
                         grp = outputdata_file[round_name]
 
-                    if key in grp and overwrite_output.lower() != 'y':
-                        logger.info(f"Key: {key} already exists in output file, skipping calculation (because overwrite_output='{overwrite_output}').")
-                        continue
+
 
                 #表示把这个dataset的实际数据读出来
                 input_temp = inputdata_file[round_name][key][()]
                 #["input_A",]所有参数
 
                 # Create a task for each sample, passing all necessary context as parameters
+                def get_gpu_id(idx):
+                    if gpu_num is None:
+                        return None
+                    return idx%gpu_num
                 all_task_args = [
                     (
                         clone_idx,  # clone_id   0
@@ -364,14 +384,23 @@ class AnalysisManager:
                         self.group_id,  # group_id
                         self._base_simulation_path,  # base_simulation_path   project/base_dtr
                         self.config['setting'],  # analysis_setting_for_task (configuration dictionary)
-                        self.simulator  # simulator_instance (simulator instance)
+                        self.simulator,  # simulator_instance (simulator instance),
+                        self.field_path,
+                        get_gpu_id(clone_idx),
+                        platform
                     )
                     for clone_idx, errors_for_clone in enumerate(input_temp)
                 ]
+                if platform == "cpu":
+                    with Pool(cpu_num) as pool:
+                        # Call module-level run_single_simulation_task function
+                        output_temp = pool.starmap(run_single_simulation_task, all_task_args)
 
-                with Pool(cpu_number) as pool:
-                    # Call module-level run_single_simulation_task function
-                    output_temp = pool.starmap(run_single_simulation_task, all_task_args)
+                elif platform == "gpu":
+
+                    with Pool(gpu_num) as pool:
+                        # Call module-level run_single_simulation_task function
+                        output_temp = pool.starmap(run_single_simulation_task, all_task_args)
 
                 output_temp_np = np.array([[float(x) for x in row] for row in output_temp])
 

@@ -26,8 +26,8 @@ class ProjectManager:
         """
 
         self.paths = ProjectPaths(Path(root_path))
-        self.base_dir = Path(origin_project_path["base_dir"])
-        self.field_dir = Path(origin_project_path["field_dir"])
+        self.base_dir = Path(origin_project_path) / "base_dir"
+        self.field_dir =  Path(origin_project_path) / "field_dir"
 
         self.config: dict = {}  # Project global configuration
 

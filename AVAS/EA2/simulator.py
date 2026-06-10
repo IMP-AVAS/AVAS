@@ -7,7 +7,7 @@ from typing import Dict, Any, List
 from apis.qt_api.SimMode import SimMode  # Assume this API is in apis directory
 from config import SIMULATION_RESULT_COLUMNS, SIMULATION_UNIT_CONVERSION_FACTORS
 from utils_ea import logger, format_sign_space, read_lines_from_file
-
+from apps.error import ErrorDyn
 
 class AvasSimulator:
     """
@@ -19,17 +19,25 @@ class AvasSimulator:
         self._result_columns = SIMULATION_RESULT_COLUMNS
         self._unit_conversion_factors = SIMULATION_UNIT_CONVERSION_FACTORS
 
-    def _run_simulation(self, project_path: Path):
-        """
-        Run single AVAS simulation.
+    def _run_simulation(self, project_path: Path, file_path: Path, platform):
 
-        Args:
-            project_path (Path): Simulation project path (i.e., clone directory).
-        """
-        logger.debug(f"Running simulation in {project_path}.")
-        item = {'projectPath': str(project_path)}
+
+        item = {
+            "project_path": project_path,
+            "seed": 0,
+            "if_normal": 0,
+            "field_path": file_path,
+            "if_generate_density_file": 1,
+            "device": platform,
+            "restart": 0,
+        }
+        obj = ErrorDyn(item)
+
+        obj.run()
+
         try:
-            obj = self._sim_mode_class(item)
+            obj = ErrorDyn(item)
+
             obj.run()
         except Exception as e:
             logger.error(f"Simulation failed in {project_path}: {e}")
@@ -94,11 +102,11 @@ class AvasSimulator:
             logger.error(f"Failed to parse result file {result_file}: {e}")
             raise ValueError(f"Failed to parse result file {result_file}: {e}")
 
-    def run_and_get_result(self, clone_path: Path, result_file: Path) -> List[str]:
+    def run_and_get_result(self, clone_path: Path, result_file: Path, file_path: Path, platform) -> List[str]:
         """
         Run simulation and parse results upon completion.
         """
-        self._run_simulation(clone_path)
-        raw_results = self._parse_results(result_file)
+        self._run_simulation(clone_path, file_path, platform ) #/clones/base_0
+        raw_results = self._parse_results(result_file)  #/clones/base_0/OutputFile
         # Format results as strings, consistent with original code
         return [format_sign_space(x) for x in raw_results]

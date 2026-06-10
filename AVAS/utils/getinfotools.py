@@ -23,7 +23,7 @@ def get_mass_freq(project_path):
 
 
     else:
-        dstfile = project_path + r'/InputFile' + r"/" + res.get('readparticledistribution')
+        dstfile = os.path.join(project_path, "InputFile", res.get('readparticledistribution'))
         dst_res = read_dst_fast(dstfile)
 
         beam_parameter["particlerestmass"] = float(dst_res.get('basemassinmev'))

@@ -16,8 +16,8 @@ class ProjectPaths:
     def create_project_dirs(self):
         """Create basic project directory structure."""
         self.root_dir.mkdir(parents=True, exist_ok=True)
-        self.base_dir.mkdir(parents=True, exist_ok=True)
-        self.field_dir.mkdir(parents=True, exist_ok=True)
+        # self.base_dir.mkdir(parents=True, exist_ok=True)
+        # self.field_dir.mkdir(parents=True, exist_ok=True)
 
     def is_project_initialized(self) -> bool:
         """Check if project directory is initialized (by checking settings.json)."""
@@ -41,12 +41,13 @@ class AnalysisPaths:
 
         self.input_data_file = self.data_dir / 'InputData.h5'
         self.output_data_file = self.data_dir / 'OutData.h5'
-        # self.sobol_results_dir = self.data_dir / 'sobol_result' # If needed
+        self.sobol_results_dir = self.data_dir / 'sobol_result.json' # If needed
 
     def create_analysis_dirs(self):
         """Create analysis group directory structure."""
         self.analysis_dir.mkdir(parents=True, exist_ok=True) #OO1ANALYSIS
         self.clones_dir.mkdir(parents=True, exist_ok=True) # OO1ANALYSIS/clones_dir
+        self.data_dir.mkdir(parents=True, exist_ok=True)
         # self.sobol_results_dir.mkdir(parents=True, exist_ok=True) # If needed
 
     def get_clone_path(self, clone_id: int) -> Path:
