@@ -357,12 +357,12 @@ class PlotDataSet(PicturePlot_2D):
 
 if __name__ == "__main__":
     project_path = None
-    dataset_path = r"C:\Users\wangh\Desktop\long_dis2\av_input\kongxin\DataSet.txt"
-    project_path = r"C:\Users\wangh\Desktop\long_dis2\av_input"
-    a = PlotDataSet(project_path=project_path,  picture_name = 'c_xy', dataset_path=dataset_path)
+    dataset_path = r"C:\Users\shliu\Desktop\cafe_AVAS\outputfile\DataSet.txt"
+    project_path = r"C:\Users\shliu\Desktop\cafe_AVAS"
+    a = PlotDataSet(project_path=project_path,  picture_name = 'rms_y', dataset_path=dataset_path)
 
     a.get_x_y()
-    # a.need_element(aper=1)
+    a.need_element(aper=1)
     a.run(show_=1)
 
 

@@ -26,22 +26,15 @@ from user.user_qt.page_tool import PageTool
 
 
 from user.user_qt.page_data import PageData
-from api import basic_mulp, match_twiss, circle_match, \
-    err_dyn, err_stat, err_stat_dyn
 import multiprocessing
-from api import basic_env
-from user.user_qt.user_defined import treat_err
 from user.user_qt.page_acc import PageAccept
-from send2trash import send2trash
+
 from utils.iniconfig import IniConfig
 from apis.qt_api.SimMode import SimMode
 from apis.qt_api.createbasicfile import CreateBasicProject
-from core.MultiParticle import MultiParticle
+
 from multiprocessing import Process, Queue
 from apis.qt_api.api import judge_if_is_avas_project
-import traceback
-from utils.exception import BaseError
-from concurrent.futures import ProcessPoolExecutor
 from apis.qt_api.api import project_check
 
 
@@ -513,7 +506,7 @@ class MainWindow(QMainWindow):
 
         project_check(item)
         ##################
-        # self.sim_thread = SimThread(self.project_path)
+
         self.sim_thread = SimThread(self.project_path)
         #完成
         self.sim_thread.finished.connect(self.on_task_finished)   #设置按钮的状态

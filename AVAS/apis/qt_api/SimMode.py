@@ -1,8 +1,7 @@
 import sys
 
 from core.MultiParticle import MultiParticle
-
-
+import multiprocessing
 from utils.beamconfig import BeamConfig
 from utils.inputconfig import InputConfig
 from utils.iniconfig import IniConfig
@@ -50,76 +49,152 @@ class SimMode():
     def run(self):
         #检查
         self.write_signal(1)
-        try:
 
-            #判断模拟类型并进行模拟
-            ini_obj = IniConfig()
-            ini_info = ini_obj.create_from_file(self.item)
+        # 判断模拟类型并进行模拟
+        ini_obj = IniConfig()
+        ini_info = ini_obj.create_from_file(self.item)
 
-            ini_info = ini_info["data"]["iniParams"]
-            base_mode = ini_info["input"]["sim_type"]
-            device = ini_info["input"]["device"]
-            if_normal = ini_info["error"]["if_normal"]
+        ini_info = ini_info["data"]["iniParams"]
+        base_mode = ini_info["input"]["sim_type"]
+        device = ini_info["input"]["device"]
+        if_normal = ini_info["error"]["if_normal"]
 
-            match_mode = [
-                ini_info["match"]["cal_input_twiss"],
-                ini_info["match"]["match_with_twiss"],
-                ini_info["match"]["use_initial_value"],
-            ]
+        match_mode = [
+            ini_info["match"]["cal_input_twiss"],
+            ini_info["match"]["match_with_twiss"],
+            ini_info["match"]["use_initial_value"],
+        ]
 
-            err_mode = ini_info["error"]["error_type"]
-            err_seed = ini_info["error"]["seed"]
+        err_mode = ini_info["error"]["error_type"]
+        err_seed = ini_info["error"]["seed"]
 
-            #检查类型
+        # 检查类型
 
+        field_path = ini_info["project"]["fieldSource"]
 
-            field_path = ini_info["project"]["fieldSource"]
+        # 如果field_path是空的
+        if not field_path:
+            field_path = None
 
-            #如果field_path是空的
-            if not field_path:
-                field_path = None
+        item = {
+            "project_path": self.project_path,
+            "field_path": field_path,
+            "seed": err_seed,
+            "device": device,
+            "if_normal": if_normal,
+        }
+        # print(item)
+        # sys.exit()
+        if run_env != "windows":
+            outputfile_path = os.path.join(self.project_path, "OutputFile")
 
-            item = {
-                "project_path": self.project_path,
-                "field_path": field_path,
-                "seed": err_seed,
-                "device": device,
-                "if_normal": if_normal,
-            }
-            # print(item)
-            # sys.exit()
-            if run_env != "windows":
-                outputfile_path = os.path.join(self.project_path, "OutputFile")
-                olddir = outputfile_path + "_old_" + str(int(time.time() * 1000))  # 带时间戳防冲突
+            if os.path.exists(outputfile_path):
+                olddir = outputfile_path + "_old_" + str(int(time.time() * 1000))
 
-                if os.path.exists(outputfile_path):
-                    os.replace(outputfile_path, olddir)  # O(1) 重命名，瞬间完成
-                os.makedirs(outputfile_path, exist_ok=True)  # 新的空目录马上就绪
+                os.replace(outputfile_path, olddir)
+                os.makedirs(outputfile_path, exist_ok=True)
 
-                # 后台线程慢慢删旧目录，不阻塞主流程
                 def _delete_async(path):
-                    shutil.rmtree(path, ignore_errors=True)
+                    try:
+                        shutil.rmtree(path)
+                    except Exception as e:
+                        print(f"删除旧目录失败: {path}, error={e}")
 
-                threading.Thread(target=_delete_async, args=(olddir,), daemon=True).start()
+                p = multiprocessing.Process(
+                    target=_delete_async,
+                    args=(olddir,)
+                )
+                p.start()
 
-            if base_mode == "mulp":
-                if err_mode == "stat":
-                    err_stat(**item)
+            else:
+                os.makedirs(outputfile_path, exist_ok=True)
 
-                elif err_mode == "dyn":
-                    err_dyn(**item)
+        if base_mode == "mulp":
+            if err_mode == "stat":
+                err_stat(**item)
 
-                elif err_mode == "stat_dyn":
-                    err_stat_dyn(**item)
-                else:
-                    basic_mulp(**item)
+            elif err_mode == "dyn":
+                err_dyn(**item)
 
-            self.write_signal(2)
+            elif err_mode == "stat_dyn":
+                err_stat_dyn(**item)
+            else:
+                basic_mulp(**item)
+
+        self.write_signal(2)
+
+        # try:
+        #     #判断模拟类型并进行模拟
+        #     ini_obj = IniConfig()
+        #     ini_info = ini_obj.create_from_file(self.item)
+        #
+        #     ini_info = ini_info["data"]["iniParams"]
+        #     base_mode = ini_info["input"]["sim_type"]
+        #     device = ini_info["input"]["device"]
+        #     if_normal = ini_info["error"]["if_normal"]
+        #
+        #     match_mode = [
+        #         ini_info["match"]["cal_input_twiss"],
+        #         ini_info["match"]["match_with_twiss"],
+        #         ini_info["match"]["use_initial_value"],
+        #     ]
+        #
+        #     err_mode = ini_info["error"]["error_type"]
+        #     err_seed = ini_info["error"]["seed"]
+        #
+        #     #检查类型
+        #
+        #
+        #     field_path = ini_info["project"]["fieldSource"]
+        #
+        #     #如果field_path是空的
+        #     if not field_path:
+        #         field_path = None
+        #
+        #     item = {
+        #         "project_path": self.project_path,
+        #         "field_path": field_path,
+        #         "seed": err_seed,
+        #         "device": device,
+        #         "if_normal": if_normal,
+        #     }
+        #     # print(item)
+        #     # sys.exit()
+        #     if run_env != "windows":
+        #         outputfile_path = os.path.join(self.project_path, "OutputFile")
+        #         olddir = outputfile_path + "_old_" + str(int(time.time() * 1000))  # 带时间戳防冲突
+        #
+        #         if os.path.exists(outputfile_path):
+        #             os.replace(outputfile_path, olddir)  # O(1) 重命名，瞬间完成
+        #         os.makedirs(outputfile_path, exist_ok=True)  # 新的空目录马上就绪
+        #
+        #         # 后台线程慢慢删旧目录，不阻塞主流程
+        #         def _delete_async(path):
+        #             shutil.rmtree(path, ignore_errors=True)
+        #
+        #         threading.Thread(target=_delete_async, args=(olddir,), daemon=True).start()
+        #
+        #     if base_mode == "mulp":
+        #         if err_mode == "stat":
+        #             err_stat(**item)
+        #
+        #         elif err_mode == "dyn":
+        #             err_dyn(**item)
+        #
+        #         elif err_mode == "stat_dyn":
+        #             err_stat_dyn(**item)
+        #         else:
+        #             basic_mulp(**item)
+        #
+        #     self.write_signal(2)
+        #
+        #
+        # except Exception as e:
+        #     self.write_signal(2)
+        #     raise Exception(str(e))
 
 
-        except Exception as e:
-            self.write_signal(2)
-            raise Exception(str(e))
+
         # elif base_mode == "env":
         #     if ini_info['match']["cal_input_twiss"] == 1:
         #         circle_match(self.project_path)
@@ -147,7 +222,7 @@ if __name__ == '__main__':
     # path = r"C:\Users\anxin\Desktop\test_schedule\cafe_avas"
     # path = r"C:\Users\anxin\Desktop\test\test_error"
 
-    path = r"F:\using\test_avas_qt\cafe_avas2"
+    path = r"C:\Users\shliu\Desktop\cafe2\AVAS"
     item = {"projectPath": path}
     obj = SimMode(item)
     res = obj.run()

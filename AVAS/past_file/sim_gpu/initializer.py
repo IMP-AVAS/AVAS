@@ -1,5 +1,5 @@
 from ctypes import *
-from sim_gpu.structures import *
+from structures import *
 import os
 
 script_directory = os.path.dirname(os.path.abspath(__file__))  # 获取当前脚本所在文件夹的绝对路径
@@ -10,7 +10,7 @@ libpicso_path = os.path.join(parent_directory, 'dllfile', "libPIC.so")  # 使用
 # print(10, libpicso_path)
 # print(11, os.path.exists(libpicso_path))
 # 打开动态链接库
-libPIC = CDLL(libpicso_path)
+libPIC = CDLL(r"C:\Users\shliu\Desktop\AVAS\AVAS\dllfile\libPIC.so")
 
 # 设置命令行检查函数
 CheckCommandLineArguments = libPIC.CheckCommandLineArguments

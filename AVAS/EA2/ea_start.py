@@ -65,8 +65,6 @@ class EaStart():
         # next_group_id = project_manager.get_next_analysis_group_id()
         # next_group_id = 1
 
-
-
         #创建analysis中的文件和更新config
         analysis_manager = AnalysisManager(
             project_root_dir=project_manager.paths.root_dir,

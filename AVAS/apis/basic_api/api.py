@@ -998,7 +998,7 @@ def plot_dst4qt(item):
 
 if __name__ == '__main__':
     item = {
-        "project_path": r"C:\Users\shliu\Desktop\ip_safe_lebt",
+        "project_path": r"C:\Users\shliu\Desktop\cafe2\AVAS",
         "device": "cpu",
     }
 

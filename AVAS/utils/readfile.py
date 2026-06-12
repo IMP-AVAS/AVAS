@@ -334,28 +334,35 @@ def read_file_with_np(path, dtype=np.float64):
 if __name__ == "__main__":
 
 
-    # path0 = r"C:\Users\wangh\Desktop\danengsan_p10_2\p10_2.dst"
-    # res= read_dst_fast(path0)
-    # print(res)
+    path0 = r"C:\Users\shliu\Desktop\testv1\part_rfq.dst"
+    res= read_dst_fast(path0)
+    print(res)
+
+
+
+    par_dist = res['partran_dist']
+    new_par_dist = []
+    for i in par_dist:
+        r = np.random.uniform(0.999, 1.01)
+        i[3] = r *0.000000001
+        new_par_dist.append(i * r)
+
+
+    new_res =res
+    new_res["partran_dist"] = new_par_dist
+    new_res["number"] = 200
+    new_path = r"C:\Users\shliu\Desktop\testv1\part_rfq2.dst"
+    write_to_dst(new_path, new_res)
+
+
+
+    # # path = r"C:\Users\wangh\Desktop\324\v1\OutputFile\inData.dst"
+    # # res = read_dst_fast(path)
+    # # print(res)
     #
-    # par_dist = res['partran_dist']
-    #
-    # v1 = new_arr = np.concatenate([par_dist] * 1000, axis=0)
-    # new_res =res
-    # new_res["partran_dist"] = v1
-    # new_res["number"] = 1000
-    # new_path = r"C:\Users\wangh\Desktop\danengsan_p10_2\p1000_2.dst"
-    # write_to_dst(new_path, new_res)
-
-
-
-    # path = r"C:\Users\wangh\Desktop\324\v1\OutputFile\inData.dst"
+    # path = r"C:\Users\wangh\Desktop\phase_plot\ge_dst\result\part_rfq.dst"
     # res = read_dst_fast(path)
     # print(res)
-
-    path = r"C:\Users\wangh\Desktop\phase_plot\ge_dst\result\part_rfq.dst"
-    res = read_dst_fast(path)
-    print(res)
 
 
 
