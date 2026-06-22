@@ -1,17 +1,16 @@
 # coding: utf-8
 
+from mpi4py import MPI
 import sys
 import os
 import time
 from ctypes import *
-from hpc.avasx_functions import *
-from hpc.avasx_structures import *
+from avasx_functions import *
+from avasx_structures import *
 
 
 class Avasx:
     def __init__(self, runtime, beam, lattice, boundary=None):
-        from mpi4py import MPI
-
         self.input_txt = runtime
         self.beam_txt = beam
         self.lattice_txt = lattice
@@ -20,6 +19,7 @@ class Avasx:
         self.mpiObject = MPIObject()
         self.mpiObject_ptr = POINTER(MPIObject)(self.mpiObject)
         InitializeMPIObject(self.mpiObject_ptr)
+        self.message_buffer_ptr = self.mpiObject.infos[self.mpiObject.rank]
 
         # NCCLObject读向
         self.ncclObject = NCCLObject()
@@ -108,7 +108,9 @@ class Avasx:
             return False
         endTime = time.time()
         # 打印读取粒子信息
-        self.mpiObject.infos[self.mpiObject.rank] = b"Holding %d particles of total %d, loading particles cost time = %f s."%(self.beam_ptr.contents.particles_cpu.numParticles, self.beam_ptr.contents.particles_init.numParticles, endTime-startTime)
+        info = b"Holding %d particles of total %d, loading particles cost time = %f s."%(self.beam_ptr.contents.particles_cpu.numParticles, self.beam_ptr.contents.particles_init.numParticles, endTime-startTime)
+        info = create_string_buffer(info)
+        memmove(self.message_buffer_ptr, info, len(info))
         PrintInformations(self.mpiObject_ptr)
         
         # 初始化加速器结构
@@ -130,11 +132,14 @@ class Avasx:
             return False
         endTime = time.time()
         # 打印边界信息
-        if self.lattice_ptr.contents.numBoundaries:
-            self.mpiObject.infos[self.mpiObject.rank] = b"The number of lattice boundaries = %d, boundary length = %f m."%(self.lattice_ptr.contents.numBoundaries, self.lattice_ptr.contents.boundary_exit_z)
-            PrintInformations(self.mpiObject_ptr)
+        info = b"The number of lattice boundaries = %d, boundary length = %f m."%(self.lattice_ptr.contents.numBoundaries, self.lattice_ptr.contents.boundary_exit_z)
+        info = create_string_buffer(info)
+        memmove(self.message_buffer_ptr, info, len(info))
+        PrintInformations(self.mpiObject_ptr)
         # 打印初始化加速器结构信息
-        self.mpiObject.infos[self.mpiObject.rank] = b"The number of lattice components = %d, lattice length = %f m, lattice creating cost time = %f s."%(self.lattice_ptr.contents.numComponents, self.lattice_ptr.contents.lattice_exit_z, endTime-startTime)
+        info = b"The number of lattice components = %d, lattice length = %f m, lattice creating cost time = %f s."%(self.lattice_ptr.contents.numComponents, self.lattice_ptr.contents.lattice_exit_z, endTime-startTime)
+        info = create_string_buffer(info)
+        memmove(self.message_buffer_ptr, info, len(info))
         PrintInformations(self.mpiObject_ptr)
 
 
@@ -144,7 +149,9 @@ class Avasx:
             scanSteps = InitializePhase(self.lattice_ptr, self.beam_ptr, self.runningOptions_ptr, self.mpiObject_ptr)
             endTime = time.time()
             # 打印扫相信息
-            self.mpiObject.infos[self.mpiObject.rank] = b"The number of phase scanning steps = %d, phase scanning cost time = %f s."%(scanSteps, endTime-startTime)
+            info = b"The number of phase scanning steps = %d, phase scanning cost time = %f s."%(scanSteps, endTime-startTime)
+            info = create_string_buffer(info)
+            memmove(self.message_buffer_ptr, info, len(info))
             PrintInformations(self.mpiObject_ptr)
         
         # 初始化CUBObject
@@ -176,9 +183,13 @@ class Avasx:
     def run(self):
         # 打印空间电荷效应求解方法
         if self.runningOptions_ptr.contents.spaceChargeMethod == 0:
-            self.mpiObject.infos[self.mpiObject.rank] = b"Using FFT as a PIC solver."
+            info = b"Using FFT as a PIC solver."
+            info = create_string_buffer(info)
+            memmove(self.message_buffer_ptr, info, len(info))
         else:
-            self.mpiObject.infos[self.mpiObject.rank] = b"Using PICNIC as a PIC solver."
+            info = b"Using PICNIC as a PIC solver."
+            info = create_string_buffer(info)
+            memmove(self.message_buffer_ptr, info, len(info))
         PrintInformations(self.mpiObject_ptr)
 
         # 运行仿真
@@ -195,7 +206,9 @@ class Avasx:
         endTime = time.time()
         if self.mpiObject.rank == 0:
             print()
-        self.mpiObject.infos[self.mpiObject.rank] = b"Pushing steps = %d, total cost time = %f s."%(numSteps, endTime-startTime)
+        info = b"Pushing steps = %d, total cost time = %f s."%(numSteps, endTime-startTime)
+        info = create_string_buffer(info)
+        memmove(self.message_buffer_ptr, info, len(info))
         PrintInformations(self.mpiObject_ptr)
 
         #输出结果
@@ -209,7 +222,7 @@ class Avasx:
 
 
     def release(self):
-        DestroyNCCL(self.ncclObject)
+        DestroyNCCL(self.ncclObject_ptr)
         sys.exit(0)
 
 

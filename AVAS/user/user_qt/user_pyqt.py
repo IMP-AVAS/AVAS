@@ -39,10 +39,6 @@ from apis.qt_api.api import project_check
 
 
 
-
-
-
-
 def basic_run(project_path, queue):
     try:
         item = {"projectPath": project_path}

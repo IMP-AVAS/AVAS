@@ -250,23 +250,23 @@ class OutputPanels(Structure):
     _fields_ = [
         ("panel_z", c_double),
         ("phasePos_cpu", POINTER(double3)),
-        ("phaseVel_cpu", POINTER(double3)),
-        ("phaseTimeStamp_cpu", POINTER(c_double)),
-        ("numCharge_cpu", POINTER(c_double)),
-        ("massMev_cpu", POINTER(c_double)),
-        ("numMacro_cpu", POINTER(c_double)),
         ("phasePos_gpu", POINTER(double3)),
+        ("phaseVel_cpu", POINTER(double3)),
         ("phaseVel_gpu", POINTER(double3)),
+        ("phaseTimeStamp_cpu", POINTER(c_double)),
         ("phaseTimeStamp_gpu", POINTER(c_double)),
+        ("numCharge_cpu", POINTER(c_double)),
         ("numCharge_gpu", POINTER(c_double)),
+        ("massMev_cpu", POINTER(c_double)),
         ("massMev_gpu", POINTER(c_double)),
+        ("numMacro_cpu", POINTER(c_double)),
         ("numMacro_gpu", POINTER(c_double)),
         ("tracerPhasePos", double3),
         ("tracerPhaseVel", double3),
-        ("tracerPhaseTimeStamp", c_double),
         ("tracerNumCharge", c_double),
         ("tracerMassMev", c_double),
-        ("tracerNumMacro", c_double)
+        ("tracerNumMacro", c_double),
+        ("tracerPhaseTimeStamp", c_double)
     ]
 
 # 定义LatticeBoundaries结构体
@@ -413,7 +413,7 @@ class MPIObject(Structure):
         ("recvStatus", c_void_p),
         ("sendRequest", c_void_p),
         ("recvRequest", c_void_p),
-        ("infos", POINTER(c_char_p))
+        ("infos", POINTER(POINTER(c_char)))
     ]
 
 # 定义LoadBeamThreadArgs结构体

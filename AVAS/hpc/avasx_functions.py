@@ -1,12 +1,8 @@
 from ctypes import *
-from hpc.avasx_structures import *
-import os
-script_directory = os.path.dirname(os.path.abspath(__file__))  # 获取当前脚本所在文件夹的绝对路径
-parent_directory = os.path.dirname(script_directory)  # 获取上级目录的路径
-libavasx_path = os.path.join(parent_directory,"dllfile", "libavasx.so")
-print(libavasx_path)
+from avasx_structures import *
+
 # 加载avasx4eng动态连接库
-libavasx = CDLL(libavasx_path)
+libavasx = CDLL("./libavasx.so")
 
 # 初始化MPIObject函数
 InitializeMPIObject = libavasx.InitializeMPIObject
@@ -107,5 +103,5 @@ OutputPhaseParticles.argtypes = [POINTER(Beam), POINTER(MPIObject), POINTER(c_ch
 OutputPanelPhaseParticles_Host = libavasx.OutputPanelPhaseParticles_Host
 OutputPanelPhaseParticles_Host.argtypes = [POINTER(Beam), POINTER(Lattice), POINTER(CUBObject), POINTER(RunningOptions), POINTER(MPIObject)]
 
-# DestroyNCCL = libavasx.DestroyNCCL
-# DestroyNCCL.argtypes = [POINTER(NCCLObject)]
+DestroyNCCL = libavasx.DestroyNCCL
+DestroyNCCL.argtypes = [POINTER(NCCLObject)]

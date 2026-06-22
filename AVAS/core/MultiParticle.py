@@ -163,14 +163,14 @@ class PartranSimGpu():
         input_txt = os.path.join(input_file, "input.txt")
         ori_input_res = read_txt(input_txt, out="list", case_sensitive=True)
 
-        ori_input_res_keys = [i[0] for i in ori_input_res]
+        ori_input_res_keys = [i[0].lower() for i in ori_input_res]
 
         if "numofgrid" not in ori_input_res_keys:
             ori_input_res.append(["numofgrid", 24, 24, 24])
-        if "MeshRms" not in ori_input_res_keys:
-            ori_input_res.append(["MeshRms", 4, 4, 4])
+        if "meshrms" not in ori_input_res_keys:
+            ori_input_res.append(["meshrms", 4, 4, 4])
 
-        ori_input_res.append(["statOutputInterval", 1])
+        ori_input_res.append(["statoutputinterval", 1])
 
 
         ori_input_res.append(["beampath", input_file]) #dst文件在哪个位置，
@@ -194,7 +194,7 @@ class PartranSimGpu():
         ori_beam_res = read_txt(beam_txt, out="list", case_sensitive=True)
 
         for i in ori_beam_res:
-            if i[0] == "kneticenergy":
+            if i[0].lower() == "kneticenergy":
                 i.append(0)
 
         beam_txt_gpu = os.path.join(input_file, "beam_gpu.txt")
@@ -220,7 +220,7 @@ class PartranSimGpu():
         # 运行
         avasx = Avasx(input_txt_gpu_path, beam_txt_gpu_path, lattice_txt_gpu_path, boundary_path)
         avasx.run()
-        avasx.release()
+        # avasx.release()
 
 def basic_mulp(project_path):
     obj = MultiParticle(project_path)
@@ -229,7 +229,7 @@ def basic_mulp(project_path):
 if __name__ == "__main__":
     import sys, os
 
-    path = r"C:\Users\shliu\Desktop\cafe2\AVAS"
+    path = r"C:\Users\shliu\Desktop\test_529_2\ip_safe_lebt"
     item = {'project_path': path,
             "device":"cpu"
             }
