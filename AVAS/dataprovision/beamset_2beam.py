@@ -55,6 +55,7 @@ class BeamsetParameter2b():
 
 
         file_size = os.path.getsize(self.beamset_path)
+        print(file_size)
         step = (file_size -  self.total_head_byte) / self.one_step_byte
 
         return int(step)
@@ -204,7 +205,7 @@ class BeamsetParameter2b():
 
 if __name__ == "__main__":
 
-    beamset_pasth = r"C:\Users\wangh\Desktop\test_xiao\OutputFile\BeamSet.plt"
+    beamset_pasth = r"C:\Users\wangh\Desktop\qx\2beam\OutputFile\BeamSet.plt"
     obj = BeamsetParameter2b(beamset_pasth)
 
     step = obj.get_step()
@@ -213,24 +214,42 @@ if __name__ == "__main__":
     #     dic ,lis = obj.get_one_parameter(i)
     #     print(dic["location"])
 
+    for i in range(0, 2550, 100):
+        dic ,lis = obj.get_one_parameter(i)
+        # print(dic)
+        # print(lis)
+        t = dic["time"]
+        center = 0
 
-    dic ,lis = obj.get_one_parameter(265)
-    print(dic["location"])
+        number_exist = len([i for i in lis if int(i[6]) == 1])
+        # print(number_exist)
+        for j in lis:
+            if int(j[6]) == 1:
+                center += j[5]
 
-    print(lis[-1])
-    import matplotlib.pyplot as plt
+        center = center / number_exist
 
-    z_p = [i[4] for i in lis if int(i[8]) == 1 and int(i[6])==1]
-    y_p = [i[2] for i in lis if int(i[8]) == 1 and int(i[6])==1]
-    z_ap = [i[4] for i in lis if int(i[8]) == -1 and int(i[6])==1]
-    y_ap = [i[2] for i in lis if int(i[8]) == -1 and int(i[6])==1]
-    # # print(d1, l1[0])
+
+        print("时间", t)
+        print("中心", center)
+
+
+
+
+    # print(lis[-1])
+    # import matplotlib.pyplot as plt
     #
-    # res =obj.get_all_dict()
-    #
-    plt.scatter(z_p, y_p,s=4.0)
-    plt.scatter(z_ap, y_ap,s=4.0)
-    plt.show()
+    # z_p = [i[4] for i in lis if int(i[8]) == 1 and int(i[6])==1]
+    # y_p = [i[2] for i in lis if int(i[8]) == 1 and int(i[6])==1]
+    # z_ap = [i[4] for i in lis if int(i[8]) == -1 and int(i[6])==1]
+    # y_ap = [i[2] for i in lis if int(i[8]) == -1 and int(i[6])==1]
+    # # # print(d1, l1[0])
+    # #
+    # # res =obj.get_all_dict()
+    # #
+    # plt.scatter(z_p, y_p,s=4.0)
+    # plt.scatter(z_ap, y_ap,s=4.0)
+    # plt.show()
 
 
     # # print(res)

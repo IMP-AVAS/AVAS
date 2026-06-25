@@ -22,7 +22,7 @@ def MultiParticle(item):
         if env_par_mode == "par":
             return PartranSimCpu(item)
 
-        elif env_par_mode == "par":
+        elif env_par_mode == "env":
             return EnvSimCpu(item)
 
 
@@ -229,7 +229,7 @@ def basic_mulp(project_path):
 if __name__ == "__main__":
     import sys, os
 
-    path = r"C:\Users\shliu\Desktop\test_529_2\ip_safe_lebt"
+    path = r"C:\Users\wangh\Desktop\qx\2beam"
     item = {'project_path': path,
             "device":"cpu"
             }
