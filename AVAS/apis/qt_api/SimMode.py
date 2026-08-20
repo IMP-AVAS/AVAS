@@ -82,6 +82,7 @@ class SimMode():
             "seed": err_seed,
             "device": device,
             "if_normal": if_normal,
+            "env_par_mode": base_mode,
         }
         # print(item)
         # sys.exit()
@@ -108,7 +109,6 @@ class SimMode():
 
             else:
                 os.makedirs(outputfile_path, exist_ok=True)
-
         if base_mode == "mulp":
             if err_mode == "stat":
                 err_stat(**item)
@@ -120,6 +120,21 @@ class SimMode():
                 err_stat_dyn(**item)
             else:
                 basic_mulp(**item)
+        elif base_mode == "env":
+            if ini_info['match']["cal_input_twiss"] == 1:
+                # print(126)
+                circle_match(self.project_path)
+            elif ini_info['match']["match_with_twiss"] == 1 and ini_info['match']["use_initial_value"] == 0:
+                # print(129)
+                match_twiss(self.project_path, 0)
+            elif ini_info['match']["match_with_twiss"] == 1 and ini_info['match']["use_initial_value"] == 1:
+                # print(132)
+                match_twiss(self.project_path, 1)
+            else:
+                # print(135)
+                basic_env(item)
+            print(ini_info)
+
 
         self.write_signal(2)
 

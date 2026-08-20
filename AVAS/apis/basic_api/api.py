@@ -48,6 +48,7 @@ def basic_mulp(**item):
     """
 
     # else:
+    print(51)
     project_path = item.get('project_path')
 
     multiparticle_obj = MultiParticle(item)
@@ -184,7 +185,7 @@ def err_stat_dyn(**item):
     return None
 
 
-def basic_env(project_path, lattice):
+def basic_env(item):
     """
 
     :param project_path:
@@ -192,7 +193,13 @@ def basic_env(project_path, lattice):
     :return:
     基础包络模拟
     """
-    obj = BasicEnvSim(project_path, lattice)
+    # print(195, item)
+    project_path = item.get('project_path')
+    lattice_mulp_path = os.path.join(project_path, 'InputFile', 'lattice_mulp.txt')
+    lattice_path = os.path.join(project_path, 'InputFile', 'lattice.txt')
+    write_mulp_to_lattice_only_sim2(lattice_mulp_path, lattice_path)
+
+    obj = MultiParticle(item)
     res = obj.run()
     return res
 

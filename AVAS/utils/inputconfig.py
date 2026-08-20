@@ -124,32 +124,33 @@ class InputConfig():
 
         v_dic = {}
 
-        if self.input_parameter["sim_type"] == 'mulp':
-            v_dic = copy.deepcopy(self.input_parameter)
-            v_dic["pchistogram"] = [v_dic["pchistogram_start"], v_dic["pchistogram_grid"]]
-            v_dic["longlimits"] = [v_dic["longlimits_start"], v_dic["longlimits_phase"], v_dic["longlimits_energy"]]
+        # if self.input_parameter["sim_type"] == 'mulp':
 
-            #如果使用自适应性网格，就删除所有
-            if v_dic["adaptive_grid"] == 1:
-                v_dic["numofgrid"] = [v_dic["numofgrid_x"], v_dic["numofgrid_y"], v_dic["numofgrid_z"]]
-                v_dic["meshrms"] = [v_dic["meshrms_x"], v_dic["meshrms_y"], v_dic["meshrms_z"]]
+        v_dic = copy.deepcopy(self.input_parameter)
+        v_dic["pchistogram"] = [v_dic["pchistogram_start"], v_dic["pchistogram_grid"]]
+        v_dic["longlimits"] = [v_dic["longlimits_start"], v_dic["longlimits_phase"], v_dic["longlimits_energy"]]
 
-            need_delete = ["spacechargelong", "spacechargetype",
-                           "pchistogram_start", "pchistogram_grid",
-                           "longlimits_start", "longlimits_phase", "longlimits_energy",
-                           "numofgrid_x", "numofgrid_y", "numofgrid_z",
-                           "meshrms_x", "meshrms_y", "meshrms_z"
-                           ]
+        #如果使用自适应性网格，就删除所有
+        if v_dic["adaptive_grid"] == 1:
+            v_dic["numofgrid"] = [v_dic["numofgrid_x"], v_dic["numofgrid_y"], v_dic["numofgrid_z"]]
+            v_dic["meshrms"] = [v_dic["meshrms_x"], v_dic["meshrms_y"], v_dic["meshrms_z"]]
 
-            for i in need_delete:
-                del v_dic[i]
+        need_delete = ["spacechargelong", "spacechargetype",
+                       "pchistogram_start", "pchistogram_grid",
+                       "longlimits_start", "longlimits_phase", "longlimits_energy",
+                       "numofgrid_x", "numofgrid_y", "numofgrid_z",
+                       "meshrms_x", "meshrms_y", "meshrms_z"
+                       ]
+
+        for i in need_delete:
+            del v_dic[i]
 
 
-        elif self.input_parameter["sim_type"] == 'env':
-
-            v_dic["sim_type"] = self.input_parameter["sim_type"]
-            v_dic["spacechargelong"] = self.input_parameter["spacechargelong"]
-            v_dic["spacechargetype"] = self.input_parameter["spacechargetype"]
+        # elif self.input_parameter["sim_type"] == 'env':
+        #
+        #     v_dic["sim_type"] = self.input_parameter["sim_type"]
+        #     v_dic["spacechargelong"] = self.input_parameter["spacechargelong"]
+        #     v_dic["spacechargetype"] = self.input_parameter["spacechargetype"]
 
 
         v_lis = convert_dic2lis(v_dic)

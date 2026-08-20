@@ -2,8 +2,8 @@ import math
 import numpy
 import struct
 
-inFileName = r"C:\Users\wangh\Desktop\test_mu\mu_all_avas\OutputFile\outData_16.718114.txt"
-outFileName = r"C:\Users\wangh\Desktop\test_mu\mu_all_avas\OutputFile\outData_2026.dst"
+inFileName = r"C:\Users\wangh\Desktop\test_mu\mu_all_avas\OutputFile\outData_12.551127.txt"
+outFileName = r"C:\Users\wangh\Desktop\test_mu\mu_all_avas\OutputFile\outData_v2.dst"
 
 freq = 162.5e6
 particleRestMass = 105.65837450

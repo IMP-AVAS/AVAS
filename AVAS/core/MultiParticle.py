@@ -1,28 +1,29 @@
 
 
+import os
+from past_file.MultiParticleEngine import PartranSimCpuEngine, EnvSimCpuEngine
 
-from core.MultiParticleEngine import PartranSimCpuEngine, EnvSimCpuEngine
-
-import platform
 from utils.readfile import read_txt
 from utils.tool import write_to_txt
-from aftertreat.dataanalysis.new_dataset import trans_dataset2new
-import os
 
 
 def MultiParticle(item):
     device = item.get("device") or "cpu"
-    env_par_mode = item.get("env_par_mode") or "par"
+    env_par_mode = item.get("env_par_mode") or "mulp"
 
+    # print(13, device, env_par_mode )
 
     if device == "gpu":
+        print(16)
         return PartranSimGpu(item)
 
     elif device == "cpu":
-        if env_par_mode == "par":
+        if env_par_mode == "mulp":
+            print(21)
             return PartranSimCpu(item)
 
         elif env_par_mode == "env":
+            print(25)
             return EnvSimCpu(item)
 
 
@@ -104,7 +105,6 @@ class EnvSimCpu():
             self.multiparticle_engine = EnvSimCpuEngine(item)
 
     def run(self):
-
         if os.path.exists(self.errorlog_path):
             os.remove(self.errorlog_path)
 
@@ -227,11 +227,12 @@ def basic_mulp(project_path):
     res = obj.run()
 
 if __name__ == "__main__":
-    import sys, os
+    import os
 
-    path = r"C:\Users\wangh\Desktop\qx\2beam"
+    path = r"C:\Users\wangh\Desktop\test_mu\mu_all_avas"
     item = {'project_path': path,
-            "device":"cpu"
+            "device":"cpu",
+            "env_par_mode": "mulp",
             }
     obj = MultiParticle(item)
     obj.run()

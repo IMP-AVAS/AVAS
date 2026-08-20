@@ -290,25 +290,25 @@ class PageInput(QWidget):
         # hbox_multithreading.addWidget(self.multithreading_checkbox)
         # group_box_multithreading.setLayout(hbox_multithreading)
         ##########################################################
-        group_box_scan_phase = QGroupBox()
-
-        hbox_scan_phase = QHBoxLayout()
-
-        scan_phase_label = QLabel("Scan Phase")
-        scan_phase_label.setMinimumWidth(84)
-
-        # self.scan_phase_text = QLineEdit()
-        self.scan_phase_combo = QComboBox(self)
-        self.scan_phase_combo.addItem("Not Scan Phase")
-        self.scan_phase_combo.addItem("Scan Phase")
-        self.scan_phase_combo.addItem("Read Phase")
-
-        self.scan_phase_combo.currentIndexChanged.connect(self.scan_phase_selection)
-
-        hbox_scan_phase.addWidget(scan_phase_label)
-        hbox_scan_phase.addWidget(self.scan_phase_combo)
-        # hbox_scan_phase.addWidget(self.scan_phase_text)
-        group_box_scan_phase.setLayout(hbox_scan_phase)
+        # group_box_scan_phase = QGroupBox()
+        #
+        # hbox_scan_phase = QHBoxLayout()
+        #
+        # scan_phase_label = QLabel("Scan Phase")
+        # scan_phase_label.setMinimumWidth(84)
+        #
+        # # self.scan_phase_text = QLineEdit()
+        # self.scan_phase_combo = QComboBox(self)
+        # self.scan_phase_combo.addItem("Not Scan Phase")
+        # self.scan_phase_combo.addItem("Scan Phase")
+        # self.scan_phase_combo.addItem("Read Phase")
+        #
+        # self.scan_phase_combo.currentIndexChanged.connect(self.scan_phase_selection)
+        #
+        # hbox_scan_phase.addWidget(scan_phase_label)
+        # hbox_scan_phase.addWidget(self.scan_phase_combo)
+        # # hbox_scan_phase.addWidget(self.scan_phase_text)
+        # group_box_scan_phase.setLayout(hbox_scan_phase)
 
         ##########################################################
         group_box_sc_use = QGroupBox()
@@ -896,8 +896,8 @@ class PageInput(QWidget):
                 box.setEnabled(False)
 
 
-            self.scan_phase_combo.setEnabled(False)
-            self.scan_phase_combo.setStyleSheet(f"QComboBox {{ background-color:  {gray240} }}")
+            # self.scan_phase_combo.setEnabled(False)
+            # self.scan_phase_combo.setStyleSheet(f"QComboBox {{ background-color:  {gray240} }}")
     def cb_grid_mode_change(self):
         sender = self.sender()
 

@@ -334,24 +334,25 @@ def read_file_with_np(path, dtype=np.float64):
 if __name__ == "__main__":
 
 
-    path0 = r"C:\Users\shliu\Desktop\testv1\part_rfq.dst"
+    path0 = r"C:\Users\wangh\Desktop\G4_AVAS 文件转换0727\G4_AVAS 文件转换0727\large_pz_positive-z1650.dst"
     res= read_dst_fast(path0)
     print(res)
 
 
 
-    par_dist = res['partran_dist']
-    new_par_dist = []
-    for i in par_dist:
-        r = np.random.uniform(0.999, 1.01)
-        i[3] = r *0.000000001
-        new_par_dist.append(i * r)
-
-
+    # par_dist = res['partran_dist']
+    # new_par_dist = []
+    # for i in par_dist:
+    #     r = np.random.uniform(0.999, 1.01)
+    #     i[3] = r *0.000000001
+    #     new_par_dist.append(i * r)
+    #
+    #
+    new_path =r"C:\Users\wangh\Desktop\G4_AVAS 文件转换0727\G4_AVAS 文件转换0727\large_pz_positive-z1650.dst"
     new_res =res
-    new_res["partran_dist"] = new_par_dist
-    new_res["number"] = 200
-    new_path = r"C:\Users\shliu\Desktop\testv1\part_rfq2.dst"
+    # new_res["partran_dist"] = new_par_dist
+    # new_res["number"] = 200
+    # new_path = r"C:\Users\shliu\Desktop\testv1\part_rfq2.dst"
     write_to_dst(new_path, new_res)
 
 

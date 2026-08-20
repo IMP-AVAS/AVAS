@@ -40,6 +40,10 @@ from apis.qt_api.api import project_check
 
 
 def basic_run(project_path, queue):
+    item = {"projectPath": project_path}
+    obj = SimMode(item)
+    obj.run()
+
     try:
         item = {"projectPath": project_path}
         obj = SimMode(item)
@@ -516,7 +520,9 @@ class MainWindow(QMainWindow):
 ######################################
 
 
-        if self.page_beam.get_beam_mode() == "single":
+        #只有多粒子和单束的时候显示进度条
+        if self.page_beam.get_beam_mode() == "single"\
+                and self.page_input.cb_mulp.isChecked():
             self.timer1.start(2000)
 
 

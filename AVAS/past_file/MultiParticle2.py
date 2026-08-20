@@ -1,15 +1,12 @@
 
 
 
-from core.MultiParticleEngine import MultiParticleEngine
-
-import platform
-
+from past_file.MultiParticleEngine import MultiParticleEngine
 
 from utils.readfile import read_txt
 from utils.tool import write_to_txt
 from aftertreat.dataanalysis.new_dataset import trans_dataset2new
-import os
+
 
 class MultiParticle():
     """
@@ -177,7 +174,7 @@ def basic_mulp(project_path):
 
 
 if __name__ == "__main__":
-    import sys, os
+    import os
 
     path = r"C:\Users\wangh\Desktop\test_shaopenghui"
     item = {'project_path': path,

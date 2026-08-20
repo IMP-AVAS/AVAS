@@ -66,10 +66,13 @@ class LatticeConfig():
         other_path = item.get("otherPath")
         sim_type = item.get("sim_type")
         if other_path is None:
-            if sim_type == "env":
-                path = os.path.join(item.get("projectPath"), "InputFile", "lattice_env.txt")
-            else:
-                path = os.path.join(item.get("projectPath"), "InputFile", "lattice_mulp.txt")
+            # if sim_type == "env":
+            #     path = os.path.join(item.get("projectPath"), "InputFile", "lattice_env.txt")
+            # else:
+            #     path = os.path.join(item.get("projectPath"), "InputFile", "lattice_mulp.txt")
+
+            path = os.path.join(item.get("projectPath"), "InputFile", "lattice_mulp.txt")
+
         else:
             path = other_path
 
