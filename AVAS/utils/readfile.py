@@ -188,6 +188,7 @@ def read_dst_fast(input):
         BaseMassInMeV = struct.unpack("<d", f.read(8))[0]
 
     res= {}
+
     res['number'] = number
     res['ib'] = Ib                         #mA
     res['freq'] = freq*10**6               #hz

@@ -13,6 +13,8 @@ class DiagInfo():
         self.input_file = item.get("input_file")
         self.output_file = item.get("output_file")
         self.diag_file_path = item.get("diag_file_path")
+
+
     def generate_all_diag_info(self, ):
         input_file = self.input_file
         output_file = self.output_file
@@ -36,6 +38,7 @@ class DiagInfo():
 
         lattice_copy = copy.deepcopy(lattice_mulp_list)
 
+        #增加元件的索引
         lattice_copy = add_element_end_index(lattice_copy)
 
 
@@ -49,16 +52,21 @@ class DiagInfo():
         #         i.append(add_name)
         #         index += 1
         #
+        #
         # #为原件添加索引
         # index = 0
         # for i in lattice_copy:
-        #     if i[0] in global_varible.long_element:
+        #     if i[0] in global_varible.all_element:
         #         add_name = f'element_{index}'
         #         i.append(add_name)
         #         index += 1
 
+        for i in lattice_copy:
+            print(i)
+
         # 查找所有的diag_command
         # 查找所有的shift
+        #每一个diag_command对应一个shift
         all_diag_command = []
         all_shift_in_field_commnad = []
         all_diag_name = []
@@ -77,6 +85,10 @@ class DiagInfo():
         diag_index = [int(i[-1].split("_")[-1]) for i in all_diag_command]
         diag_command_list = [i[:-1] for i in all_diag_command]
 
+        print(diag_index)
+        print(diag_command_list)
+
+
         diag_dict = []
         for i in range(len(diag_index)):
             dic = {}
@@ -94,7 +106,7 @@ class DiagInfo():
                 #这里需要将束诊的单位从mm换成m
                 dic["position"] = dic["position"] + float(all_shift_in_field_commnad[i][1]) /1000
             diag_dict.append(dic)
-
+        print(diag_dict)
         # for i in diag_dict:
         #     print(i)
         new_diag_dict = self.get_info_from_dataset(diag_dict, dataset_path)
@@ -178,15 +190,17 @@ class DiagInfo():
 
 if __name__ == "__main__":
 
-    project = r"C:\Users\shliu\Desktop\test_lattice"
+    project = r"C:\Users\shliu\Desktop\test_adjust"
     item = {
         "project_path": project,
-        "input_file": r"C:\Users\shliu\Desktop\test_lattice\InputFile",
-        "output_file": r"C:\Users\shliu\Desktop\test_lattice\OutputFile",
+        "input_file": r"C:\Users\shliu\Desktop\test_adjust\InputFile",
+        "output_file": r"C:\Users\shliu\Desktop\test_adjust\OutputFile",
         "diag_file_path" : r"C:\Users\shliu\Desktop\test_lattice\OutputFile\Diag_Datas_1_2.txt"
     }
     obj = DiagInfo(item)
-    # obj.generate_all_diag_info(item)
-    #
-    # diag_file_path = r"C:\Users\shliu\Desktop\test_lattice\Diag_Datas_1_2.txt"
-    obj.write_diag_info_to_file()
+    res = obj.generate_all_diag_info()
+    print("-" * 50)
+    print(res)
+    # #
+    # # diag_file_path = r"C:\Users\shliu\Desktop\test_lattice\Diag_Datas_1_2.txt"
+    # obj.write_diag_info_to_file()

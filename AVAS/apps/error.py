@@ -1253,7 +1253,9 @@ class Errorstat(Error):
             for i in range(1, self.all_group+1):
                 for j in range(1, self.all_time + 1):
                     lattice_mulp_list = self.generate_lattice_mulp_list(i)
+
                     opti_res_this, loss_this = self.run_one_time_opti(i, j, lattice_mulp_list)
+
                     print(opti_res_this, loss_this)
                     # opti_res_this = {'1_8': 0.4933612120807681, '1_7': 0.7579544029403025,
                     #                  '5_8': 0.7614636313839422, '5_7': 0.25891675029296335}

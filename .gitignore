@@ -6,4 +6,5 @@ AVAS/build/
 AVAS/dist/
 AVAS/test_yaxin512/
 AVAS/otherdemand/test_wending.py
+AVAS/core/LinacMTv1/
 .vs/

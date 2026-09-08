@@ -69,93 +69,235 @@ class Adjust_Error():
         res = multiparticle_obj.run()
         return res
 
+    # def generate_adjust_parameter(self, input_lines):
+    #     """
+    #     产生定位信息, adjust命令中哪些参数需要修改
+    #     """
+    #     adjust_parameter_lattice_command = []  # 原来的命令
+    #     adjust_element_num = []  # 第几个元件要改
+    #     adjust_parameter_num = []  # 第几个参数要改
+    #     adjust_parameter_range = []  # 参数的范围
+    #     adjust_parameter_n = []  # 具有一样的值
+    #     adjust_parameter_use_init = []  # 是否使用初值
+    #     adjust_parameter_initial_value = []
+    #
+    #     adjust_parameter_num_per = []
+    #     adjust_parameter_range_per = []
+    #     adjust_parameter_n_per = []
+    #     adjust_parameter_use_init_per = []
+    #
+    #     index = 0
+    #     # 为adjust命令增加编号
+    #     lattice = copy.deepcopy(input_lines)
+    #     for i in lattice:
+    #         if i[0] == "adjust":
+    #             add_name = f'adjust_{index}'
+    #             i.append(add_name)
+    #             index += 1
+    #
+    #     # 为每个调整命令增加作用元件数
+    #     for i in lattice:
+    #         if i[0] == "adjust":
+    #             adjust_on_element = judge_command_on_element(lattice, i)
+    #             i.append(adjust_on_element)
+    #             if adjust_on_element not in adjust_element_num:
+    #                 adjust_element_num.append(adjust_on_element)
+    #
+    #     # [['adjust', '0', '1', '0', '0', '0.3', '0', 'adjust_0', 2]]
+    #     all_adjust_command = []
+    #     for i in lattice:
+    #         if i[0] == "adjust":
+    #             all_adjust_command.append(copy.deepcopy(i))
+    #
+    #     adjust_parameter_num = [[] for _ in range(len(adjust_element_num))]
+    #     adjust_parameter_range = [[] for _ in range(len(adjust_element_num))]
+    #     adjust_parameter_n = [[] for _ in range(len(adjust_element_num))]
+    #     adjust_parameter_use_init = [[] for _ in range(len(adjust_element_num))]
+    #     # for i in lattice:
+    #     #     print(i)
+    #     for i in lattice:
+    #         if i[0] == "adjust":
+    #             index = adjust_element_num.index(i[-1])
+    #             adjust_parameter_num[index].append(int(i[2]))
+    #             adjust_parameter_range[index].append([float(i[4]), float(i[5])])
+    #             adjust_parameter_n[index].append(int(i[3]))
+    #             adjust_parameter_use_init[index].append(int(i[6]))
+    #
+    #     adjust_parameter_initial_value = [[] for _ in range(len(adjust_element_num))]
+    #     print(adjust_element_num)
+    #     for i in range(len(adjust_element_num)):
+    #         for j in lattice:
+    #             if j[0] in global_varible.mulpud_element and int(j[-1].split("_")[-1]) == adjust_element_num[i]:
+    #                 for k in adjust_parameter_num[i]:
+    #                     adjust_parameter_initial_value[i].append(float(j[k]))
+    #
+    #             #     for k in adjust_parameter_num[i]:
+    #             #
+    #             #         #检查参数是否超过命令的长度
+    #             #         if k > len(j[:-1]) -1:
+    #             #             v = BaseError()
+    #             #             command = []
+    #             #             for com in all_adjust_command:
+    #             #                 if com[-1] == adjust_element_num[i] and int(com[2]) == k:
+    #             #                     command = com
+    #             #                     break
+    #             #             v.adjust_param_value_error(command[:-2])
+    #             #
+    #             #         adjust_parameter_initial_value[i].append(float(j[k]))
+    #             # break
+    #     #返回 哪些元件需要修改， 优化的初始初始值， 哪些参数需要修改， ,每个参数的范围，关联值n，是否使用初值
+    #     return adjust_element_num, adjust_parameter_initial_value, adjust_parameter_num, adjust_parameter_range, \
+    #         adjust_parameter_n, adjust_parameter_use_init
+    #
+    #     #[15, 16]
+    #     # [[-38.0], [-0.3, 0.3]]
+    #     # [[6], [5, 4]]  adjust_parameter_num
+    #     # [[[-0.5, 0.5]], [[-0.5, 0.5], [-0.5, 0.5]]]
+    #     # [[0], [0, 0]]
+    #     # [[1], [1, 0]]
+
+    # def generate_adjust_parameter(self, input_lines):
+    #     """
+    #     解析 adjust 命令，并按照作用元件分组
+    #     """
+    # 
+    #     lattice = copy.deepcopy(input_lines)
+    # 
+    #     # 1. 给 adjust 命令编号，并确定作用元件
+    #     adjust_commands = []
+    # 
+    #     adjust_index = 0
+    # 
+    #     for command in lattice:
+    # 
+    #         if command[0] != "adjust":
+    #             continue
+    # 
+    #         element_num = judge_command_on_element(lattice, command)
+    # 
+    #         adjust_commands.append({
+    #             "name": f"adjust_{adjust_index}",
+    #             "element_num": element_num,
+    #             "parameter_num": int(command[2]),
+    #             "n": int(command[3]),
+    #             "range": [float(command[4]), float(command[5])],
+    #             "use_init": int(command[6]),
+    #         })
+    # 
+    #         adjust_index += 1
+    # 
+    #     # 2. 按照元件编号分组
+    #     adjust_info = {}
+    # 
+    #     for command in adjust_commands:
+    # 
+    #         element_num = command["element_num"]
+    # 
+    #         if element_num not in adjust_info:
+    #             adjust_info[element_num] = {
+    #                 "parameter_num": [],
+    #                 "range": [],
+    #                 "n": [],
+    #                 "use_init": [],
+    #                 "initial_value": [],
+    #             }
+    # 
+    #         info = adjust_info[element_num]
+    # 
+    #         info["parameter_num"].append(command["parameter_num"])
+    #         info["range"].append(command["range"])
+    #         info["n"].append(command["n"])
+    #         info["use_init"].append(command["use_init"])
+    # 
+    #     # 3. 获取各参数的初始值
+    #     for command in lattice:
+    # 
+    #         if command[0] not in global_varible.mulpud_element:
+    #             continue
+    # 
+    #         element_num = int(command[-1].split("_")[-1])
+    # 
+    #         if element_num not in adjust_info:
+    #             continue
+    # 
+    #         for parameter_num in adjust_info[element_num]["parameter_num"]:
+    #             adjust_info[element_num]["initial_value"].append(
+    #                 float(command[parameter_num])
+    #             )
+    # 
+    #     return adjust_info
+
     def generate_adjust_parameter(self, input_lines):
         """
-        产生定位信息, adjust命令中哪些参数需要修改
+        解析 adjust 命令，并按照作用元件分组
         """
-        adjust_parameter_lattice_command = []  # 原来的命令
-        adjust_element_num = []  # 第几个元件要改
-        adjust_parameter_num = []  # 第几个参数要改
-        adjust_parameter_range = []  # 参数的范围
-        adjust_parameter_n = []  # 具有一样的值
-        adjust_parameter_use_init = []  # 是否使用初值
-        adjust_parameter_initial_value = []
 
-        adjust_parameter_num_per = []
-        adjust_parameter_range_per = []
-        adjust_parameter_n_per = []
-        adjust_parameter_use_init_per = []
-        index = -1
-
-        index = 0
-        # 为adjust命令增加编号
         lattice = copy.deepcopy(input_lines)
-        for i in lattice:
-            if i[0] == "adjust":
-                add_name = f'adjust_{index}'
-                i.append(add_name)
-                index += 1
 
-        # 为每个调整命令增加作用元件数
-        for i in lattice:
-            if i[0] == "adjust":
-                adjust_on_element = judge_command_on_element(lattice, i)
-                i.append(adjust_on_element)
-                if adjust_on_element not in adjust_element_num:
-                    adjust_element_num.append(adjust_on_element)
+        # 1. 给 adjust 命令编号，并确定作用元件
+        adjust_commands = []
 
-        # [['adjust', '0', '1', '0', '0', '0.3', '0', 'adjust_0', 2]]
-        all_adjust_command = []
-        for i in lattice:
-            if i[0] == "adjust":
-                all_adjust_command.append(copy.deepcopy(i))
+        adjust_index = 0
 
-        adjust_parameter_num = [[] for _ in range(len(adjust_element_num))]
-        adjust_parameter_range = [[] for _ in range(len(adjust_element_num))]
-        adjust_parameter_n = [[] for _ in range(len(adjust_element_num))]
-        adjust_parameter_use_init = [[] for _ in range(len(adjust_element_num))]
-        for i in lattice:
-            print(i)
-        for i in lattice:
-            if i[0] == "adjust":
-                index = adjust_element_num.index(i[-1])
-                adjust_parameter_num[index].append(int(i[2]))
-                adjust_parameter_range[index].append([float(i[4]), float(i[5])])
-                adjust_parameter_n[index].append(int(i[3]))
-                adjust_parameter_use_init[index].append(int(i[6]))
+        for command in lattice:
 
-        adjust_parameter_initial_value = [[] for _ in range(len(adjust_element_num))]
-        print(adjust_element_num)
-        for i in range(len(adjust_element_num)):
-            for j in lattice:
-                if j[0] in global_varible.mulpud_element and int(j[-1].split("_")[-1]) == adjust_element_num[i]:
-                    for k in adjust_parameter_num[i]:
-                        adjust_parameter_initial_value[i].append(float(j[k]))
+            if command[0] != "adjust":
+                continue
 
-                #     for k in adjust_parameter_num[i]:
-                #
-                #         #检查参数是否超过命令的长度
-                #         if k > len(j[:-1]) -1:
-                #             v = BaseError()
-                #             command = []
-                #             for com in all_adjust_command:
-                #                 if com[-1] == adjust_element_num[i] and int(com[2]) == k:
-                #                     command = com
-                #                     break
-                #             v.adjust_param_value_error(command[:-2])
-                #
-                #         adjust_parameter_initial_value[i].append(float(j[k]))
-                # break
-        #返回 哪些元件需要修改， 优化的初始初始值， 哪些参数需要修改， ,每个参数的范围，关联值n，是否使用初值
-        return adjust_element_num, adjust_parameter_initial_value, adjust_parameter_num, adjust_parameter_range, \
-            adjust_parameter_n, adjust_parameter_use_init
+            element_num = judge_command_on_element(lattice, command)
 
-        #[15, 16]
-        # [[-38.0], [-0.3, 0.3]]
-        # [[6], [5, 4]]  adjust_parameter_num
-        # [[[-0.5, 0.5]], [[-0.5, 0.5], [-0.5, 0.5]]]
-        # [[0], [0, 0]]
-        # [[1], [1, 0]]
+            adjust_commands.append({
+                "name": f"adjust_{adjust_index}",  #判断是第几个adjust命令
+                "element_num": element_num,        #作用于哪个原件上
+                "parameter_num": int(command[2]),   #哪一个参数要修改
+                "n": int(command[3]),      #关联值n的使用
+                "range": [float(command[4]), float(command[5])],  #参数的范围
+                "use_init": int(command[6]),        #是否使用初值
+            })
+
+            adjust_index += 1
+
+        # 2. 按照元件编号分组
+        adjust_info = {}
+
+        for command in adjust_commands:
+
+            element_num = command["element_num"]
+
+            if element_num not in adjust_info:
+                adjust_info[element_num] = {
+                    "parameter_num": [], #哪一个参数要修改 1w
+                    "range": [],      #参数的范围    2w
+                    "n": [],          #关联值n的使用  1w
+                    "use_init": [],   #是否使用初值  1w
+                    "initial_value": [], #初值是多少  1w
+                }
+
+            info = adjust_info[element_num]
+
+            info["parameter_num"].append(command["parameter_num"])
+            info["range"].append(command["range"])
+            info["n"].append(command["n"])
+            info["use_init"].append(command["use_init"])
+
+        # 3. 获取各参数的初始值
+        for command in lattice:
+
+            if command[0] not in global_varible.mulpud_element:
+                continue
+
+            element_num = int(command[-1].split("_")[-1])
+
+            if element_num not in adjust_info:
+                continue
+
+            for parameter_num in adjust_info[element_num]["parameter_num"]:
+
+                adjust_info[element_num]["initial_value"].append(
+                    float(command[parameter_num])
+                )
+
+        return adjust_info
 
     def treat_diag(self, group, time, NN):
 
@@ -515,9 +657,7 @@ class Adjust_Error():
 
             error_lattice_no_index = delete_element_end_index(error_lattice)
 
-
             error_lattice_write = copy.deepcopy(error_lattice_no_index)
-
 
             for index, i in enumerate(error_lattice[::-1]):
                 index = -1 * index - 1
@@ -533,9 +673,11 @@ class Adjust_Error():
 
 
             for i in error_lattice_write:
+                #把动态误差注释掉
 
                 if i[0] in global_varible.error_elemment_command_dyn_ncpl or i[0] in global_varible.error_beam_dyn:
                     i[0] = "!" + i[0]
+
                 # 如果是静态误差，变成动态误差
                 elif i[0] == 'err_beam_stat':
                     i[0] = 'err_beam_dyn'
@@ -588,67 +730,124 @@ class Adjust_Error():
             return loss
 
         return goal
-    def optimize_one_group(self, group, time, error_lattice,
-                           adjust_element_num, adjust_parameter_initial_value, adjust_parameter_num,
-                           adjust_parameter_range, \
-                           adjust_parameter_n, adjust_parameter_use_init, NN):
+
+    def optimize_one_group(self, group, time, error_lattice, adjust_info, NN):
 
         error_lattice = copy.deepcopy(error_lattice)
 
-        # lattice中原本的初值
-        # lattice_initial_value =np.array(adjust_parameter_initial_value).reshape(-1)
+        lattice_initial_value = []
+        parameter_range = []
+        use_initial_value = []
+        n_ = []
 
-        lattice_initial_value = flatten_list(adjust_parameter_initial_value)
+        adjust_element_num = []
+        adjust_parameter_num = []
 
-        # print('lattice_initial_value', lattice_initial_value)
+        #######################################################################
+        # 从adjust_info中提取数据
 
-        # 范围
-        parameter_range = np.array(flatten_list(adjust_parameter_range)).reshape(-1, 2)
-        # print('parameter_range', parameter_range)
+        for element_num, info in adjust_info.items():
+            adjust_element_num.append(element_num)
 
+            adjust_parameter_num.append(info["parameter_num"])
+
+            lattice_initial_value.extend(info["initial_value"])
+
+            parameter_range.extend(info["range"])
+
+            use_initial_value.extend(info["use_init"])
+
+            n_.extend(info["n"])
+
+        #######################################################################
         # 随机初值
-        random_initial_value = [random.uniform(i[0], i[1]) for i in parameter_range]
 
-        # 是否使用初值
-        # use_initial_value = np.array(adjust_parameter_use_init).reshape(-1)
-        use_initial_value = np.hstack(adjust_parameter_use_init)
+        random_initial_value = [
+            random.uniform(i[0], i[1])
+            for i in parameter_range
+        ]
 
-        # 最终初值
         initial_value = random_initial_value
+
+        # 是否使用lattice中的初值
         for i in range(len(initial_value)):
+
             if use_initial_value[i] == 1:
                 initial_value[i] = lattice_initial_value[i]
 
         print('initial_value', initial_value)
 
-        # 是否使用相同的值
-        # n_ = np.array(adjust_parameter_n).reshape(-1)
-        n_ = flatten_list(adjust_parameter_n)
-        # print('n_', n_)
+        #######################################################################
+        # 产生优化初值
 
-        unique_elements, unique_indices = np.unique(n_, return_index=True)
-        print(unique_elements, unique_indices)
+        random_initial_value = [
+            random.uniform(i[0], i[1])
+            for i in parameter_range
+        ]
 
-        indiaces = []
+        initial_value = random_initial_value
 
-        for i in range(len(unique_elements)):
-            if unique_elements[i] != 0:
-                indiaces.append([index for index, element in enumerate(n_) if element == unique_elements[i]])
+        for i in range(len(initial_value)):
 
+            if use_initial_value[i] == 1:
+                initial_value[i] = lattice_initial_value[i]
+
+        print('initial_value', initial_value)
+
+        #######################################################################
+        # 根据n寻找哪些参数需要使用相同的值
+
+        same_parameter = {}
+
+        for index, n in enumerate(n_):
+
+            if n == 0:
+                continue
+
+            if n not in same_parameter:
+                same_parameter[n] = []
+
+            same_parameter[n].append(index)
+
+        # 例如：
+        # n_ = [0, 1, 1, 2, 0, 2]
+        #
+        # same_parameter =
+        # {
+        #     1: [1, 2],
+        #     2: [3, 5]
+        # }
+
+        #######################################################################
+        # 建立相等约束
 
         constraints = []
-        for i in indiaces:
-            if len(i) == 1:
-                continue
-            for j in range(1, len(i)):
-                # print([i[j]], i[0])
-                initial_value[i[j]] = initial_value[i[0]]
-                constraints.append({'type': 'eq', 'fun': lambda x: x[i[j]] - x[i[0]]})
 
+        for indices in same_parameter.values():
+
+            if len(indices) == 1:
+                continue
+
+            index_1 = indices[0]
+
+            for index_2 in indices[1:]:
+                # 保证优化开始时，相同的值就已经相同
+                initial_value[index_2] = initial_value[index_1]
+
+                constraints.append({
+                    'type': 'eq',
+                    'fun': lambda x, index_1=index_1, index_2=index_2:
+                    x[index_2] - x[index_1]
+                })
+
+            #######################################################################
+
+######################################################################
 
         # for constraint in constraints:
         #     print('约束条件函数结果:', constraint)
 
+        #修改元件的编号， 修改参数的编号，
         goal = self.get_goal(error_lattice, adjust_element_num, adjust_parameter_num, group, time, NN)
 
         options = {'maxiter': 100, 'eps': 10**-1, 'ftol': 10**-4}
@@ -669,10 +868,10 @@ class Adjust_Error():
             return self.ini_this[-1], self.loss_this[-1]
 
 
+    #把所有的adjust和diag作为一族来处理
     def opti_one_time(self, group, time, lattice_mulp_list):
         """
-        静态误差完整跑一次, 需要矫正
-
+        把所有的族都当成一个族
         :param group:
         :param time:hg
         :return:
@@ -696,7 +895,7 @@ class Adjust_Error():
 
     def opti_one_time_different_group(self, group, time, lattice_mulp_list):
         print(572)
-        #使用不同的组数进行优化
+        #使用不同的族数进行优化
         """
         静态误差完整跑一次, 需要矫正
 
@@ -736,25 +935,29 @@ class Adjust_Error():
             #     print(i)
             # sys.exit()
             # 得到lattice的定位信息
-            adjust_element_num, adjust_parameter_initial_value, adjust_parameter_num, adjust_parameter_range, \
-                adjust_parameter_n, adjust_parameter_use_init = self.generate_adjust_parameter(t_lattice)
+            adjust_info = self.generate_adjust_parameter(t_lattice)
             # 返回 哪些元件需要修改， 优化的初始初始值， 哪些参数需要修改， ,每个参数的范围，关联值n，是否使用初值
-
-            print( adjust_element_num, adjust_parameter_initial_value, adjust_parameter_num, adjust_parameter_range, \
-                adjust_parameter_n, adjust_parameter_use_init)
 
             self.ini_this = []
             self.loss_this = []
 
             opti_res_this, loss_this = self.optimize_one_group(group, time, t_lattice,
-                                                               adjust_element_num, adjust_parameter_initial_value,
-                                                               adjust_parameter_num,
-                                                               adjust_parameter_range,
-                                                               adjust_parameter_n, adjust_parameter_use_init, NN)
+                                                               adjust_info, NN)
 
             # print(618, adjust_element_num, adjust_parameter_initial_value, adjust_parameter_num, adjust_parameter_range, \
             #     adjust_parameter_n, adjust_parameter_use_init)
             # print(620, opti_res_this)
+
+            adjust_element_num = []
+            adjust_parameter_num = []
+
+            #######################################################################
+            # 从adjust_info中提取数据
+            #包括修改的原件数，还有参数索引
+            for element_num, info in adjust_info.items():
+                adjust_element_num.append(element_num)
+                adjust_parameter_num.append(info["parameter_num"])
+
 
             lattice_mulp_list = self.change_latticae_with_opti_res(opti_res_this, lattice_mulp_list, adjust_element_num, adjust_parameter_num)
             # for i1 in lattice_mulp_list:
@@ -768,7 +971,7 @@ class Adjust_Error():
 
         all_loss = self.treat_diag(group, time, None)
 
-    #返回矫正参数信息, 这一次优化的结果， 只一次优化的损失， 束诊结果
+        #返回矫正参数信息, 这一次优化的结果， 只一次优化的损失， 束诊结果
         return opti_res_this_dict, all_loss
 
     # sys.exit()
