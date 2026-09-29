@@ -60,23 +60,44 @@ def format_output(code=0, msg="success", **kwargs):
 
 
 def judge_command_on_element(lattice, command):
-    # 返回一个命令对应的是哪个元件
+    # 返回一个命令对应的是哪个元件,原件必须有索引
     lattice = copy.deepcopy(lattice)
 
     command_index = lattice.index(command)
     command_on_element = None
     for i in range(command_index, len(lattice)):
-        if lattice[i][0] in global_varible.all_element:
+        if lattice[i][0] in global_varible.mulp_element:
             command_on_element = int(lattice[i][-1].split("_")[1])
             break
     if command_on_element is None:
         command_on_element = -1
     return command_on_element
 
+def judge_command_under_element(lattice, command):
+    #判断命令在哪个原件后面
+    lattice = copy.deepcopy(lattice)
+
+    try:
+        command_index = lattice.index(command)
+    except ValueError:
+        return -1
+    command_under_element = None
+
+    # 从command前面反向寻找所属元件
+    for item in reversed(lattice[:command_index]):
+
+        if item[0] in global_varible.mulp_element:
+            command_under_element = item[-1].split("_")[1]
+            break
+    if command_under_element is None:
+        command_under_element = -1
+    return int(command_under_element)
+
+
 def delete_element_end_index(error_lattice):
     error_lattice_copy = copy.deepcopy(error_lattice)
     for i in error_lattice_copy:
-        if i[0] in global_varible.all_element:
+        if i[0] in global_varible.mulp_element:
             i.pop()
     return error_lattice_copy
 
@@ -84,7 +105,7 @@ def add_element_end_index(lattice):
     lattice = copy.deepcopy(lattice)
     index = 0
     for i in lattice:
-        if i[0] in global_varible.all_element:
+        if i[0] in global_varible.mulp_element:
             add_name = f'element_{index}'
             i.append(add_name)
             index += 1

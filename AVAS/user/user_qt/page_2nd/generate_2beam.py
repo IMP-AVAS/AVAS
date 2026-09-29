@@ -412,7 +412,7 @@ class Pagegenerate2beam(QWidget):
             out_put = self.b2_dst_path
             obj.generate_dst(input, out_put)
         else:
-            source_file = os.path.join(self.dir_generate_2b, self.beam1_window.text_particle_input_file.text())
+            source_file = os.path.join(self.dir_generate_2b, self.beam2_window.text_particle_input_file.text())
             target_folder = self.dir_generate_2b
             new_name = "2beam_second.dst"
             new_file_path = os.path.join(target_folder, new_name)

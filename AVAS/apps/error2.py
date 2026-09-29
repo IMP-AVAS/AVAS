@@ -209,7 +209,7 @@ class Error():
                     return self.increase_error(res)
 
 
-            elif input_lines[i][0] in global_varible.mulpud_element and N > 0:
+            elif input_lines[i][0] in global_varible.mulp_element and N > 0:
                 # 在叠加场添加磁场原件误差
                 if input_lines[i][0] == 'field' and input_lines[i][4] == '3':
                     if command[0] in (

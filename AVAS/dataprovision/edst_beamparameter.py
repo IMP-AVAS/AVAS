@@ -54,7 +54,7 @@ class EdstParameter:
         # ---- scalars ----
         self.number = int(raw.get("number"))
         self.freq = float(raw.get("freq"))
-        par = np.asarray(raw.get("partran_dist"), dtype=np.float64)
+        par = np.asarray(raw.get("partran_dist"), dtype=np.float64) [:-1]
         self.BaseMassInMeV = float(raw.get("basemassinmev"))
 
         mass_charge = par[:, [6, 7]]
@@ -62,40 +62,69 @@ class EdstParameter:
 
         # 找出所有不同的 质量-电荷 组合
         unique_mass_charge = np.unique(mass_charge, axis=0)
-        print(unique_mass_charge)
+        if len(unique_mass_charge) == 2:
+            key1 = unique_mass_charge[0]
+            key2 = unique_mass_charge[1]
 
-        key1 = unique_mass_charge[0]
-        key2 = unique_mass_charge[1]
+            mask1 = np.all(np.isclose(mass_charge, key1), axis=1)
+            mask2 = np.all(np.isclose(mass_charge, key2), axis=1)
 
-        mask1 = np.all(np.isclose(mass_charge, key1), axis=1)
-        mask2 = np.all(np.isclose(mass_charge, key2), axis=1)
+            par_group1 = par[mask1]
+            par_group2 = par[mask2]
 
-        par_group1 = par[mask1]
-        par_group2 = par[mask2]
+        ################粒子1的信息
+            self.b1_x = par_group1[:, 0] * 10 #mm
+            self.b1_x1 = par_group1[:, 1] * 1000 #mrad
+            self.b1_y = par_group1[:, 2] * 10
+            self.b1_y1 = par_group1[:, 3] * 1000
 
-        print(len(par))
+            self.b1_phi_rad = par_group1[:, 4]            # rad
+            self.b1_phi_deg = par_group1[:, 4] * 180.0 / Pi   # deg
 
-    ################粒子1的信息
-        self.b1_x = par_group1[:, 0] * 10 #mm
-        self.b1_x1 = par_group1[:, 1] * 1000 #mrad
-        self.b1_y = par_group1[:, 2] * 10
-        self.b1_y1 = par_group1[:, 3] * 1000
+            self.b1_w = par_group1[:, 5] #MeV
 
-        self.b1_phi_rad = par_group1[:, 4]            # rad
-        self.b1_phi_deg = par_group1[:, 4] * 180.0 / Pi   # deg
+        ################粒子2的信息
+            self.b2_x = par_group2[:, 0] * 10  # mm
+            self.b2_x1 = par_group2[:, 1] * 1000  # mrad
+            self.b2_y = par_group2[:, 2] * 10
+            self.b2_y1 = par_group2[:, 3] * 1000
 
-        self.b1_w = par_group1[:, 5] #MeV
+            self.b2_phi_rad = par_group2[:, 4]            # rad
+            self.b2_phi_deg = par_group2[:, 4] * 180.0 / Pi   # deg
 
-    ################粒子2的信息
-        self.b2_x = par_group2[:, 0] * 10  # mm
-        self.b2_x1 = par_group2[:, 1] * 1000  # mrad
-        self.b2_y = par_group2[:, 2] * 10
-        self.b2_y1 = par_group2[:, 3] * 1000
+            self.b2_w = par_group2[:, 5]  # MeV
 
-        self.b2_phi_rad = par_group2[:, 4]            # rad
-        self.b2_phi_deg = par_group2[:, 4] * 180.0 / Pi   # deg
+        elif len(unique_mass_charge) == 1:
 
-        self.b2_w = par_group2[:, 5]  # MeV
+            key1 = unique_mass_charge[0]
+
+            mask1 = np.all(np.isclose(mass_charge, key1), axis=1)
+
+            par_group1 = par[mask1]
+            par_group2 = []
+
+            ################粒子1的信息
+            self.b1_x = par_group1[:, 0] * 10  # mm
+            self.b1_x1 = par_group1[:, 1] * 1000  # mrad
+            self.b1_y = par_group1[:, 2] * 10
+            self.b1_y1 = par_group1[:, 3] * 1000
+
+            self.b1_phi_rad = par_group1[:, 4]  # rad
+            self.b1_phi_deg = par_group1[:, 4] * 180.0 / Pi  # deg
+
+            self.b1_w = par_group1[:, 5]  # MeV
+
+            ################粒子2的信息
+            self.b2_x = []
+            self.b2_x1 = []
+            self.b2_y = []
+            self.b2_y1 = []
+
+            self.b2_phi_rad = []
+            self.b2_phi_deg = []
+
+            self.b2_w = []
+
 
         return {
             "number": self.number,

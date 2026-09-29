@@ -118,16 +118,24 @@ class Plotedst():
             }
             plot_edst_picture(item)
 
-        particle_1_cm = edst_dict["unique_mass_charge"][0]   #电荷质量
-        particle_2_cm = edst_dict["unique_mass_charge"][1]
-
-        fig.text(
-            0.01, 0.92,
-            f'Particle 1: charge {particle_1_cm[0]:.0f} mass {particle_1_cm[1]:.3f} number {edst_dict["number_1"]} red\n'
-            f'Particle 2: charge {particle_2_cm[0]:.0f} mass {particle_2_cm[1]:.3f} number {edst_dict["number_2"]} blue',
-            fontsize=11,
-            color='black'
-        )
+        if len(edst_dict["unique_mass_charge"]) == 2:
+            particle_1_cm = edst_dict["unique_mass_charge"][0]   #电荷质量
+            particle_2_cm = edst_dict["unique_mass_charge"][1]
+            fig.text(
+                0.01, 0.92,
+                f'Particle 1: charge {particle_1_cm[0]:.0f} mass {particle_1_cm[1]:.3f} number {edst_dict["number_1"]} red\n'
+                f'Particle 2: charge {particle_2_cm[0]:.0f} mass {particle_2_cm[1]:.3f} number {edst_dict["number_2"]} blue',
+                fontsize=11,
+                color='black'
+            )
+        elif len(edst_dict["unique_mass_charge"]) == 1:
+            particle_1_cm = edst_dict["unique_mass_charge"][0]  # 电荷质量
+            fig.text(
+                0.01, 0.92,
+                f'Particle 1: charge {particle_1_cm[0]:.0f} mass {particle_1_cm[1]:.3f} number {edst_dict["number_1"]} red\n',
+                fontsize=11,
+                color='black'
+            )
 
         # fig.tight_layout(rect=[0.0, 0.0, 1.0, 0.9])
         fig.subplots_adjust(
@@ -157,14 +165,14 @@ if __name__ == "__main__":
 
 
     obj = Plotedst()
-    edst_path = r"C:\Users\wangh\Desktop\test_xiao\OutputFile\outData_2.022640.edst"
-
+    edst_path = r"C:\Users\wangh\Desktop\132Sn33\132Sn33\OutputFile\outData_57.220000.edst"
+    # edst_path = r"C:\Users\wangh\Desktop\field_ciads\InputFile\2beam.edst"
 
     item = {
         "show_": 1,
         "fig": None,
         "save_path": None,
-        "picture_type":  [["x", "x1"], ["y", "y1"], ["phi", "w"], ["phi", "y"]],
+        "picture_type":  [["x", "x1"], ["y", "y1"], ["phi", "w"], ["x", "y"]],
         "edst_path": edst_path,
         "edst_dict": None,
         }

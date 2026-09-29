@@ -303,7 +303,7 @@ if __name__ == "__main__":
     t0 = time.time()
     # dst_path = r"F:\save\python_code\scatter\cpu_scatter_demo2\cafe1000.dst"
     # dst_path =r"C:\Users\shliu\Desktop\boun\part_dtl1.dst"
-    dst_path = r"C:\Users\wangh\Desktop\324\v1\OutputFile\inData.dst"
+    dst_path = r"C:\Users\wangh\Desktop\test_mu\mu_avas_0907\OutputFile\outData_3.454494_2.dst"
 
     plot_phase = PlotPhase2()
 
@@ -327,7 +327,7 @@ if __name__ == "__main__":
                           ["phi", "w_minus_mean"], ["z", "dp_p"]],
         "dst_path": dst_path,
         "dst_dict": None,
-        "twiss_dict": twiss_dict
+        "twiss_dict": None
         }
 
 

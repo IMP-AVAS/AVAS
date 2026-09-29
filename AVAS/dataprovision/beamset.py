@@ -219,22 +219,25 @@ class BeamsetParameter():
 if __name__ == "__main__":
     import os
     import numpy as np
-    beamset_pasth = r"C:\Users\wangh\Desktop\test_xiao\OutputFile\BeamSet.plt"
+    beamset_pasth = r"C:\Users\wangh\Desktop\qx\1beam0921\OutputFile\BeamSet.plt"
     obj = BeamsetParameter(beamset_pasth)
 
     step = obj.get_step()
     print(step)
-    # for i in step:
-    v1 , v2 = obj.get_one_parameter(270)
-    print(v1)
+    v1, v2 = obj.get_one_parameter(0)
+    print(229, v1)
+    # for i in range(step):
+        # v1 , v2 = obj.get_one_parameter(i)
+        # print(229, v1)
 
-    x = np.array([i[0] for i in v2])
-    z = np.asarray([i[4] for i in v2])
-    z = np.array(z) + v1["location"]
-
-    from matplotlib import pyplot as plt
-    plt.scatter(z, x)
-    plt.show()
+        # x = np.array([i[0] for i in v2])
+        # z = np.asarray([i[4] for i in v2])
+        # z = np.array(z) + v1["location"]
+        # mean_z = np.mean(z)
+        # print(mean_z)
+    # from matplotlib import pyplot as plt
+    # plt.scatter(z, x)
+    # plt.show()
 
 
     # res =obj.get_all_dict()

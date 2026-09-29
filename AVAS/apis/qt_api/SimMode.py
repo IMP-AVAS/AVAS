@@ -55,9 +55,10 @@ class SimMode():
         ini_info = ini_obj.create_from_file(self.item)
 
         ini_info = ini_info["data"]["iniParams"]
+##############################################################
         base_mode = ini_info["input"]["sim_type"]
         device = ini_info["input"]["device"]
-        if_normal = ini_info["error"]["if_normal"]
+
 
         match_mode = [
             ini_info["match"]["cal_input_twiss"],
@@ -67,7 +68,9 @@ class SimMode():
 
         err_mode = ini_info["error"]["error_type"]
         err_seed = ini_info["error"]["seed"]
+        if_normal = ini_info["error"]["if_normal"]
 
+###############################
         # 检查类型
 
         field_path = ini_info["project"]["fieldSource"]

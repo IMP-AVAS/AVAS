@@ -126,21 +126,21 @@ class CreateBasicProject():
             "inputMissing": [],
         }
 
-        if self.platform == "qt":
-            pass
-        elif self.platform == "web":
-            validate_res = self.validate_keys()
-            validate_res_values = [v for k, v in validate_res.items()]
-
-            if any(validate_res_values):
-                msg = ("The template parameter does not match the"
-                       " parameters of the AVAS project, unable to generate the basic configuration directory.")
-
-
-                error_msg = {k: v for k, v in validate_res.items() if v}
-                kwargs.update(error_msg)
-                output = format_output(code=-1, msg=msg, **kwargs)
-                return output
+        # if self.platform == "qt":
+        #     pass
+        # elif self.platform == "web":
+        #     validate_res = self.validate_keys()
+        #     validate_res_values = [v for k, v in validate_res.items()]
+        #
+        #     if any(validate_res_values):
+        #         msg = ("The template parameter does not match the"
+        #                " parameters of the AVAS project, unable to generate the basic configuration directory.")
+        #
+        #
+        #         error_msg = {k: v for k, v in validate_res.items() if v}
+        #         kwargs.update(error_msg)
+        #         output = format_output(code=-1, msg=msg, **kwargs)
+        #         return output
 
         if not os.path.exists(self.project_path):
             os.makedirs(self.project_path)

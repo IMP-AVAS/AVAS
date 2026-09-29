@@ -8,8 +8,8 @@ import os
 # + Nx * [Char + tpye(int) + Index(int) + time[s](double) + location[m](double) +
 # Np * [x(d) + px(d) +  y(double) + py(double) + z(double) + pz(double) + lossFlag(int)]]
 # Np * [x(double) + px(double) +  y(double) + py(double) + t(double) + pz(double) + recordFlag(double)]]
-
-
+import matplotlib.pyplot as plt
+import numpy as np
 class BeamsetParameter2b():
     def __init__(self, beamset_path):
         self.beamset_path = beamset_path
@@ -55,7 +55,7 @@ class BeamsetParameter2b():
 
 
         file_size = os.path.getsize(self.beamset_path)
-        print(file_size)
+        # print(file_size)
         step = (file_size -  self.total_head_byte) / self.one_step_byte
 
         return int(step)
@@ -113,9 +113,9 @@ class BeamsetParameter2b():
                 data['yp'],
                 data['z'],
                 data['zp'],
-                data['status'],
+                data['status'], #6
                 data['id'],
-                data['charge'],
+                data['charge'], #8
                 data['mass'],
                 data['weight'],
             ])
@@ -204,107 +204,47 @@ class BeamsetParameter2b():
 
 
 if __name__ == "__main__":
-
-    beamset_pasth = r"C:\Users\wangh\Desktop\qx\2beam\OutputFile\BeamSet.plt"
+    c_light = 299792458
+    mass_sn32 = 122957.208
+    mass_sn33 =122957.208
+    beamset_pasth = r"C:\Users\wangh\Desktop\qx\1beam0921\OutputFile\BeamSet.plt"
     obj = BeamsetParameter2b(beamset_pasth)
-
     step = obj.get_step()
-    print(step)
-    # for i in range(390):
-    #     dic ,lis = obj.get_one_parameter(i)
-    #     print(dic["location"])
 
-    for i in range(0, 2550, 100):
-        dic ,lis = obj.get_one_parameter(i)
-        # print(dic)
-        # print(lis)
-        t = dic["time"]
-        center = 0
-
-        number_exist = len([i for i in lis if int(i[6]) == 1])
-        # print(number_exist)
-        for j in lis:
-            if int(j[6]) == 1:
-                center += j[5]
-
-        center = center / number_exist
-
-
-        print("时间", t)
-        print("中心", center)
-
-
-
-
-    # print(lis[-1])
-    # import matplotlib.pyplot as plt
+    # stop = 0
+    # for i in range(step):
+    #     v1 , v2 = obj.get_one_parameter(i)
+    #     print(229, i, v1)
     #
-    # z_p = [i[4] for i in lis if int(i[8]) == 1 and int(i[6])==1]
-    # y_p = [i[2] for i in lis if int(i[8]) == 1 and int(i[6])==1]
-    # z_ap = [i[4] for i in lis if int(i[8]) == -1 and int(i[6])==1]
-    # y_ap = [i[2] for i in lis if int(i[8]) == -1 and int(i[6])==1]
-    # # # print(d1, l1[0])
-    # #
-    # # res =obj.get_all_dict()
-    # #
-    # plt.scatter(z_p, y_p,s=4.0)
-    # plt.scatter(z_ap, y_ap,s=4.0)
-    # plt.show()
+    #     x = np.array([i[0] for i in v2])
+    #     z = np.asarray([i[4] for i in v2])
+    #     mean_z = np.mean(z)
+    #     print(mean_z)
+    #     if mean_z > 0.21:
+    #         break
+    # v_dic, v_lis = obj.get_one_parameter(0)
+    # print(v_dic)
+    # print(v_lis[-1])
+    def ana_one_ste(index):
+        v_dic, v_lis = obj.get_one_parameter(index)
+
+        x = np.array([i[0] for i in v_lis])
+        z = np.asarray([i[4] for i in v_lis])
+        mean_z = np.mean(z)
+        print(v_dic, mean_z)
+        print(v_lis[-1])
+        return mean_z
+
+    res1 = ana_one_ste(0)
+    res1 = ana_one_ste(1)
+    res1 = ana_one_ste(107)
+    res1 = ana_one_ste(108)
+    # res1 = ana_one_ste(100)
 
 
-    # # print(res)
-    # x = np.array([i[0] for i in v2])
-    # x1 = np.array([i[1]/i[5] for i in v2])
-    #
-    # z = np.asarray([i[4] for i in v2])
-    #
-    # from matplotlib import pyplot as plt
-    # plt.scatter(x,x1)
-    # plt.show()
 
 
-    # res = obj.get_all_dict()
-    # print(res)
-
-    # v1, v2 = obj.get_one_parameter(49)
-    # print(v1)
-    # # print(v1, v2)
 
 
-    # print(x)
-    # print(x1)
-    # from utils.tool import cal_twiss
-    #
-    # item ={
-    #     "x": x,
-    #     "x1": x1,
-    #     "coefficient": 1,
-    #     "gamma": 1.000042631556908,
-    #     "beta": 0.029190516,
-    # }
-    # res = cal_twiss(item)
-    # print(res)
-    #
-    # from matplotlib import pyplot as plt
-    # print(len(x), len(x1))
-    # plt.scatter(x, x1)
-    # plt.show()
 
-    # res = obj.get_parameter()
-    # res = obj.allstep_dict[0]
-    # print(res)
 
-    # for i in range(697):
-    #     v1, v2 =obj.get_one_parameter(i)
-    #     print(v1)
-    # print(v1)
-    # import matplotlib.pyplot as plt
-    # # x = [i[0] * 1000 for i in v2]
-    # # y = [i[2] * 1000for i in v2]
-    #
-    # x = [i[4] * 1000 for i in v2]
-    # y = np.array([i[5] * 1000for i in v2])
-    # y = [(i -np.mean(y))/np.mean(y) *1000 for i in y]
-    #
-    # plt.scatter(x, y, s = 0.8)
-    # plt.show()

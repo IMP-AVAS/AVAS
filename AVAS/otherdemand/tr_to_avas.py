@@ -308,8 +308,8 @@ def write_to_avas_lattice(new_avaslattice, avas_lattice_path):
 
 
 if __name__ == "__main__":
-    tracewin_lattiace_path = r"C:\Users\shliu\Desktop\双束模拟\tr.txt"
-    avas_lattice_path = r"C:\Users\shliu\Desktop\双束模拟\av.txt"
+    tracewin_lattiace_path = r"F:\using\test_avas_qt\env_project_match\v1.dat"
+    avas_lattice_path = r"F:\using\test_avas_qt\env_project_match\v1_avas.dat"
 
     # 修改后的lattice
 

@@ -40,9 +40,6 @@ from apis.qt_api.api import project_check
 
 
 def basic_run(project_path, queue):
-    item = {"projectPath": project_path}
-    obj = SimMode(item)
-    obj.run()
 
     try:
         item = {"projectPath": project_path}

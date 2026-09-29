@@ -212,7 +212,7 @@ class Error():
                     return self.increase_error(res)
 
 
-            elif input_lines[i][0] in global_varible.mulpud_element and N > 0:
+            elif input_lines[i][0] in global_varible.mulp_element and N > 0:
                 # 在叠加场添加磁场原件误差
                 if input_lines[i][0] == 'field' and input_lines[i][4] == '3':
                     if command[0] in (
@@ -1342,7 +1342,7 @@ class Errorstatdyn(Errorstat):
         tmp_err_beam_dyn = []
         for i in range(len(error_lattice)):
             # 处理双误差情况
-            if error_lattice[i][0] in global_varible.mulpud_element:
+            if error_lattice[i][0] in global_varible.mulp_element:
                 #如果一个元件前面两个都是误差，那么一定一个是静态的，一个是动态的的
                 if error_lattice[i - 1][0] in global_varible.error_elemment_command_ncpl and \
                         error_lattice[i - 2][0] in global_varible.error_elemment_command_ncpl:

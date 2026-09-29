@@ -32,16 +32,7 @@ def split_file(file_path):
     parts = [subpart.lower() for part in parts for subpart in part.split('\\')]
     return parts
 
-# 判断哪一个文件是否在文件夹中():
-# def file_in_directory(file, directory):
-#     file_list = os.path.normpath(file)
-#     directory_list = [os.path.normpath(i) for i in list_files_in_directory(directory)]
-#     # print(file)
-#     # print(directory_list)
-#     if file_list in directory_list:
-#         return True
-#     else:
-#         return False
+
 def normalize_path(path):
     return os.path.normpath(path).lower()
 

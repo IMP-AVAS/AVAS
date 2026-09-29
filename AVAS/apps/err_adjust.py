@@ -1,3 +1,6 @@
+#用来给束流进行优化
+
+
 from scipy.optimize import minimize
 
 import numpy as np
@@ -127,7 +130,7 @@ class Adjust_Error():
     #     print(adjust_element_num)
     #     for i in range(len(adjust_element_num)):
     #         for j in lattice:
-    #             if j[0] in global_varible.mulpud_element and int(j[-1].split("_")[-1]) == adjust_element_num[i]:
+    #             if j[0] in global_varible.mulp_element and int(j[-1].split("_")[-1]) == adjust_element_num[i]:
     #                 for k in adjust_parameter_num[i]:
     #                     adjust_parameter_initial_value[i].append(float(j[k]))
     #
@@ -160,21 +163,21 @@ class Adjust_Error():
     #     """
     #     解析 adjust 命令，并按照作用元件分组
     #     """
-    # 
+    #
     #     lattice = copy.deepcopy(input_lines)
-    # 
+    #
     #     # 1. 给 adjust 命令编号，并确定作用元件
     #     adjust_commands = []
-    # 
+    #
     #     adjust_index = 0
-    # 
+    #
     #     for command in lattice:
-    # 
+    #
     #         if command[0] != "adjust":
     #             continue
-    # 
+    #
     #         element_num = judge_command_on_element(lattice, command)
-    # 
+    #
     #         adjust_commands.append({
     #             "name": f"adjust_{adjust_index}",
     #             "element_num": element_num,
@@ -183,16 +186,16 @@ class Adjust_Error():
     #             "range": [float(command[4]), float(command[5])],
     #             "use_init": int(command[6]),
     #         })
-    # 
+    #
     #         adjust_index += 1
-    # 
+    #
     #     # 2. 按照元件编号分组
     #     adjust_info = {}
-    # 
+    #
     #     for command in adjust_commands:
-    # 
+    #
     #         element_num = command["element_num"]
-    # 
+    #
     #         if element_num not in adjust_info:
     #             adjust_info[element_num] = {
     #                 "parameter_num": [],
@@ -201,30 +204,30 @@ class Adjust_Error():
     #                 "use_init": [],
     #                 "initial_value": [],
     #             }
-    # 
+    #
     #         info = adjust_info[element_num]
-    # 
+    #
     #         info["parameter_num"].append(command["parameter_num"])
     #         info["range"].append(command["range"])
     #         info["n"].append(command["n"])
     #         info["use_init"].append(command["use_init"])
-    # 
+    #
     #     # 3. 获取各参数的初始值
     #     for command in lattice:
-    # 
-    #         if command[0] not in global_varible.mulpud_element:
+    #
+    #         if command[0] not in global_varible.mulp_element:
     #             continue
-    # 
+    #
     #         element_num = int(command[-1].split("_")[-1])
-    # 
+    #
     #         if element_num not in adjust_info:
     #             continue
-    # 
+    #
     #         for parameter_num in adjust_info[element_num]["parameter_num"]:
     #             adjust_info[element_num]["initial_value"].append(
     #                 float(command[parameter_num])
     #             )
-    # 
+    #
     #     return adjust_info
 
     def generate_adjust_parameter(self, input_lines):
@@ -283,7 +286,7 @@ class Adjust_Error():
         # 3. 获取各参数的初始值
         for command in lattice:
 
-            if command[0] not in global_varible.mulpud_element:
+            if command[0] not in global_varible.mulp_element:
                 continue
 
             element_num = int(command[-1].split("_")[-1])

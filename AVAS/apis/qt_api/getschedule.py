@@ -51,6 +51,7 @@ class GetSchedule():
 
         lattice_obj = LatticeParameter(self.lattice_mulp_path)
         lattice_obj.get_parameter()
+
         total_length = lattice_obj.total_length
         total_length = round(total_length, 6)
         dic["totalLength"] = total_length
@@ -205,7 +206,7 @@ class GetSchedule():
 
 if __name__ == '__main__':
     import time
-    path = r"C:\Users\anxin\Desktop\test_schedule\cafe_avas_error"
+    path = r"C:\Users\wangh\Desktop\cafe_AVAS"
     # path = r"C:\Users\shliu\Desktop\test_schedule\cafe_avas"
 
     item = {"projectPath": path}

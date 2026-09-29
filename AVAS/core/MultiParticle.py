@@ -6,6 +6,7 @@ from past_file.MultiParticleEngine import PartranSimCpuEngine, EnvSimCpuEngine
 from utils.readfile import read_txt
 from utils.tool import write_to_txt
 
+from core.LinacMT.linacmt.cli import run as env_run
 
 def MultiParticle(item):
     device = item.get("device") or "cpu"
@@ -83,10 +84,10 @@ class EnvSimCpu():
         self.output_file = item.get("output_file")
         self.field_path = item.get("field_path")
         # self.errorlog_path = item.get("errorlog_path")
-        self.multiparticle_engine = item.get("mulp_engine")
+        # self.multiparticle_engine = item.get("mulp_engine")
         self.device = item.get("device")
         self.if_error = item.get("if_error", 0)
-        self.env_par_mode = item.get("env_par_mode", "par")
+        # self.env_par_mode = item.get("env_par_mode", "par")
 
         if self.input_file is None:
             self.input_file = os.path.join(self.project_path, "InputFile")
@@ -101,27 +102,34 @@ class EnvSimCpu():
         elif self.if_error == 1:
             self.errorlog_path = os.path.join(self.output_file, "output_0", "ErrorLog.txt")
 
-        if self.multiparticle_engine is None:
-            self.multiparticle_engine = EnvSimCpuEngine(item)
+        # if self.multiparticle_engine is None:
+        #     self.multiparticle_engine = EnvSimCpuEngine(item)
 
     def run(self):
         if os.path.exists(self.errorlog_path):
             os.remove(self.errorlog_path)
 
-        res_tmp = self.multiparticle_engine.get_path(self.input_file, self.output_file, self.field_path)
+        res = env_run(
+        input_dir= self.input_file,
+        output_dir= self.output_file,
+        field_dir= self.field_path,)
 
-        res = self.multiparticle_engine.main_agent(1)
+        return res
 
-        # 检查报错
-        if res == 1:
-            # raise Exception(f'模拟错误，请查询OutputFile中的ErrorLog.txt')
-
-            error = self.check_error_file(self.errorlog_path)
-            raise Exception(f'{error}')
-        elif res == 2:
-            # raise Exception(f'模拟错误，请查询OutputFile中的ErrorLog.txt')
-            error = self.check_error_file(self.errorlog_path)
-            raise Exception(f'{error}')
+        # res_tmp = self.multiparticle_engine.get_path(self.input_file, self.output_file, self.field_path)
+        #
+        # res = self.multiparticle_engine.main_agent(1)
+        #
+        # # 检查报错
+        # if res == 1:
+        #     # raise Exception(f'模拟错误，请查询OutputFile中的ErrorLog.txt')
+        #
+        #     error = self.check_error_file(self.errorlog_path)
+        #     raise Exception(f'{error}')
+        # elif res == 2:
+        #     # raise Exception(f'模拟错误，请查询OutputFile中的ErrorLog.txt')
+        #     error = self.check_error_file(self.errorlog_path)
+        #     raise Exception(f'{error}')
 
 class PartranSimGpu():
     """
@@ -229,13 +237,18 @@ def basic_mulp(project_path):
 if __name__ == "__main__":
     import os
 
-    path = r"C:\Users\shliu\Desktop\cafe2\AVAS"
+    path = r"F:\using\test_avas_qt\env_project_match"
     item = {'project_path': path,
             "device":"cpu",
-            "env_par_mode": "mulp",
+            "field_path": r"F:\using\test_avas_qt\env_project_match\FieldFile",
+            "env_par_mode": "env",
             }
+
     obj = MultiParticle(item)
     obj.run()
+
+
+
     # print(">" * 30)
     # print("exe =", sys.executable)
     # print("cwd =", os.getcwd())
