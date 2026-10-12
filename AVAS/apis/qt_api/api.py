@@ -133,7 +133,7 @@ def get_fieldname(item):
 
 
 def get_bimap_name(item):
-    #相对路径，没有后缀
+    #相对路径，没有后缀 如 name.csv
     kwargs = {}
     bimapPath = item["filePath"] 
     if os.path.exists(bimapPath):
@@ -155,7 +155,7 @@ def get_bimap_name(item):
 
 
 def get_fieldfile(item):
-    #相对路径，有后缀
+    #相对路径，有后缀 如hwr010.edx hwr010.edy
     kwargs = {}
     fieldpath = item["fieldPath"]
     if os.path.exists(fieldpath):
@@ -226,6 +226,8 @@ def create_from_file_input_ini(item):
 
     new_dic = {}
     new_dic.update(input_res["data"]["inputParams"])
+
+    #
     fieldSource_dic = {'fieldSource': ini_res["data"]["iniParams"]["project"]["fieldSource"],
                        "device": ini_res["data"]["iniParams"]["input"]["device"]
                        }

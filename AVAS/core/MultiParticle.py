@@ -237,11 +237,10 @@ def basic_mulp(project_path):
 if __name__ == "__main__":
     import os
 
-    path = r"F:\using\test_avas_qt\env_project_match"
+    path = r"C:\Users\wangh\Desktop\project\cafe_AVAS"
     item = {'project_path': path,
             "device":"cpu",
-            "field_path": r"F:\using\test_avas_qt\env_project_match\FieldFile",
-            "env_par_mode": "env",
+            "env_par_mode": "mulp",
             }
 
     obj = MultiParticle(item)

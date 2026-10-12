@@ -95,14 +95,13 @@ class SetDiagInfo():
             dic['set_command'] = set_command_list[i]
             dic['set_order'] = i
 
-            #判断set命令在哪个个原件下面
+            #判断set命令在哪个原件下面
             set_command_under_element = judge_command_under_element(lattice_copy, set_command_list[i])
 
             #找到原件对应的索引序列
             ele_index = lattice_obj.v_index_with_sup.index(set_command_under_element)
 
             dic['position'] = lattice_obj.v_end_with_sup[ele_index]
-
 
             if all_shift_in_field_commnad[i][0] is not None:
                 #这里需要将束诊的单位从mm换成m
@@ -209,17 +208,19 @@ class SetDiagInfo():
 
 
             # dic["current"] = [current]
-            set_dict[i["set_order"]]["set_data"] = dic
+            i["set_data"] = dic
 
 
         print(211, set_dict)
 
-        # 211[{'set_command': ['set_twiss', '1', '-0.4466', '0.737702', '-0.33856', '0.6970', 'set_0'],
+        # 211[
+        # {'set_command': ['set_twiss', '1', '-0.4466', '0.737702', '-0.33856', '0.6970', 'set_0'],
         #      'set_order': 0,
         #      'position': np.float64(4.348450002),
         #      'set_data': {'center': [0.007107598, -0.014512480000000001], 'energy': [2.0],
         #                   'emit_x': [-0.4166403, 0.7184489, 0.1000005],
-        #                   'emit_y': [-0.3475868, 0.6912392, 0.1000003]}}]
+        #                   'emit_y': [-0.3475868, 0.6912392, 0.1000003]} }
+        #                   ]
         return set_dict
 
 if __name__ == "__main__":

@@ -160,7 +160,8 @@ class LatticeParameter():
                 this_sup_start_index = None
                 this_sup_end_index = None
 
-        #[{'start_index': 1, 'end_index': 10, 'sup_length': np.float64(1.13623)}, {'start_index': 18, 'end_index': 27, 'sup_length': np.float64(1.13604)}]
+        #[{'start_index': 1, 'end_index': 10, 'sup_length': np.float64(1.13623), "sup_field_index": "sup_field_0"}
+        # {'start_index': 18, 'end_index': 27, 'sup_length': np.float64(1.13604)}]
 
 
         if len(self.sup_field_list) != 0: #如果确实存在叠加场
@@ -178,7 +179,6 @@ class LatticeParameter():
             # print("self.v_index_with_sup", self.v_index_with_sup)
 
         elif len(self.sup_field_list) == 0:  # 如果不存在叠加场
-
             self.v_len_with_sup = copy.deepcopy(self.v_len)
             self.v_name_with_sup = copy.deepcopy(self.v_name)
             self.v_index_with_sup = copy.deepcopy(self.v_index)
@@ -187,8 +187,8 @@ class LatticeParameter():
         # self.v_len_with_sup
         # self.v_name_with_sup
         #  self.v_index_with_sup
-        self.v_end_with_sup = np.cumsum(self.v_len_with_sup)
-        self.v_start_with_sup = np.cumsum([0] + self.v_len_with_sup[:-1])
+        self.v_end_with_sup = np.cumsum(self.v_len_with_sup)       #对应原件的末尾
+        self.v_start_with_sup = np.cumsum([0] + self.v_len_with_sup[:-1])      #对应原件的起点
 
         # print("self.sup_field_list", self.sup_field_list)
         # print("self.v_len_with_sup", self.v_len_with_sup)  #每个原件的长度

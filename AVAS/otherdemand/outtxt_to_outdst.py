@@ -5,8 +5,8 @@ import struct
 # inFileName = r"C:\Users\wangh\Desktop\test_mu\mu_avas_0907\OutputFile\outData_3.454494.txt"
 # outFileName = r"C:\Users\wangh\Desktop\test_mu\mu_avas_0907\OutputFile\outData_3.454494_z1.dst"
 
-inFileName = r"C:\Users\wangh\Desktop\test_mu\mu_avas_0907_f1\OutputFile\outData_3.454494.txt"
-outFileName = r"C:\Users\wangh\Desktop\test_mu\mu_avas_0907_f1\OutputFile\outData_3.454494_f1.dst"
+inFileName = r"C:\Users\wangh\Desktop\test_mu\mu_all_avas_f1\OutputFile\outData_7.501127.txt"
+outFileName = r"C:\Users\wangh\Desktop\test_mu\mu_all_avas_f1\OutputFile\outData_7.501127.dst"
 
 freq = 162.5e6
 particleRestMass = 105.65837450
