@@ -106,10 +106,10 @@ class FindReplaceDialog(QDialog):
                 match_cursor = doc.find(find_text, 0, flags)  # 从头查找
 
                 if match_cursor.isNull():
-                    self.show_error_message("No match was found")
+                    self.show_error_message("No match_with_command was found")
                     return
             else:
-                self.show_error_message("No match was found")  # 未找到时显示提示
+                self.show_error_message("No match_with_command was found")  # 未找到时显示提示
                 return
 
         if not match_cursor.isNull():
@@ -149,7 +149,7 @@ class FindReplaceDialog(QDialog):
         if cursor.hasSelection():
             cursor.insertText(replace_text)
         else:
-            self.show_error_message("Search for a match and then replace it")
+            self.show_error_message("Search for a match_with_command and then replace it")
 
     def replace_all(self):
         """ 替换文档中所有匹配项 """
@@ -179,7 +179,7 @@ class FindReplaceDialog(QDialog):
 
         print(f"替换了 {count} 处匹配项")
         if count == 0:
-            self.show_error_message("No match was found")
+            self.show_error_message("No match_with_command was found")
 
 
 class SearchDialog(QDialog):

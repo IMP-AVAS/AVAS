@@ -233,7 +233,7 @@ class MainWindow(QMainWindow):
         page_analysis_action = QAction('analysis', self)
         page_input_action = QAction('setting', self)
         # page_function_action = QAction('function', self)
-        # page_match_action = QAction('match', self)
+        # page_match_action = QAction('match_with_command', self)
         page_others_action = QAction('others', self)
 
         page_data_action = QAction('data', self)
@@ -458,7 +458,7 @@ class MainWindow(QMainWindow):
         ini_obj = IniConfig()
         ini_obj.create_from_file(item)
         set_dict = {'input': self.input_signal,
-                    'match': self.match_signal,
+                    'match_with_command': self.match_signal,
                     'error': self.error_signal,
         }
         set_dict = {k: v for k, v in set_dict.items() if v}

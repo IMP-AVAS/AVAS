@@ -14,13 +14,13 @@ import os
 from core.MultiParticle import MultiParticle
 
 from utils.treat_directory import list_files_in_directory, copy_directory, delete_directory
-from apps.match.setdiaginfo import SetDiagInfo
+from apps.match_with_command.setdiaginfo import SetDiagInfo
 import math
 
 def position_loss( k_coefficient,
                     target_x, target_x1, target_y, target_y1,
                     rel_x, rel_x1,  rel_y, rel_y1,
-                    not_consider_list
+                    consider_list
                 ):
     def cal_loss(target_x, rel_x):
         return (target_x - rel_x)**2
@@ -34,7 +34,7 @@ def position_loss( k_coefficient,
 
     loss = 0
     for i in range(4):
-        if not_consider_list[i] == 0:
+        if consider_list[i] == 1:
             loss += loss_list[i]
     loss = k_coefficient/2 * loss
     return loss
@@ -43,7 +43,7 @@ def position_loss( k_coefficient,
 def size_loss(  k_coefficient,
                     target_size_x, target_size_y, target_size_z,
                     rel_size_x, rel_size_y, rel_size_z,
-                    not_consider_list
+                    consider_list
                 ):
     def cal_loss(target_x, rel_x):
         if rel_x != 0:
@@ -58,11 +58,11 @@ def size_loss(  k_coefficient,
 
     loss_list = [loss_x, loss_y, loss_z]
 
-    M = len([i for i in not_consider_list if i == 0])
+    M = len([i for i in consider_list if i == 1])
 
     loss = 0
     for i in range(3):
-        if not_consider_list[i] == 0:
+        if consider_list[i] == 1:
             loss += loss_list[i]
     loss = k_coefficient / M * loss
     return loss
@@ -84,14 +84,14 @@ def twiss_loss(
         rel_alpha_z,
         rel_beta_z,
 
-        not_consider_x,
-        not_consider_y,
-        not_consider_z,
+        consider_x,
+        consider_y,
+        consider_z,
 ):
     #alpha_0代表目标值
 
     def calculate_twiss_distance(alpha, beta, alpha0, beta0):
-        if beta0 == 0 or beta0 == 0:
+        if beta == 0 or beta0 == 0:
             return 0
         # gamma = (1+alpha^2)/beta
         gamma = (1 + alpha ** 2) / beta
@@ -143,11 +143,11 @@ def twiss_loss(
     )
 
     loss_list = [loss_x, loss_y, loss_z]
-    not_consider_list = [not_consider_x, not_consider_y, not_consider_z]
+    consider_list = [consider_x, consider_y, consider_z]
 
     loss = 0
     for i in range(3):
-        if not_consider_list[i] == 0:
+        if consider_list[i] == 1:
             loss += loss_list[i]
 
     return loss
@@ -164,11 +164,11 @@ class MatchWithConmmandalgorithm(object):
         self.match_sim_type = item.get("match_sim_type")
         self.device = item.get("device") or "cpu"
 
-        self.match_adjust_out0_path = os.path.join(self.project_path, "OutputFile", "match_adjust", "output_0")
+        self.match_opti_out0_path = os.path.join(self.project_path, "OutputFile", "match_opti", "output_0")
 
-        if os.path.exists(self.match_adjust_out0_path):
-            delete_directory(self.match_adjust_out0_path)
-        os.makedirs(self.match_adjust_out0_path)
+        if os.path.exists(self.match_opti_out0_path):
+            delete_directory(self.match_opti_out0_path)
+        os.makedirs(self.match_opti_out0_path)
 
         self.v_index = 0
     def treat_set(self,  NN):
@@ -180,7 +180,7 @@ class MatchWithConmmandalgorithm(object):
         item = {
             "project_path": self.project_path,
             "input_file": os.path.join(self.project_path, "InputFile"),
-            "output_file": os.path.join(self.project_path, r"OutputFile\match_adjust\output_0"),
+            "output_file": os.path.join(self.project_path, r"OutputFile\match_opti\output_0"),
             "diag_file_path": None,
             "dataset_mode": "env"
         }
@@ -203,14 +203,14 @@ class MatchWithConmmandalgorithm(object):
                                                 float(i['set_data']["center"][2]), float(i['set_data']["center"][3]) )
 
 
-                not_consider_list = i['set_command'][7:11]
-                not_consider_list = [int(i) for i in not_consider_list]
+                consider_list = i['set_command'][7:11]
+                consider_list = [int(i) for i in consider_list]
 
                 loss = position_loss(
                     k_coefficient,
                     target_x, target_x1, target_y, target_y1,
                     rel_x, rel_x1,  rel_y, rel_y1,
-                    not_consider_list
+                    consider_list
                 )
                 loss_list.append(loss)
 
@@ -220,14 +220,14 @@ class MatchWithConmmandalgorithm(object):
                 target_size_x, target_size_y, target_size_z = float(i['set_command'][2]), float(i['set_command'][3]), float(i['set_command'][4])
                 rel_size_x, rel_size_y, rel_size_z = float(i['set_data']["rms_size"][0]), float(i['set_data']["rms_size"][1]), float(i['set_data']["rms_size"][2])
 
-                not_consider_list = i['set_command'][7:11]
-                not_consider_list = [int(i) for i in not_consider_list]
+                consider_list = i['set_command'][7:11]
+                consider_list = [int(i) for i in consider_list]
 
                 loss = size_loss(
                     k_coefficient,
                     target_size_x, target_size_y, target_size_z,
                     rel_size_x, rel_size_y, rel_size_z,
-                    not_consider_list
+                    consider_list
                 )
 
                 loss_list.append(loss)
@@ -249,10 +249,10 @@ class MatchWithConmmandalgorithm(object):
                 rel_alpha_x, rel_beta_x, rel_alpha_y, rel_beta_y = i["set_data"]["emit_x"][0], i["set_data"]["emit_x"][1],\
                 i["set_data"]["emit_y"][0], i["set_data"]["emit_y"][1]
 
-                #不考虑的值是1，考虑代表0
-                not_consider_x = int(i["set_command"][8])
-                not_consider_y = int(i["set_command"][9])
-                not_consider_z = int(i["set_command"][10])
+                #考虑的值是0，考虑代表1
+                consider_x = int(i["set_command"][8])
+                consider_y = int(i["set_command"][9])
+                consider_z = int(i["set_command"][10])
 
                 target_alpha_z = 0
                 target_beta_z = 0
@@ -274,9 +274,9 @@ class MatchWithConmmandalgorithm(object):
                 rel_alpha_z,
                 rel_beta_z,
 
-                not_consider_x,
-                not_consider_y,
-                not_consider_z,
+                consider_x,
+                consider_y,
+                consider_z,
                 )
 
                 loss_list.append(loss)
@@ -293,7 +293,7 @@ class MatchWithConmmandalgorithm(object):
 
     def generate_match_parameter(self, input_lines):
         """
-        解析 match 命令，并按照作用元件分组
+        解析 match_with_command 命令，并按照作用元件分组
         """
 
 ################################################
@@ -303,20 +303,20 @@ class MatchWithConmmandalgorithm(object):
         #给match命令添加一个索引
         index = 0
         for i in lattice:
-            if i[0].startswith("match"):
+            if i[0].startswith("match_with_command"):
                 add_name = f'match_{index}'
                 i.append(add_name)
                 index += 1
 ###########################################
 
-        # 1. 给 match 命令编号，并确定作用元件
+        # 1. 给 match_with_command 命令编号，并确定作用元件
         match_commands = []
 
         match_index = 0
 
         for command in lattice:
 
-            if command[0] != "match":
+            if command[0] != "match_with_command":
                 continue
 
             element_num = judge_command_on_element(lattice, command)
@@ -429,7 +429,7 @@ class MatchWithConmmandalgorithm(object):
             #注释掉所有的match命令
 
             for i in match_lattice_no_index:
-                if i[0].startswith("match"):
+                if i[0].startswith("match_with_command"):
                     i[0] = "!" + i[0]
 
             match_lattice_write = [i for i in match_lattice_no_index if i[0] in global_varible.mulp_basic_command]
@@ -442,12 +442,12 @@ class MatchWithConmmandalgorithm(object):
 
             # delete_directory(self.match_middle_output0_path)
 
-            err_adjust_output0_path = os.path.join(self.project_path, "OutputFile", "match_adjust", "output_0" )
+            err_adjust_output0_path = os.path.join(self.project_path, "OutputFile", "match_opti", "output_0" )
             # if os.path.exists(err_adjust_output0_path):
             #     delete_directory(err_adjust_output0_path)
 
             sim_item = {
-                "output_file": os.path.join(self.project_path, "OutputFile", "match_adjust", "output_0"), #用来优化的地址
+                "output_file": os.path.join(self.project_path, "OutputFile", "match_opti", "output_0"), #用来优化的地址
             }
 
 
@@ -646,7 +646,7 @@ class MatchWithConmmandalgorithm(object):
         all_match_N = []
         all_set_N = []
         for i in lattice_mulp_list:
-            if i[0].lower() == "match":
+            if i[0].lower() == "match_with_command":
                 all_match_N.append(int(i[1]))
             elif i[0].lower().startswith("set"):
                 all_set_N.append(int(i[1]))
@@ -662,7 +662,7 @@ class MatchWithConmmandalgorithm(object):
             NN = i
             t_lattice = copy.deepcopy(lattice_mulp_list)
             for j in t_lattice:
-                if j[0].lower() == "match" and int(j[1]) != i:
+                if j[0].lower() == "match_with_command" and int(j[1]) != i:
                     j.append(False)
 
                 if j[0].lower().startswith("set") and int(j[1]) != i:

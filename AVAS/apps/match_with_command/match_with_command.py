@@ -1,5 +1,5 @@
-from apps.match.match_with_command_algorithm import MatchWithConmmandalgorithm
-from apps.match.setdiaginfo import SetDiagInfo
+from apps.match_with_command.match_with_command_algorithm import MatchWithConmmandalgorithm
+from apps.match_with_command.setdiaginfo import SetDiagInfo
 from utils.readfile import read_txt, read_lattice_mulp, read_lattice_mulp_with_name
 import os
 from utils.treat_directory import list_files_in_directory, copy_directory, delete_directory

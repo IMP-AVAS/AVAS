@@ -27,7 +27,7 @@ class GetSchedule():
         base_mode = ini_info["input"]["sim_type"]
 
         err_mode = ini_info["error"]["error_type"]
-        match = ini_info["match"]
+        match = ini_info["match_with_command"]
 
         match_mode = ''
         if match["cal_input_twiss"] == 1:

@@ -39,8 +39,8 @@ class PageLattice(QWidget):
         hbox_cut = QHBoxLayout()
         self.button_mulp_lattice = QPushButton("lattice_mulp")
         self.button_env_lattice = QPushButton("lattice_env")
-        # self.button_match_result = QPushButton("match result")
-        # self.button_match_twiss = QPushButton("match twiss")
+        # self.button_match_result = QPushButton("match_with_command result")
+        # self.button_match_twiss = QPushButton("match_with_command twiss")
         self.button_input_twiss = QPushButton("input twiss")
 
 
