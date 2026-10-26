@@ -237,7 +237,7 @@ def basic_mulp(project_path):
 if __name__ == "__main__":
     import os
 
-    path = r"C:\Users\wangh\Desktop\project\cafe_AVAS"
+    path = r"F:\using\test_avas_qt\cafe_AVAS"
     item = {'project_path': path,
             "device":"cpu",
             "env_par_mode": "mulp",

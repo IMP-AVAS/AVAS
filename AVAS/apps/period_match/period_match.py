@@ -46,7 +46,7 @@ class PeriodMatch():
 
 
     def run_use_corrected_result(self, opti_res_this,  error_lattice):
-        fda
+
 
 
     def run_multiparticle(self, p_path, out_putfile_, if_error=1):
@@ -74,8 +74,6 @@ class PeriodMatch():
         # opti_res_this = {'1_8': 0.4933612120807681, '1_7': 0.7579544029403025,
         #                  '5_8': 0.7614636313839422, '5_7': 0.25891675029296335}
         #
-
-
 
         # 使用优化后的结果运行一次
         self.run_use_corrected_result(opti_res_this, lattice_mulp_list)
