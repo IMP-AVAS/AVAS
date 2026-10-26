@@ -61,9 +61,9 @@ class SimMode():
 
 
         match_mode = [
-            ini_info["match_with_command"]["cal_input_twiss"],
-            ini_info["match_with_command"]["match_with_twiss"],
-            ini_info["match_with_command"]["use_initial_value"],
+            ini_info["match"]["cal_input_twiss"],
+            ini_info["match"]["match_with_twiss"],
+            ini_info["match"]["use_initial_value"],
         ]
 
         err_mode = ini_info["error"]["error_type"]
@@ -124,13 +124,13 @@ class SimMode():
             else:
                 basic_mulp(**item)
         elif base_mode == "env":
-            if ini_info['match_with_command']["cal_input_twiss"] == 1:
+            if ini_info['match']["cal_input_twiss"] == 1:
                 # print(126)
                 circle_match(self.project_path)
-            elif ini_info['match_with_command']["match_with_twiss"] == 1 and ini_info['match_with_command']["use_initial_value"] == 0:
+            elif ini_info['match']["match_with_twiss"] == 1 and ini_info['match']["use_initial_value"] == 0:
                 # print(129)
                 match_twiss(self.project_path, 0)
-            elif ini_info['match_with_command']["match_with_twiss"] == 1 and ini_info['match_with_command']["use_initial_value"] == 1:
+            elif ini_info['match']["match_with_twiss"] == 1 and ini_info['match']["use_initial_value"] == 1:
                 # print(132)
                 match_twiss(self.project_path, 1)
             else:
@@ -152,9 +152,9 @@ class SimMode():
         #     if_normal = ini_info["error"]["if_normal"]
         #
         #     match_mode = [
-        #         ini_info["match_with_command"]["cal_input_twiss"],
-        #         ini_info["match_with_command"]["match_with_twiss"],
-        #         ini_info["match_with_command"]["use_initial_value"],
+        #         ini_info["match"]["cal_input_twiss"],
+        #         ini_info["match"]["match_with_twiss"],
+        #         ini_info["match"]["use_initial_value"],
         #     ]
         #
         #     err_mode = ini_info["error"]["error_type"]
@@ -214,11 +214,11 @@ class SimMode():
 
 
         # elif base_mode == "env":
-        #     if ini_info['match_with_command']["cal_input_twiss"] == 1:
+        #     if ini_info['match']["cal_input_twiss"] == 1:
         #         circle_match(self.project_path)
-        #     elif ini_info['match_with_command']["match_with_twiss"] == 1 and ini_info['match_with_command']["use_initial_value"] == 0:
+        #     elif ini_info['match']["match_with_twiss"] == 1 and ini_info['match']["use_initial_value"] == 0:
         #         match_twiss(self.project_path, 0)
-        #     elif ini_info['match_with_command']["match_with_twiss"] == 1 and ini_info['match_with_command']["use_initial_value"] == 1:
+        #     elif ini_info['match']["match_with_twiss"] == 1 and ini_info['match']["use_initial_value"] == 1:
         #         match_twiss(self.project_path, 1)
         #     else:
         #         basic_env(self.project_path)

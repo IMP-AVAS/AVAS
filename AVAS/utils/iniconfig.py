@@ -15,7 +15,7 @@ class IniConfig():
                      },
         "lattice":{"length": 0},
          "input": {"sim_type": "mulp", "device": "cpu"},
-         "match_with_command": {"cal_input_twiss": 0, "match_with_twiss": 0, "use_initial_value": 0},
+         "match": {"cal_input_twiss": 0, "match_with_twiss": 0, "use_initial_value": 0},
          "error": {"error_type": "", "seed": 0, "if_normal": 1},
          }
 
@@ -138,9 +138,9 @@ class IniConfig():
         base_mode = ini_info["input"]["sim_type"]
 
         match_mode = [
-            ini_info["match_with_command"]["cal_input_twiss"],
-            ini_info["match_with_command"]["match_with_twiss"],
-            ini_info["match_with_command"]["use_initial_value"],
+            ini_info["match"]["cal_input_twiss"],
+            ini_info["match"]["match_with_twiss"],
+            ini_info["match"]["use_initial_value"],
         ]
 
         err_mode = ini_info["error"]["error_type"]
@@ -172,7 +172,7 @@ if __name__ == '__main__':
     # cfg.set_ini(
     #     project={"project_path": "C:/new/path"},
     #     lattice={"length": 100},
-    #     match_with_command={"use_initial_value": 1}
+    #     match={"use_initial_value": 1}
     # )
     #
     #

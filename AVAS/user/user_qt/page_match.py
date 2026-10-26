@@ -130,12 +130,12 @@ class PageMatch (QWidget):
         ini_dict = ini_dict["data"]['ini_params']
 
 
-        if ini_dict['match_with_command']['cal_input_twiss'] == 1:
+        if ini_dict['match']['cal_input_twiss'] == 1:
             self.cb_input_twiss.setChecked(True)
 
-        if ini_dict['match_with_command']['match_with_twiss'] == 1:
+        if ini_dict['match']['match_with_twiss'] == 1:
             self.cb_match_twiss.setChecked(True)
-        if ini_dict['match_with_command']['use_initial_value'] == 1:
+        if ini_dict['match']['use_initial_value'] == 1:
             self.cb_use_initial_value.setChecked(True)
 
 
