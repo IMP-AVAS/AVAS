@@ -6,7 +6,7 @@ from past_file.MultiParticleEngine import PartranSimCpuEngine, EnvSimCpuEngine
 from utils.readfile import read_txt
 from utils.tool import write_to_txt
 
-from core.LinacMT.linacmt.cli import run as env_run
+from core.linacmt.cli import run as env_run
 
 def MultiParticle(item):
     device = item.get("device") or "cpu"
