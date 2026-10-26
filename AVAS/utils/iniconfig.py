@@ -50,7 +50,6 @@ class IniConfig():
         config = configparser.ConfigParser()
         config.optionxform = str
         config.read(path, encoding='utf-8')  # 确保文件以正确的编码读取
-
         for section in config.sections():
             for key, value in config.items(section):
                 if key not in self.str_keys:
