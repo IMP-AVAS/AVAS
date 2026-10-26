@@ -1,6 +1,6 @@
 ﻿from aftertreat.picture.initialplot import PicturePlot_2D
 import os
-from dataprovision.env_beam_out import EnvBeamOutParameter
+from dataprovision.envdatasetparameter import EnvDatasetParameter
 
 class PlotEnvBeamOut(PicturePlot_2D):
     """
@@ -14,7 +14,7 @@ class PlotEnvBeamOut(PicturePlot_2D):
 
 
     def get_x_y(self, picture_name):
-        beam_out_info = EnvBeamOutParameter(self.beam_out_path)
+        beam_out_info = EnvDatasetParameter(self.beam_out_path)
         beam_out_info.get_parameter()
         self.x = beam_out_info.z
         if picture_name == 'beta':

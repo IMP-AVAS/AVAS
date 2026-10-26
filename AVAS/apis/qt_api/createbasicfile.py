@@ -32,7 +32,7 @@ class CreatBasicFile():
             {"project": {"project_path": "undefined"},
             "lattice":{"length": 0},
              "input": {"sim_type": "mulp", "device": "cpu"},
-             "match_with_command": {"cal_input_twiss": 0, "match_with_twiss": 0, "use_initial_value": 0},
+             "match": {"cal_input_twiss": 0, "match_with_twiss": 0, "use_initial_value": 0},
              "error": {"error_type": "", "seed": 0, "if_normal": 1},
              }
 
@@ -133,7 +133,7 @@ class CreateBasicProject():
         #     validate_res_values = [v for k, v in validate_res.items()]
         #
         #     if any(validate_res_values):
-        #         msg = ("The template parameter does not match_with_command the"
+        #         msg = ("The template parameter does not match the"
         #                " parameters of the AVAS project, unable to generate the basic configuration directory.")
         #
         #
