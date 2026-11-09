@@ -1,4 +1,4 @@
-from hpc.avasx_initializer import Avasx
+from sim_gpu.avasx_initializer import Avasx
 
 if __name__ == "__main__":
     # 配置文件路径
