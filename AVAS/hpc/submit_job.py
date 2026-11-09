@@ -3,14 +3,14 @@ import subprocess
 import uuid
 import os
 
-from avasControl.utils.tool import format_output
+from utils.tool import format_output
 
-from avasControl.utils.treat_directory import list_files_in_directory
-from avasControl.utils.treatfile import delete_file
+from utils.treat_directory import list_files_in_directory
+from utils.treatfile import delete_file
 
-from avasControl.utils.inputconfig import InputConfig
+from utils.inputconfig import InputConfig
 
-from avasControl.utils.iniconfig import IniConfig
+from utils.iniconfig import IniConfig
 import time
 # def submit_job(username: str, output_path: str):
 #     job_id = str(uuid.uuid4())[:8]

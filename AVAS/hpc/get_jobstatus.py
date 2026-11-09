@@ -2,8 +2,8 @@
 import subprocess
 import uuid
 import os
-from avasControl.utils.tool import format_output
-from avasControl.hpc.get_errordata import get_errordata
+from utils.tool import format_output
+from hpc.get_errordata import get_errordata
 def get_jobstatus_in_hpc(**item):
     job_id = item['jobId']
 

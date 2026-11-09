@@ -1,5 +1,5 @@
 import os
-from avasControl.utils.tool import format_output
+from utils.tool import format_output
 def get_errordata(**item):
 
     project_path = item['projectPath']

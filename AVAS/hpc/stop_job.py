@@ -1,7 +1,7 @@
 import subprocess
 import uuid
 import os
-from avasControl.utils.tool import format_output
+from utils.tool import format_output
 def stop_job(**item):
     job_id = item['jobId']
 
