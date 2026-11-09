@@ -210,7 +210,7 @@ class PartranSimGpu():
 
 
     def run(self):
-        from hpc.avasx_initializer import Avasx
+        from sim_gpu.avasx_initializer import Avasx
 
         if os.path.exists(self.errorlog_path):
             os.remove(self.errorlog_path)

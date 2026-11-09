@@ -1,5 +1,7 @@
 import sys
 
+from zmq.sugar import device
+
 from core.MultiParticle import MultiParticle
 import multiprocessing
 from utils.beamconfig import BeamConfig
@@ -241,7 +243,7 @@ if __name__ == '__main__':
     # path = r"C:\Users\anxin\Desktop\test\test_error"
 
     path = r"C:\Users\shliu\Desktop\cafe2\AVAS"
-    item = {"projectPath": path}
+    item = {"projectPath": path, "device": "gpu"}
     obj = SimMode(item)
     res = obj.run()
     print(res)
