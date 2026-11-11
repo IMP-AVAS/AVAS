@@ -1,8 +1,14 @@
 from ctypes import *
-from avasx_structures import *
+from sim_gpu.avasx_structures import *
+import os
+
+script_directory = os.path.dirname(os.path.abspath(__file__))  # 获取当前脚本所在文件夹的绝对路径
+parent_directory = os.path.dirname(script_directory)  # 获取上级目录的路径
+so_path = os.path.join(parent_directory, 'dllfile', 'libavasx.so')  # 使用绝对路径连接得到完整的路径
+
 
 # 加载avasx4eng动态连接库
-libavasx = CDLL("./libavasx.so")
+libavasx = CDLL(so_path)
 
 # 初始化MPIObject函数
 InitializeMPIObject = libavasx.InitializeMPIObject

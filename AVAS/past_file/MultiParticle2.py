@@ -1,7 +1,7 @@
 
 
 
-from past_file.MultiParticleEngine import MultiParticleEngine
+from core.MultiParticleEngine import MultiParticleEngine
 
 from utils.readfile import read_txt
 from utils.tool import write_to_txt

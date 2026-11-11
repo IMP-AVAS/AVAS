@@ -1,13 +1,10 @@
-
-
-import os
-from past_file.MultiParticleEngine import PartranSimCpuEngine, EnvSimCpuEngine
+from core.MultiParticleEngine import PartranSimCpuEngine
 
 from utils.readfile import read_txt
 from utils.tool import write_to_txt
 
 from core.linacmt.cli import run as env_run
-
+import os
 def MultiParticle(item):
     device = item.get("device") or "cpu"
     env_par_mode = item.get("env_par_mode") or "mulp"
