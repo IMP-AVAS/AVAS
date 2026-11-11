@@ -1,7 +1,5 @@
 import sys
 
-from zmq.sugar import device
-
 from core.MultiParticle import MultiParticle
 import multiprocessing
 from utils.beamconfig import BeamConfig
