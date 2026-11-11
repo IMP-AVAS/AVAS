@@ -1,13 +1,10 @@
-
-
-import os
-from past_file.MultiParticleEngine import PartranSimCpuEngine, EnvSimCpuEngine
+from core.MultiParticleEngine import PartranSimCpuEngine
 
 from utils.readfile import read_txt
 from utils.tool import write_to_txt
 
 from core.linacmt.cli import run as env_run
-
+import os
 def MultiParticle(item):
     device = item.get("device") or "cpu"
     env_par_mode = item.get("env_par_mode") or "mulp"
@@ -210,7 +207,7 @@ class PartranSimGpu():
 
 
     def run(self):
-        from hpc.avasx_initializer import Avasx
+        from sim_gpu.avasx_initializer import Avasx
 
         if os.path.exists(self.errorlog_path):
             os.remove(self.errorlog_path)

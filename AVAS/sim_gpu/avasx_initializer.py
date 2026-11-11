@@ -5,8 +5,8 @@ import sys
 import os
 import time
 from ctypes import *
-from avasx_functions import *
-from avasx_structures import *
+from sim_gpu.avasx_functions import *
+from sim_gpu.avasx_structures import *
 
 
 class Avasx:
