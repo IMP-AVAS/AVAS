@@ -28,7 +28,7 @@ template = """#!/bin/bash
 #SBATCH --cpus-per-task=56
 
 cd {work_dir}
-python apis/qt_api/hpc_simmode.py {project_path}
+python -m apis.qt_api.hpc_simmode {project_path}
 """
 
 template_gpu = """#!/bin/bash
@@ -45,7 +45,7 @@ template_gpu = """#!/bin/bash
 
 
 cd {work_dir}
-mpirun -np 1 python apis/qt_api/hpc_simmode.py {project_path}
+mpirun -np 1 python -m apis.qt_api.hpc_simmode {project_path}
 """
 
 # template = """#!/bin/bash
